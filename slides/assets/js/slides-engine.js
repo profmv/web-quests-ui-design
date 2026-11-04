@@ -2,6 +2,13 @@
  * Web Quests UI Design - Slide Deck Engine
  * Rule 5 Compliant: Zero Emojis or Unicode Pictograms.
  * Pure Vanilla JavaScript ES6+
+ *
+ * Contract kept for the quest (slides embedded in an iframe drawer):
+ * - URL hash #N opens slide N (1-based).
+ * - Outgoing postMessage: SLIDES_READY, SLIDE_CHANGED, CURRENT_SLIDE_REPORT,
+ *   TOGGLE_DRAWER and CLOSE_DRAWER (the last two only to the same origin).
+ * - Incoming postMessage (same origin only): JUMP_TO_SLIDE {slideIndex: N},
+ *   NEXT_SLIDE, PREV_SLIDE, GET_CURRENT_SLIDE.
  */
 
 (function () {
@@ -39,7 +46,11 @@
   const helpModal = document.querySelector('#deck-help-modal');
   const btnCloseHelp = document.querySelector('#btn-close-help');
 
+  const embedded = window.parent && window.parent !== window;
+  if (embedded) document.documentElement.classList.add('is-embedded');
+
   let currentSlideIndex = 0;
+  let lastFocus = null;
   let touchStartX = 0;
   let touchStartY = 0;
 
@@ -61,10 +72,14 @@
       item.type = 'button';
       item.className = 'drawer-slide-item';
       if (index === currentSlideIndex) item.classList.add('active');
-      item.innerHTML = `
-        <span class="drawer-slide-num">${String(index + 1).padStart(2, '0')}</span>
-        <span class="drawer-slide-name">${titleText}</span>
-      `;
+      const num = document.createElement('span');
+      num.className = 'drawer-slide-num';
+      num.textContent = String(index + 1).padStart(2, '0');
+      const name = document.createElement('span');
+      name.className = 'drawer-slide-name';
+      name.textContent = titleText;
+      item.append(num, name);
+      if (index === currentSlideIndex) item.setAttribute('aria-current', 'page');
       item.addEventListener('click', () => {
         goToSlide(index);
         closeDrawer();
@@ -88,6 +103,8 @@
       slide.setAttribute('aria-hidden', String(!isActive));
       if (isActive) {
         slide.scrollTop = 0;
+        const frame = slide.querySelector('.frame');
+        if (frame) frame.scrollTop = 0;
       }
     });
 
@@ -121,6 +138,11 @@
       const items = drawerList.querySelectorAll('.drawer-slide-item');
       items.forEach((item, i) => {
         item.classList.toggle('active', i === currentSlideIndex);
+        if (i === currentSlideIndex) {
+          item.setAttribute('aria-current', 'page');
+        } else {
+          item.removeAttribute('aria-current');
+        }
       });
     }
 
@@ -137,7 +159,7 @@
       title: activeSlide && activeSlide.querySelector('.slide-title') ? activeSlide.querySelector('.slide-title').textContent.trim() : ''
     };
 
-    if (window.parent && window.parent !== window) {
+    if (embedded) {
       window.parent.postMessage(slideInfo, '*');
     }
   }
@@ -186,22 +208,44 @@
   document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
 
   // Drawer Controls
+  function rememberFocus() {
+    if (!document.querySelector('#deck-drawer.open, #deck-search-modal.open, #deck-help-modal.open')) {
+      lastFocus = document.activeElement;
+    }
+  }
+
+  function restoreFocus() {
+    if (lastFocus && lastFocus !== document.body && typeof lastFocus.focus === 'function' && document.contains(lastFocus)) {
+      lastFocus.focus();
+    } else if (stage) {
+      // Never leave focus inside a closed dialog (keys would be swallowed)
+      stage.focus({ preventScroll: true });
+    }
+    lastFocus = null;
+  }
+
   function openDrawer() {
+    rememberFocus();
     buildDrawerList();
     if (drawer) drawer.classList.add('open');
     if (drawerOverlay) drawerOverlay.classList.add('open');
     drawer?.setAttribute('aria-hidden', 'false');
+    const activeItem = drawerList ? drawerList.querySelector('.drawer-slide-item.active') : null;
+    if (activeItem) activeItem.focus();
   }
 
   function closeDrawer() {
+    const wasOpen = drawer && drawer.classList.contains('open');
     if (drawer) drawer.classList.remove('open');
     if (drawerOverlay) drawerOverlay.classList.remove('open');
     drawer?.setAttribute('aria-hidden', 'true');
+    if (wasOpen) restoreFocus();
   }
 
   // Search Modal Controls
   function openSearchModal() {
     if (searchModal && modalOverlay) {
+      rememberFocus();
       searchModal.classList.add('open');
       modalOverlay.classList.add('open');
       searchModal.setAttribute('aria-hidden', 'false');
@@ -214,10 +258,11 @@
   }
 
   function closeSearchModal() {
-    if (searchModal && modalOverlay) {
+    if (searchModal && modalOverlay && searchModal.classList.contains('open')) {
       searchModal.classList.remove('open');
       modalOverlay.classList.remove('open');
       searchModal.setAttribute('aria-hidden', 'true');
+      restoreFocus();
     }
   }
 
@@ -240,9 +285,7 @@
 
     if (matches.length === 0) {
       const emptyNote = document.createElement('div');
-      emptyNote.style.padding = '12px';
-      emptyNote.style.color = '#94a3b8';
-      emptyNote.style.fontSize = '14px';
+      emptyNote.className = 'search-empty';
       emptyNote.textContent = 'Nenhum slide correspondente encontrado.';
       searchResults.appendChild(emptyNote);
       return;
@@ -252,10 +295,14 @@
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'search-result-item';
-      btn.innerHTML = `
-        <span><strong>${String(item.index + 1).padStart(2, '0')}</strong> &middot; ${item.title}</span>
-        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan);">${item.tag}</span>
-      `;
+      const label = document.createElement('span');
+      const strong = document.createElement('strong');
+      strong.textContent = String(item.index + 1).padStart(2, '0');
+      label.append(strong, ` \u00b7 ${item.title.trim()}`);
+      const tag = document.createElement('span');
+      tag.className = 'search-result-tag';
+      tag.textContent = item.tag.replace(/\s+/g, ' ').trim();
+      btn.append(label, tag);
       btn.addEventListener('click', () => {
         goToSlide(item.index);
         closeSearchModal();
@@ -273,17 +320,20 @@
   // Help Modal Controls
   function openHelpModal() {
     if (helpModal && modalOverlay) {
+      rememberFocus();
       helpModal.classList.add('open');
       modalOverlay.classList.add('open');
       helpModal.setAttribute('aria-hidden', 'false');
+      if (btnCloseHelp) btnCloseHelp.focus();
     }
   }
 
   function closeHelpModal() {
-    if (helpModal && modalOverlay) {
+    if (helpModal && modalOverlay && helpModal.classList.contains('open')) {
       helpModal.classList.remove('open');
       modalOverlay.classList.remove('open');
       helpModal.setAttribute('aria-hidden', 'true');
+      restoreFocus();
     }
   }
 
@@ -322,8 +372,6 @@
       return;
     }
 
-    const embedded = window.parent && window.parent !== window;
-
     // Inside the quest drawer: forward drawer shortcuts to the parent page
     if (embedded && (e.ctrlKey || e.altKey) && (e.key === 's' || e.key === 'S')) {
       e.preventDefault();
@@ -339,6 +387,14 @@
       }
       return;
     }
+
+    // Leave browser shortcuts (Ctrl+F, Cmd+K...) alone
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    // Space or Enter on a focused control activates it instead of turning the page
+    const tag = e.target && e.target.tagName;
+    const onControl = tag === 'BUTTON' || tag === 'A' || tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+    if (onControl && e.key === ' ') return;
 
     // Navigation Keys
     switch (e.key) {
@@ -469,7 +525,7 @@
   handleHash();
 
   // Notify parent frame that slides are ready
-  if (window.parent && window.parent !== window) {
+  if (embedded) {
     window.parent.postMessage({
       type: 'SLIDES_READY',
       totalSlides: totalSlides

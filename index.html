@@ -3,206 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Quests &mdash; UI Design &amp; Fundamentos para Figma</title>
-  <meta name="description" content="Atividade dinâmica e colaborativa para alunos de desenvolvimento web e design dominarem os 4 pilares de UI e a preparação para o Figma.">
+  <title>Estúdio Oito &mdash; Web Quests de UI Design</title>
+  <meta name="description" content="Atividade em duplas: estude nos slides e conserte, fechadura por fechadura, o card quebrado do app Agenda do Campus até ele virar um componente pronto para o Figma.">
+  <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/portal.css">
 </head>
 <body>
-  <!-- Sprite de Icones SVG (Strict Rule 5: Zero Emojis) -->
-  <svg class="sprite" aria-hidden="true" focusable="false" style="display: none;">
-    <symbol id="i-route" viewBox="0 0 24 24"><path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4z"/><path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5"/></symbol>
+  <!-- Icon sprite (Rule 5: SVG icons only, no emojis) -->
+  <svg class="sprite" aria-hidden="true" focusable="false">
     <symbol id="i-presentation" viewBox="0 0 24 24"><path d="M3 4h18v12h-18z"/><path d="M4 16l-1 4"/><path d="M20 16l1 4"/><path d="M12 16v4"/><path d="M9 10l2 2l4 -4"/></symbol>
-    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 21l8 0"/><path d="M12 17l0 4"/><path d="M7 4l10 0"/><path d="M17 4v8a5 5 0 0 1 -10 0v-8"/><path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/></symbol>
     <symbol id="i-key" viewBox="0 0 24 24"><path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"/><path d="M15 9h.01"/></symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"/></symbol>
-    <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/><path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z"/></symbol>
-    <symbol id="i-users" viewBox="0 0 24 24"><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></symbol>
     <symbol id="i-external-link" viewBox="0 0 24 24"><path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6"/><path d="M11 13l9 -9"/><path d="M15 4h5v5"/></symbol>
     <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"/><path d="M9 12l2 2l4 -4"/></symbol>
-    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25"/><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></symbol>
+    <symbol id="i-frame" viewBox="0 0 24 24"><path d="M4 7l16 0"/><path d="M4 17l16 0"/><path d="M7 4l0 16"/><path d="M17 4l0 16"/></symbol>
+    <symbol id="i-component" viewBox="0 0 24 24"><path d="M3 12l3 3l3 -3l-3 -3z"/><path d="M15 12l3 3l3 -3l-3 -3z"/><path d="M9 6l3 3l3 -3l-3 -3z"/><path d="M9 18l3 3l3 -3l-3 -3z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z"/><path d="M12 16h.01"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12l14 0"/><path d="M13 18l6 -6"/><path d="M13 6l6 6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0 -3 -3.85"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M12 12m-5 0a5 5 0 1 0 10 0a5 5 0 1 0 -10 0"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/></symbol>
   </svg>
 
-  <header class="hero">
-    <div class="container">
-      <div class="tag-badge">
-        <svg class="icone" aria-hidden="true"><use href="#i-users"/></svg>
-        <span>Atividade Colaborativa em Duplas &bull; Prof. Marcos V Moraes</span>
-      </div>
-      <h1 class="hero-titulo">Web Quests &mdash; UI Design &amp; Fundamentos para Figma</h1>
-      <p class="hero-subtitulo">
-        Treine seu olho clínico de UI, domine os 4 pilares fundamentais de interfaces modernas e prepare o caminho para o Figma através de 8 fechaduras e bancadas interativas.
-      </p>
-    </div>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="ws-toolbar">
+    <a class="ws-brand" href="index.html">
+      <span class="ws-brand-mark" aria-hidden="true">8</span>
+      <span>Estúdio Oito</span>
+    </a>
+    <span class="ws-toolbar-sep" aria-hidden="true"></span>
+    <span class="toolbar-file">Web Quests &middot; UI Design</span>
+    <span class="ws-toolbar-spacer"></span>
+    <a class="ws-tool-btn teacher-link" href="quest/placar/index.html">
+      <svg class="ic ic-16" aria-hidden="true"><use href="#i-shield-check"/></svg>
+      <span>Placar do professor</span>
+    </a>
   </header>
 
-  <main class="container">
-    <section class="grid-portais" aria-label="Modulos da Atividade">
-      <!-- Card Quest -->
-      <article class="card-modulo destaque">
-        <div class="card-cabecalho">
-          <div class="card-icone azul">
-            <svg class="icone" aria-hidden="true"><use href="#i-route"/></svg>
-          </div>
-          <span class="badge-status">[EXPERIÊNCIA PRINCIPAL]</span>
-        </div>
-        <h2 class="card-titulo">Trilha do Quest Dinâmico</h2>
-        <p class="card-descricao">
-          8 fechaduras encadeadas. Resolva desafios de hierarquia, affordance, consistência, grid de 8px e esqueletização low-fi em duplas.
+  <main id="conteudo" class="ws-canvas-bg portal-canvas">
+    <div class="frame-name" aria-hidden="true">
+      <svg class="ic ic-16" aria-hidden="true"><use href="#i-frame"/></svg>00-portal
+    </div>
+
+    <section class="portal-frame" aria-labelledby="titulo">
+      <div class="intro">
+        <span class="eyebrow">
+          <svg class="ic ic-16" aria-hidden="true"><use href="#i-users"/></svg>
+          Atividade em duplas &middot; Prof. Marcos V Moraes
+        </span>
+        <h1 id="titulo">O card quebrado do Dia do Design</h1>
+        <p class="lead">
+          Vocês são a dupla júnior do <strong>Estúdio Oito</strong>. O Prof. Ramos, cliente do app
+          <strong>Agenda do Campus</strong>, mandou um card quebrado. Estudem nos slides e consertem o
+          card, fechadura por fechadura, até ele virar um componente pronto para o Figma.
         </p>
-        <ul class="lista-recursos">
-          <li><strong>Bancada interativa:</strong> ajuste o grid de 8px e monte wireframes reais</li>
-          <li><strong>Consulta aos slides integrada:</strong> pressione <code>Ctrl+S</code> a qualquer momento</li>
-          <li><strong>Mochila de pistas:</strong> dicas progressivas para desbloquear cada etapa</li>
-          <li><strong>Certificado final:</strong> gere o comprovante autenticado da sua dupla</li>
-        </ul>
-        <div class="card-acoes">
-          <a href="quest/index.html" class="botao botao-primario">
-            <svg class="icone" aria-hidden="true"><use href="#i-key"/></svg>
-            <span>Iniciar o Quest</span>
+
+        <div class="entries">
+          <a class="entry" href="slides/index.html">
+            <span class="entry-icon"><svg class="ic ic-24" aria-hidden="true"><use href="#i-presentation"/></svg></span>
+            <span class="entry-text">
+              <span class="entry-step">Passo 1</span>
+              <strong>Slides</strong>
+              <span>22 slides com as regras que a trilha cobra.</span>
+            </span>
+            <svg class="ic entry-arrow" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+          </a>
+          <a class="entry entry-primary" href="quest/index.html">
+            <span class="entry-icon"><svg class="ic ic-24" aria-hidden="true"><use href="#i-key"/></svg></span>
+            <span class="entry-text">
+              <span class="entry-step">Passo 2</span>
+              <strong>Quest</strong>
+              <span>8 fechaduras e 3 minigames sobre o mesmo card.</span>
+            </span>
+            <svg class="ic entry-arrow" aria-hidden="true"><use href="#i-arrow-right"/></svg>
           </a>
         </div>
-      </article>
-
-      <!-- Card Slides -->
-      <article class="card-modulo">
-        <div class="card-cabecalho">
-          <div class="card-icone roxo">
-            <svg class="icone" aria-hidden="true"><use href="#i-presentation"/></svg>
-          </div>
-          <span class="badge-status">[MATERIAL DE CONSULTA]</span>
-        </div>
-        <h2 class="card-titulo">Apresentação de Slides</h2>
-        <p class="card-descricao">
-          Guia visual e teórico abrangendo os 4 pilares de UI: Hierarquia Visual, Affordance &amp; Signifiers, Consistência &amp; Padrões e Espaçamento/Grid 8px, com preparação para Figma.
-        </p>
-        <ul class="lista-recursos">
-          <li><strong>14 slides visuais:</strong> comparativos lado a lado de bom vs ruim</li>
-          <li><strong>Navegação por teclado:</strong> setas direcionais, espaço e tela cheia (F)</li>
-          <li><strong>Ponte para o Figma:</strong> de regras de design a Auto-Layout e Componentes</li>
-        </ul>
-        <div class="card-acoes">
-          <a href="slides/index.html" class="botao botao-secundario">
-            <svg class="icone" aria-hidden="true"><use href="#i-eye"/></svg>
-            <span>Abrir Apresentação</span>
-          </a>
-        </div>
-      </article>
-
-      <!-- Card Placar -->
-      <article class="card-modulo">
-        <div class="card-cabecalho">
-          <div class="card-icone verde">
-            <svg class="icone" aria-hidden="true"><use href="#i-trophy"/></svg>
-          </div>
-          <span class="badge-status">[DOCÊNCIA]</span>
-        </div>
-        <h2 class="card-titulo">Placar do Professor</h2>
-        <p class="card-descricao">
-          Painel protegido por senha para validar os códigos de progresso das duplas, detectar adulterações e exportar notas.
-        </p>
-        <ul class="lista-recursos">
-          <li><strong>Auditoria automática:</strong> detecção de adulteração de progresso</li>
-          <li><strong>Métricas por dupla:</strong> tempo total, pistas consumidas e erros</li>
-          <li><strong>Exportação CSV:</strong> relatório pronto para lançamento de avaliação</li>
-          <li><strong>Acesso restrito:</strong> autenticação por senha docente</li>
-        </ul>
-        <div class="card-acoes">
-          <a href="quest/placar/index.html" class="botao botao-secundario">
-            <svg class="icone" aria-hidden="true"><use href="#i-shield-check"/></svg>
-            <span>Acessar Placar</span>
-          </a>
-        </div>
-      </article>
-    </section>
-
-    <!-- Sessao de Minigames do Olho Clinico -->
-    <section class="secao-minigames" aria-labelledby="titulo-minigames">
-      <div class="secao-cabecalho">
-        <div class="tag-badge">
-          <svg class="icone" aria-hidden="true"><use href="#i-palette"/></svg>
-          <span>Treinamento Complementar</span>
-        </div>
-        <h2 id="titulo-minigames" class="secao-titulo">Minigames do Olho Clínico de UI</h2>
-        <p class="secao-subtitulo">
-          Ferramentas interativas externas que rodam 100% no navegador para afiar a percepção visual antes do Figma:
-        </p>
       </div>
 
-      <div class="grid-jogos">
-        <a href="https://cantunsee.space" target="_blank" rel="noopener noreferrer" class="card-jogo">
-          <div class="jogo-cabecalho">
-            <h3>Can't Unsee</h3>
-            <svg class="icone" aria-hidden="true"><use href="#i-external-link"/></svg>
+      <div class="preview canvas-dots" aria-label="Antes e depois do card Dia do Design">
+        <div class="pv-item">
+          <span class="pv-label pv-bad"><svg class="ic ic-16" aria-hidden="true"><use href="#i-alert"/></svg>antes</span>
+          <div class="pv-card is-broken">
+            <span class="pv-tag">workshop</span>
+            <span class="pv-title">Dia do Design</span>
+            <span class="pv-meta">16 de maio, Auditório B</span>
+            <span class="pv-desc">Oficinas, revisão de portfólio e conversas com designers.</span>
+            <span class="pv-btn-broken">inscrever</span>
           </div>
-          <p>Escolha entre duas telas idênticas onde uma delas possui um erro sutil de alinhamento, contraste ou kerning.</p>
-        </a>
-
-        <a href="https://bezier.method.ac" target="_blank" rel="noopener noreferrer" class="card-jogo">
-          <div class="jogo-cabecalho">
-            <h3>The B&eacute;zier Game</h3>
-            <svg class="icone" aria-hidden="true"><use href="#i-external-link"/></svg>
+        </div>
+        <span class="pv-arrow" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+        <div class="pv-item">
+          <span class="pv-label pv-comp"><svg class="ic ic-16" aria-hidden="true"><use href="#i-component"/></svg>Card/Evento</span>
+          <div class="pv-card">
+            <span class="pv-tag">Workshop</span>
+            <span class="pv-title">Dia do Design</span>
+            <span class="pv-meta"><svg class="ic ic-16" aria-hidden="true"><use href="#i-calendar"/></svg>16 de maio, Auditório B</span>
+            <span class="pv-desc">Oficinas, revisão de portfólio e conversas com designers.</span>
+            <span class="btn btn-primary pv-btn">Inscrever-se</span>
           </div>
-          <p>Aprenda a lógica de caneta vetorial (Pen Tool), exatamente a mesma usada dentro do Figma e Illustrator.</p>
-        </a>
-
-        <a href="https://type.method.ac" target="_blank" rel="noopener noreferrer" class="card-jogo">
-          <div class="jogo-cabecalho">
-            <h3>Kern Type</h3>
-            <svg class="icone" aria-hidden="true"><use href="#i-external-link"/></svg>
-          </div>
-          <p>Jogo interativo de ajuste de espaçamento entre caracteres (kerning). Excelente para demonstrar legibilidade em títulos.</p>
-        </a>
-
-        <a href="https://color.method.ac" target="_blank" rel="noopener noreferrer" class="card-jogo">
-          <div class="jogo-cabecalho">
-            <h3>Color Method</h3>
-            <svg class="icone" aria-hidden="true"><use href="#i-external-link"/></svg>
-          </div>
-          <p>Treino de teoria das cores (saturação, matiz, complementares e análogas) contra o relógio.</p>
-        </a>
-
-        <a href="https://userinyerface.com" target="_blank" rel="noopener noreferrer" class="card-jogo">
-          <div class="jogo-cabecalho">
-            <h3>User Inyerface</h3>
-            <svg class="icone" aria-hidden="true"><use href="#i-external-link"/></svg>
-          </div>
-          <p>Uma página intencionalmente desenvolvida com as piores práticas de UI e dark patterns para exercitar o senso crítico.</p>
-        </a>
+        </div>
+        <div class="pv-comment">
+          <span class="pv-avatar" aria-hidden="true">B</span>
+          <span><strong>Bia, designer líder</strong>Uma regra por fechadura. No fim, o card vira componente.</span>
+        </div>
       </div>
     </section>
 
-    <!-- Pilares de UI Teoria Resumida -->
-    <section class="secao-pilares" aria-labelledby="titulo-pilares">
-      <h2 id="titulo-pilares" class="secao-titulo">Os 4 Pilares Centrais de UI</h2>
-      <div class="grid-quatro-pilares">
-        <div class="card-pilar">
-          <div class="numero-pilar">01</div>
-          <h3>Hierarquia Visual</h3>
-          <p>Tamanho de fonte, peso (bold vs regular), contraste e espaçamento determinam a ordem exata em que o olho humano escaneia a tela.</p>
-        </div>
-        <div class="card-pilar">
-          <div class="numero-pilar">02</div>
-          <h3>Affordance &amp; Signifiers</h3>
-          <p>Elementos que indicam intuitivamente como interagir (botões com elevação indicam clique; bottom nav indica troca de telas).</p>
-        </div>
-        <div class="card-pilar">
-          <div class="numero-pilar">03</div>
-          <h3>Consistência &amp; Padrões</h3>
-          <p>Padrões universais consolidados pelo usuário (lupa = busca; engrenagem = ajustes; X = fechar). Quebrar padrões gera atrito cognitivo.</p>
-        </div>
-        <div class="card-pilar">
-          <div class="numero-pilar">04</div>
-          <h3>Grid &amp; Ritmo dos 8px</h3>
-          <p>Por que interfaces profissionais parecem harmoniosas? Elas usam múltiplos consistentes de 8px (4, 8, 16, 24, 32, 48px) para espaçamentos.</p>
-        </div>
+    <section class="explore" aria-labelledby="titulo-explore">
+      <div class="explore-head">
+        <h2 id="titulo-explore">
+          <svg class="ic" aria-hidden="true"><use href="#i-target"/></svg>
+          Explore mais
+        </h2>
+        <span class="chip">opcional &middot; sites externos</span>
+      </div>
+      <div class="explore-grid">
+        <a href="https://cantunsee.space" target="_blank" rel="noopener noreferrer" class="game-card">
+          <strong>Can't Unsee<svg class="ic ic-16" aria-hidden="true"><use href="#i-external-link"/></svg></strong>
+          <span>Qual das duas telas está certa? Treina o olho para detalhes.</span>
+        </a>
+        <a href="https://bezier.method.ac" target="_blank" rel="noopener noreferrer" class="game-card">
+          <strong>The Bezier Game<svg class="ic ic-16" aria-hidden="true"><use href="#i-external-link"/></svg></strong>
+          <span>A lógica da ferramenta caneta dos editores vetoriais.</span>
+        </a>
+        <a href="https://type.method.ac" target="_blank" rel="noopener noreferrer" class="game-card">
+          <strong>Kern Type<svg class="ic ic-16" aria-hidden="true"><use href="#i-external-link"/></svg></strong>
+          <span>Ajuste o espaço entre pares de letras.</span>
+        </a>
+        <a href="https://color.method.ac" target="_blank" rel="noopener noreferrer" class="game-card">
+          <strong>Color Method<svg class="ic ic-16" aria-hidden="true"><use href="#i-external-link"/></svg></strong>
+          <span>Matiz, saturação e harmonias contra o relógio.</span>
+        </a>
+        <a href="https://userinyerface.com" target="_blank" rel="noopener noreferrer" class="game-card">
+          <strong>User Inyerface<svg class="ic ic-16" aria-hidden="true"><use href="#i-external-link"/></svg></strong>
+          <span>Uma interface hostil de propósito, cheia de armadilhas.</span>
+        </a>
       </div>
     </section>
   </main>
 
-  <footer class="rodape">
-    <div class="container rodape-conteudo">
-      <p>&copy; 2026 Web Quests UI Design &bull; Atividade Educacional de Desenvolvimento Web e Design de Interfaces.</p>
-    </div>
+  <footer class="portal-footer">
+    <span>Web Quests UI Design &middot; atividade educacional de design de interfaces</span>
+    <a href="quest/placar/index.html">Área do professor</a>
   </footer>
 </body>
 </html>
