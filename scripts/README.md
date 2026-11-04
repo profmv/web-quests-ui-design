@@ -58,6 +58,10 @@ scripts/
   node scripts/build/build_etapas.mjs [--source quest/etapas.source.mjs] [--out quest/etapas.json]
   ```
 - **Output:** Encrypted `etapas.json` consumed by the student browser client.
+- **Source custody:** `quest/etapas.source.mjs` holds every answer in plain text. It is gitignored because the repository is public; keep it only on the teacher's machine and commit just the rebuilt `etapas.json`. After a `git pull` removes the local copy, restore it with:
+  ```bash
+  git restore --source="$(git log --diff-filter=D -1 --format=%h -- quest/etapas.source.mjs)~1" --worktree -- quest/etapas.source.mjs
+  ```
 
 ---
 

@@ -25,10 +25,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      # Publish only the site. Docs, scripts and the plain-text answer source stay out of Pages.
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r index.html assets slides quest _site/
+          rm -f _site/quest/etapas.source.mjs
+          test -f _site/quest/etapas.json
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

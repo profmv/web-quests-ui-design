@@ -69,6 +69,17 @@ export async function compilarEtapas(sourcePath, outPath) {
   const absoluteSource = path.resolve(sourcePath);
   const absoluteOut = path.resolve(outPath);
 
+  try {
+    await fs.access(absoluteSource);
+  } catch {
+    // The answer source is gitignored (public repository) and lives only on the teacher's machine.
+    throw new Error(
+      `[FAIL] Source not found: ${absoluteSource}\n` +
+      "  It is not versioned. Restore the last committed copy with (bash or PowerShell, keeps UTF-8):\n" +
+      '  git restore --source="$(git log --diff-filter=D -1 --format=%h -- quest/etapas.source.mjs)~1" --worktree -- quest/etapas.source.mjs'
+    );
+  }
+
   const moduleUrl = new URL(`file:///${absoluteSource.replace(/\\/g, "/")}`).href;
   const { etapas, configuracao } = await import(moduleUrl);
 
