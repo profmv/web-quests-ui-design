@@ -126,9 +126,10 @@ if (process.argv[1] && process.argv[1].endsWith("build_etapas.mjs")) {
     if (args[i] === "--out" && args[i + 1]) dest = args[i + 1];
   }
 
-  if (await fs.stat(src).catch(() => null)) {
-    compilarEtapas(src, dest);
-  } else {
-    console.log(`[INFO] Source file ${src} does not exist yet. Harness ready.`);
+  try {
+    await compilarEtapas(src, dest);
+  } catch (erro) {
+    console.error(erro.message);
+    process.exitCode = 1;
   }
 }

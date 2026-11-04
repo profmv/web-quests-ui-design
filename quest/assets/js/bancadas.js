@@ -658,12 +658,15 @@ function montarClinicalGauntlet(container, dados, onClue) {
           setTimeout(renderizarRodada, PAUSA_MS);
         } else {
           rodadaAtual = 0;
+          // Only the chosen option's measurement: revealing all would give away the retry
+          const escolhida = lista.find((o) => o.token === btn.dataset.token);
+          const medicao = escolhida && escolhida.detalhe ? listaDetalhes([escolhida]) : "";
           alertSlot.innerHTML = `
             <div class="answer-feedback error" style="display: block; margin-top: 12px;">
-              [ERRO DE PRECISÃO] Resposta incorreta! O circuito do gauntlet foi reiniciado. Calibre o olhar e tente novamente.${detalhes}
+              [ERRO DE PRECISÃO] Resposta incorreta! O circuito do gauntlet foi reiniciado. Calibre o olhar e tente novamente.${medicao}
             </div>
           `;
-          setTimeout(renderizarRodada, detalhes ? PAUSA_MS * 2 : PAUSA_MS);
+          setTimeout(renderizarRodada, medicao ? PAUSA_MS * 2 : PAUSA_MS);
         }
       });
     });
