@@ -51,17 +51,19 @@ scripts/
 ### Category: `build`
 
 #### `scripts/build/build_etapas.mjs`
-- **Objective:** Encrypts quest locks using AES-256-GCM derived via PBKDF2 (150,000 iterations) with SHA-256. Lock $N$ requires the normalized answer of Lock $N-1$ as password.
-- **Runtime:** Node.js v18+ (uses native `webcrypto`).
+- **Objective:** Encrypts the quest locks with AES-256-GCM (PBKDF2-SHA-256, 150,000 iterations). Lock N opens with the normalized answer of lock N-1. Also hashes the predictable mistakes of each lock (salted SHA-256, targeted messages), writes the teacher verification file and an encrypted backup of the source.
+- **Runtime:** Node.js v18+ (native `webcrypto`).
 - **Usage:**
-  ```powershell
-  node scripts/build/build_etapas.mjs [--source quest/etapas.source.mjs] [--out quest/etapas.json]
-  ```
-- **Output:** Encrypted `etapas.json` consumed by the student browser client.
-- **Source custody:** `quest/etapas.source.mjs` holds every answer in plain text. It is gitignored because the repository is public; keep it only on the teacher's machine and commit just the rebuilt `etapas.json`. After a `git pull` removes the local copy, restore it with:
   ```bash
-  git restore --source="$(git log --diff-filter=D -1 --format=%h -- quest/etapas.source.mjs)~1" --worktree -- quest/etapas.source.mjs
+  node scripts/build/build_etapas.mjs --placar-senha "<teacher passphrase>"
   ```
+  ```bash
+  node scripts/build/build_etapas.mjs --restaurar --placar-senha "<teacher passphrase>"
+  ```
+  The passphrase may also come from the `PLACAR_SENHA` environment variable. Without it, only `quest/etapas.json` is rebuilt.
+- **Outputs:** `quest/etapas.json` (public, encrypted locks), `quest/placar/verificacao.json` (answers encrypted with the teacher passphrase, PBKDF2 600,000 iterations), `scripts/build/etapas.source.enc.json` (encrypted copy of the source).
+- **Checks:** fails with exit 1 when a briefing plus tasks exceeds 120 words, when a predictable mistake equals the answer, or when a glossary key is missing.
+- **Source custody:** `quest/etapas.source.mjs` holds every answer in plain text and is gitignored (public repository). After a fresh clone or a `git pull`, restore it from the encrypted backup with the `--restaurar` command above. Normalization (accents, case, "px", punctuation ignored) must stay identical in `quest/assets/js/crypto.js`.
 
 ---
 

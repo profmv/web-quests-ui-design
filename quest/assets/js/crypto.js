@@ -8,12 +8,32 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 const ITERATIONS_DEFAULT = 150000;
 
+// Must match normalizar() in scripts/build/build_etapas.mjs: accents, case, "px" and punctuation are ignored.
 export function normalizar(texto) {
-  return String(texto || "")
+  return String(texto ?? "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/\s+/g, "");
+    .replace(/px/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
+/**
+ * Encrypts text with a password (AES-256-GCM, PBKDF2-SHA-256). Returns {salt, iv, dados} in base64.
+ */
+export async function cifrarTexto(texto, senha, iteracoes = ITERATIONS_DEFAULT) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const base = await crypto.subtle.importKey("raw", encoder.encode(senha), "PBKDF2", false, ["deriveKey"]);
+  const chave = await crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: iteracoes, hash: "SHA-256" },
+    base,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt"]
+  );
+  const dados = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, chave, encoder.encode(texto));
+  return { salt: paraBase64(salt), iv: paraBase64(iv), dados: paraBase64(dados) };
 }
 
 export function deBase64(base64) {

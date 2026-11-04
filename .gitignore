@@ -17,7 +17,7 @@ artifacts/tmp/
 
 # Plain-text quest answers: kept only on the teacher's machine (repository is public).
 # Restore after a pull removed it:
-#   git restore --source="$(git log --diff-filter=D -1 --format=%h -- quest/etapas.source.mjs)~1" --worktree -- quest/etapas.source.mjs
+#   node scripts/build/build_etapas.mjs --restaurar --placar-senha "<teacher passphrase>"
 quest/etapas.source.mjs
 
 # Pages build output (CI)
