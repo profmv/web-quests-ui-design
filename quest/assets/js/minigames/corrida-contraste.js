@@ -20,7 +20,7 @@ const MARGEM = 0.12;
 
 const FRASES = [
   'Inscrições abertas', 'Sala 204, 14h', 'Ver programação', 'Últimas vagas',
-  'Certificado disponível', 'Semana de Design', 'Confirmar presença', 'Mapa do campus',
+  'Certificado disponível', 'Dia do Design', 'Confirmar presença', 'Mapa do campus',
   'Oficina de Figma', 'Palestra cancelada'
 ];
 
@@ -45,6 +45,27 @@ const PLANO = [
   ...Array(3).fill({ cat: 'grande', grupo: 'grande', faixa: [2.25, 2.85] }),
   ...Array(2).fill({ cat: 'armadilha', grupo: 'armadilha', faixa: [3.3, 4.2] })
 ];
+
+/* Pass/fail of a plan item: normal passes above 4.5, large passes above 3, trap sizes are normal text. */
+function planoPassa(item) {
+  return item.cat === 'grande' ? item.faixa[0] >= 3 : item.faixa[0] >= 4.5;
+}
+
+/* Shuffles the plan avoiding runs of more than 3 equal verdicts in a row. */
+function embaralharEquilibrado(plano) {
+  let melhor = embaralhar(plano);
+  for (let t = 0; t < 200; t++) {
+    let maior = 1;
+    let atual = 1;
+    for (let i = 1; i < melhor.length; i++) {
+      atual = planoPassa(melhor[i]) === planoPassa(melhor[i - 1]) ? atual + 1 : 1;
+      maior = Math.max(maior, atual);
+    }
+    if (maior <= 3) return melhor;
+    melhor = embaralhar(plano);
+  }
+  return melhor;
+}
 
 function ehGrande(estilo) {
   return estilo.px >= 24 || (estilo.peso >= 700 && estilo.px >= 18.66);
@@ -150,7 +171,7 @@ export async function iniciar(raiz, opcoes = {}) {
 
   function comecar() {
     inicio = performance.now();
-    cartoes = embaralhar(PLANO).map(gerarCartao);
+    cartoes = embaralharEquilibrado(PLANO).map(gerarCartao);
     indice = 0;
     restante = DURACAO;
     casca.corpo.innerHTML = `

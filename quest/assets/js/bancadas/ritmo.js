@@ -53,7 +53,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
         onclick: (ev) => { ev.stopPropagation(); selecionado = id; desenhar(); },
       }, [filho, selecionado === id ? selecao(r.w, r.h) : null]);
     };
-    area.replaceChildren(
+    area.replaceChildren(...[
       camada("titulo", el("span", { class: "r-title", text: "Dia do Design" })),
       camada("data", el("span", { class: "r-date", text: "16 de maio, Auditório B" })),
       camada("descricao", el("span", { class: "r-desc", text: "Oficinas, revisão de portfólio e conversas com designers." })),
@@ -64,7 +64,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
       medida(W - 20, g.descricao.y + g.descricao.h, g.botao.y, s.g3),
       medida(W - 20, g.botao.y + g.botao.h, g.card.h, s.pad),
       selecionado === "card" ? selecao(g.card.w, g.card.h) : null
-    );
+    ].filter(Boolean));
     area.onclick = () => { selecionado = "card"; desenhar(); };
     const r = g[selecionado];
     inspecao.replaceChildren(

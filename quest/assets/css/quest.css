@@ -303,6 +303,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
+}
+
+.panel-right,
+.panel-right * {
+  min-width: 0;
+}
+
+.panel-right select,
+.panel-right input,
+.panel-right .field {
+  max-width: 100%;
 }
 
 .prop-wide { grid-column: 1 / -1; }

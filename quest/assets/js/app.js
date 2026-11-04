@@ -285,7 +285,7 @@ function mostrarBoasVindas() {
         el("div", { class: "welcome-story" }, [
           el("p", { class: "eyebrow", text: "Estúdio Oito · primeiro dia" }),
           el("h1", { id: "bv-titulo", text: "O card do evento chegou quebrado." }),
-          el("p", { class: "lead", text: "Vocês são a nova dupla de design do estúdio. O cliente, o app Agenda do Campus, precisa do card do Dia do Design pronto para o Figma. Oito fechaduras, oito consertos, três intervalos." }),
+          el("p", { class: "lead", text: "Vocês são a nova dupla de design do estúdio. O cliente, Prof. Ramos, do app Agenda do Campus, precisa do card do Dia do Design pronto para o Figma. Oito fechaduras, oito consertos, três intervalos." }),
           el("ul", { class: "welcome-steps" }, [
             el("li", {}, [icone("frame"), el("span", { text: "Cada fechadura conserta uma parte do mesmo card." })]),
             el("li", {}, [icone("sliders"), el("span", { text: "A pista sai do trabalho de vocês na bancada, não do texto." })]),
@@ -306,7 +306,7 @@ function mostrarBoasVindas() {
 
 function cartaoQuebrado() {
   return el("div", { class: "broken-card" }, [
-    el("span", { class: "redline-tag broken-tag", text: "13px" }),
+    el("span", { class: "redline-tag broken-tag", text: "tudo 15px" }),
     el("p", { text: "Dia do Design" }),
     el("p", { text: "16 de maio, Auditório B" }),
     el("p", { text: "Oficinas, revisão de portfólio e conversas com designers." }),
@@ -354,6 +354,7 @@ function irPara(item) {
   atualizarPapeis();
   mostrarPainel("canvas");
   dom.areaCanvas.scrollTop = 0;
+  requestAnimationFrame(() => dom.canvas.querySelector(".lock-title")?.focus({ preventScroll: true }));
 }
 
 function renderizarTrilha() {
@@ -539,10 +540,9 @@ function renderizarDicas(i) {
       }, [icone("bulb"), `Ver dica ${usadas + 1} de ${c.dicas.length}`])
     : null;
   dom.dicas.replaceChildren(
-    ...itens,
-    botao,
-    restantes > 0 && botao ? el("p", { class: "small muted", text: "Cada dica custa pontos no placar." }) : null
+    ...[...itens, botao, restantes > 0 && botao ? el("p", { class: "small muted", text: "Cada dica custa pontos no placar." }) : null].filter(Boolean)
   );
+  if (!itens.length && !botao) dom.dicas.append(el("p", { class: "small muted", text: "Sem dicas usadas nesta fechadura." }));
 }
 
 function renderizarConceitos(c) {

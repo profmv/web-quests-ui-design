@@ -6,7 +6,7 @@
  */
 
 import { el, icone } from "../ui.js";
-import { campoNumero, campoSelect, inspetor, quadro, secao, segmentado, selecao } from "./comum.js";
+import { campoNumero, campoSelect, inspetor, quadro, secao, segmentado, selecao, caixaExport } from "./comum.js";
 
 const GENERICO = /^(frame|group|grupo|rectangle|retangulo|text|texto|layer|camada)\s*\d*$/i;
 const LINHA = 24;
@@ -111,10 +111,10 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
     medidaRaiz = { ...medir("root", 360), x: 16, y: 16 };
     const altura = Math.max(480, medidaRaiz.h + 64);
     area.style.height = `${altura}px`;
-    area.replaceChildren(
+    area.replaceChildren(...[
       mostrarGrid ? el("div", { class: "al-grid", "aria-hidden": "true" }, [0, 1, 2, 3].map(() => el("span"))) : null,
-      renderNo(medidaRaiz, 0)
-    );
+      renderNo(medidaRaiz, 0),
+    ].filter(Boolean));
     area.onclick = () => { sel = ["root"]; atualizar(); };
   }
 
@@ -200,7 +200,11 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
   /* ---------- Properties panel ---------- */
   const corpoProps = el("div");
   const checklist = el("ul", { class: "checklist" });
-  props.replaceChildren(corpoProps, secao("Checklist do arquivo", [checklist], "check"));
+  const exp = caixaExport("Componente exportado (L x A - nomes válidos)");
+  props.replaceChildren(corpoProps, secao("Checklist do arquivo", [checklist], "check"), secao("Handoff", [
+    el("p", { class: "small muted", text: "N conta camadas e frames com nome válido, mais 1 se o Card/Evento for componente." }),
+    exp.no,
+  ], "export"));
 
   function focarNome() {
     corpoProps.querySelector("#al-nome")?.focus();
@@ -295,6 +299,8 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
       ["Card/Evento transformado em componente", s.nos.root.componente],
     ];
     checklist.replaceChildren(...itens.map(([t, ok]) => el("li", { class: ok ? "is-ok" : "" }, [icone(ok ? "check" : "x"), el("span", { text: t })])));
+    const validos = Object.keys(s.nos).filter((id) => nomeValido(id)).length + (s.nos.root.componente ? 1 : 0);
+    exp.definir(`${Math.round(medidaRaiz.w)}x${Math.round(medidaRaiz.h)}-N${validos}`);
   }
 
   function atualizar(refazerProps = true) {

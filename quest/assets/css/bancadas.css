@@ -50,6 +50,7 @@
 
 .order-item {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--s-1);
   padding: var(--s-05);
@@ -128,7 +129,7 @@
 .state-cell:hover { border-color: #c4d3f7; }
 .state-cell.is-selected { border-color: var(--ac-select); border-style: solid; background: var(--ac-select-soft); }
 .state-name { font-size: var(--fs-12); font-weight: 700; color: var(--tx-2); }
-.state-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 var(--s-2); border-radius: var(--r-8); font-size: 16px; font-weight: 600; white-space: nowrap; }
+.state-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; max-width: 100%; padding: 4px var(--s-1); border-radius: var(--r-8); font-size: 16px; font-weight: 600; text-align: center; line-height: 1.2; }
 .state-hidden { font-size: var(--fs-12); color: var(--tx-3); min-height: 48px; display: grid; place-items: center; }
 .cursor-tag { display: inline-flex; align-items: center; gap: 2px; font-family: var(--ff-mono); font-size: 11px; color: var(--tx-3); }
 .palette-strip { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-1); margin: var(--s-2) 0 var(--s-1); }
@@ -199,7 +200,7 @@
 /* ---------- Lock 5: wireframe ---------- */
 .wire-compare { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--s-4); }
 .wire-compare .stage-frame { margin: var(--s-3) 0 0; }
-.hifi { position: relative; display: grid; gap: var(--s-1); align-content: start; height: 600px; padding: 0 0 72px; overflow: hidden; font-size: 12px; background: #fbfbfd; }
+.hifi { position: relative; display: grid; gap: var(--s-1); align-content: start; height: 696px; padding: 0 0 72px; overflow: hidden; font-size: 12px; background: #fbfbfd; }
 .hf-appbar { display: flex; align-items: center; justify-content: space-between; height: 48px; padding: 0 var(--s-2); background: #ffffff; border-bottom: 1px solid var(--ws-border); }
 .hf-logo { font-weight: 800; color: var(--ac-select); font-size: 16px; }
 .hf-actions { display: inline-flex; align-items: center; gap: var(--s-1); color: var(--tx-2); }
@@ -222,7 +223,10 @@
 .hf-tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; display: grid; grid-template-columns: repeat(4, 1fr); background: #ffffff; border-top: 1px solid var(--ws-border); }
 .hf-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-size: 10px; color: var(--tx-3); }
 .hf-tab.on { color: var(--ac-select); font-weight: 700; }
-.lofi { display: flex; flex-direction: column; gap: var(--s-1); min-height: 600px; padding: var(--s-1); background: #ffffff; }
+.hf-promo { display: grid; gap: 2px; margin: var(--s-1) var(--s-2) 0; padding: var(--s-2); border-radius: var(--r-12); background: #ffffff; box-shadow: var(--el-2); border: 1px solid var(--ws-border); }
+.hf-promo span { color: var(--tx-3); }
+.hf-promo .hf-promo-btn { justify-self: start; margin-top: var(--s-05); padding: 4px 12px; border-radius: var(--r-pill); background: var(--ac-component); color: #ffffff; font-weight: 600; }
+.lofi { display: flex; flex-direction: column; gap: var(--s-1); min-height: 696px; padding: var(--s-1); background: #ffffff; }
 .lofi-block { display: grid; place-items: center; flex: none; border: 1px solid #b9c0cc; border-radius: var(--r-4); background: repeating-linear-gradient(45deg, #eceef2 0 8px, #e2e5ea 8px 16px); color: var(--tx-2); font: 600 12px var(--ff-ui); cursor: pointer; }
 .lofi-block.is-selected { outline: 2px solid var(--ac-select); }
 .lofi-FB { width: 56px; align-self: flex-end; border-radius: 50%; }

@@ -21,6 +21,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
       ...[["Oficina de ícones", "22 de maio"], ["Roda de portfólio", "29 de maio"]].map(([t, d]) =>
         el("div", { class: "hf-item" }, [el("span", { class: "hf-thumb" }), el("span", { class: "hf-item-text" }, [el("strong", { text: t }), el("span", { text: d })]), el("span", { class: "hf-chev", text: ">" })])
       ),
+      el("div", { class: "hf-promo" }, [el("strong", { text: "Seja monitor do Dia do Design" }), el("span", { text: "Ganhe certificado de 8 horas." }), el("span", { class: "hf-promo-btn", text: "Quero ajudar" })]),
       el("span", { class: "hf-fab", "aria-hidden": "true" }, [icone("plus", 24)]),
       el("div", { class: "hf-tabs" }, [["home", "Início"], ["calendar", "Agenda"], ["heart", "Favoritos"], ["user", "Perfil"]].map(([ic, t], i) => el("span", { class: `hf-tab${i === 0 ? " on" : ""}` }, [icone(ic), t]))),
     ]);

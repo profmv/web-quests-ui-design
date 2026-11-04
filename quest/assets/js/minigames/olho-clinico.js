@@ -13,7 +13,8 @@ import {
 } from './comum.js';
 
 const JOGO = 'olho-clinico';
-const TEMPO_RODADA = 15;
+// Phones stack the two options vertically, so they get more time to compare.
+const TEMPO_RODADA = typeof matchMedia === 'function' && matchMedia('(max-width: 640px)').matches ? 22 : 15;
 
 const SVG_ICONES = {
   agenda: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
@@ -45,18 +46,18 @@ const RODADAS = [
   {
     id: 'grid',
     titulo: 'Grid de 8px',
-    regra: 'Espaços fora da escala (13px) quebram o ritmo: use 8 dentro do grupo, 16 entre grupos e 24 antes da ação principal.',
+    regra: 'Espaços fora da escala (13px) quebram o ritmo: 8 dentro do grupo, 24 antes da ação principal e padding igual ao maior espaço interno.',
     montar(falho) {
-      const v = falho ? [13, 8, 8, 13, 16] : [16, 8, 8, 24, 16];
+      const v = falho ? [13, 8, 8, 13, 16] : [24, 8, 8, 24, 24];
       const ruim = falho ? [true, false, false, true, false] : [];
       return `
         <span class="mg-s-card">
           ${esp(v[0], ruim[0])}
           <span class="mg-s-chip">Workshop</span>
           ${esp(v[1], ruim[1])}
-          <span class="mg-s-tit">Semana de Design</span>
+          <span class="mg-s-tit">Dia do Design</span>
           ${esp(v[2], ruim[2])}
-          <span class="mg-s-meta">12 nov, Auditório 2</span>
+          <span class="mg-s-meta">16 de maio, Auditório B</span>
           ${esp(v[3], ruim[3])}
           <span class="mg-s-botao">Inscrever-se</span>
           ${esp(v[4], ruim[4])}
@@ -106,9 +107,9 @@ const RODADAS = [
   {
     id: 'optico',
     titulo: 'Centralização óptica',
-    regra: 'Um triângulo centrado pela caixa parece puxado para a esquerda; desloque-o uns 5px para a direita (centro óptico).',
+    regra: 'Um triângulo centrado pela caixa parece puxado para a esquerda; desloque-o uns 3px para a direita (centro óptico, slide 15).',
     montar(falho) {
-      const dx = falho ? 0 : 5;
+      const dx = falho ? 0 : 3;
       const x0 = 25 + dx;
       const cx = (x0 * 2 + x0 + 30) / 3;
       return `
@@ -124,7 +125,7 @@ const RODADAS = [
             </g>
           </svg>
           <span class="mg-s-dur">Aula 3, 12:40</span>
-          ${tag(falho ? 'caixa centrada' : '+5px óptico', 'left:50%;top:12px;transform:translateX(-50%)', falho)}
+          ${tag(falho ? 'caixa centrada' : '+3px óptico', 'left:50%;top:12px;transform:translateX(-50%)', falho)}
         </span>`;
     }
   },
@@ -368,7 +369,7 @@ export async function iniciar(raiz, opcoes = {}) {
 
   telaIntro(casca, {
     titulo: 'Olho Clínico',
-    objetivo: 'Em 8 rodadas, escolha a versão sem o defeito sutil antes que os 15 segundos acabem.',
+    objetivo: `Em 8 rodadas, escolha a versão sem o defeito sutil antes que os ${TEMPO_RODADA} segundos acabem.`,
     duracao: 'cerca de 3 min',
     nomeIcone: 'olho',
     passos: [

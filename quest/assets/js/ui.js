@@ -97,6 +97,8 @@ export function ativarBaloes(raiz, conceitos, aoAbrirSlide) {
       gatilho.setAttribute("aria-expanded", "true");
       gatilho.setAttribute("aria-controls", id);
       baloaAtual = { balao, gatilho };
+      balao.setAttribute("tabindex", "-1");
+      balao.focus({ preventScroll: true });
     });
   });
 }
