@@ -606,7 +606,7 @@ async function conferirPista() {
   const armadilha = (c.armadilhas || []).find((a) => a.h === h);
   const msg = armadilha
     ? armadilha.msg
-    : `Ainda não abriu. Confiram o formato (${c.formato}) e o trabalho na bancada. Errar faz parte: cada tentativa fica registrada.`;
+    : `Ainda não abriu. Confiram o formato pedido, ${c.formato}, e o trabalho na bancada. Errar faz parte: cada tentativa fica registrada.`;
   dom.retorno.replaceChildren(el("p", { class: `callout ${armadilha ? "callout-warn" : "callout-bad"} anim-shake` }, [msg]));
   dom.campoPista.select();
 }
@@ -715,7 +715,7 @@ function renderizarFinal() {
     el("div", { class: "frame-tag" }, [icone("component", 16), "Opcional"]),
     el("h2", { id: "bonus-titulo", text: c.bonus.titulo }),
     el("ol", {}, c.bonus.passos.map((p) => el("li", { text: p }))),
-    el("a", { class: "btn btn-secondary btn-sm", href: c.bonus.link, target: "_blank", rel: "noopener" }, ["Ajuda do Figma", icone("external")]),
+    el("a", { class: "btn btn-secondary btn-sm", href: c.bonus.link, target: "_blank", rel: "noopener" }, ["Figma: guia de auto layout", icone("external")]),
   ]);
 
   dom.canvas.replaceChildren(certificado, bonus);

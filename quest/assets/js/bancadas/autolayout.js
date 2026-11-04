@@ -276,11 +276,11 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
       ? [{ v: "fixed", t: "Fixed" }, { v: "hug", t: "Hug contents" }, { v: "fill", t: "Fill container" }]
       : [{ v: "hug", t: "Hug contents" }, { v: "fill", t: "Fill container" }];
     const tamanho = [
-      campoSelect({ rotulo: "Largura", valor: n.larg.modo, opcoes: modos, aoMudar: (v) => { n.larg.modo = v; if (v === "fixed" && !n.larg.valor) n.larg.valor = Math.round(m.w); atualizar(); } }),
+      campoSelect({ rotulo: "Largura", largo: true, valor: n.larg.modo, opcoes: modos, aoMudar: (v) => { n.larg.modo = v; if (v === "fixed" && !n.larg.valor) n.larg.valor = Math.round(m.w); atualizar(); } }),
     ];
     if (n.tipo === "frame" && n.larg.modo === "fixed") tamanho.push(campoNumero({ rotulo: "L fixa", valor: n.larg.valor, max: 720, aoMudar: (v) => { n.larg.valor = v; atualizar(false); } }));
     if (n.tipo === "frame") {
-      tamanho.push(campoSelect({ rotulo: "Altura", valor: n.alt.modo, opcoes: [{ v: "fixed", t: "Fixed" }, { v: "hug", t: "Hug contents" }], aoMudar: (v) => { n.alt.modo = v; if (v === "fixed" && !n.alt.valor) n.alt.valor = Math.round(m.h); atualizar(); } }));
+      tamanho.push(campoSelect({ rotulo: "Altura", largo: true, valor: n.alt.modo, opcoes: [{ v: "fixed", t: "Fixed" }, { v: "hug", t: "Hug contents" }], aoMudar: (v) => { n.alt.modo = v; if (v === "fixed" && !n.alt.valor) n.alt.valor = Math.round(m.h); atualizar(); } }));
       if (n.alt.modo === "fixed") tamanho.push(campoNumero({ rotulo: "A fixa", valor: n.alt.valor, max: 900, aoMudar: (v) => { n.alt.valor = v; atualizar(false); } }));
     }
     blocos.push(secao("Redimensionamento", [el("div", { class: "prop-grid" }, tamanho)], "frame"));

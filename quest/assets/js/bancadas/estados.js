@@ -7,11 +7,12 @@
 import { el, icone, razaoContraste, num } from "../ui.js";
 import { campoSelect, inspetor, quadro, secao, caixaExport, segmentado } from "./comum.js";
 
+// Same order as the export code (Default - Hover - Pressed - Foco - Disabled).
 const ESTADOS = [
   { id: "default", nome: "Default" },
   { id: "hover", nome: "Hover" },
-  { id: "focus", nome: "Focus" },
   { id: "pressed", nome: "Pressed" },
+  { id: "focus", nome: "Focus" },
   { id: "disabled", nome: "Disabled" },
 ];
 

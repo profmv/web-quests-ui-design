@@ -45,6 +45,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
     ...config.problemas.map((k) =>
       el("div", { class: "audit-row", "data-problema": k.id }, [
         campoSelect({ rotulo: k.id, valor: s.notas[k.id], largo: true, opcoes, aoMudar: (v) => { s.notas[k.id] = v; selecionado = k.id; desenhar(); } }),
+        el("p", { class: "heur-escolha", "data-escolha": k.id }),
       ])
     )
   );
@@ -57,8 +58,14 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
   function desenhar() {
     portal.querySelectorAll(".heur-marker").forEach((b) => b.classList.toggle("is-selected", b.textContent === selecionado));
     const p = config.problemas.find((k) => k.id === selecionado);
-    leitura.replaceChildren(el("p", { class: "callout callout-info" }, [el("strong", { text: `${p.id}: ` }), p.texto]));
+    leitura.replaceChildren(el("p", { class: "callout callout-info" }, [el("span", {}, [el("strong", { text: `${p.id}:` }), ` ${p.texto}`])]));
     lista.querySelectorAll(".audit-row").forEach((r) => r.classList.toggle("is-selected", r.dataset.problema === selecionado));
+    // Full heuristic name under each select: long names are cut inside a narrow panel.
+    lista.querySelectorAll(".heur-escolha").forEach((n) => {
+      const v = s.notas[n.dataset.escolha];
+      n.textContent = v ? `${v}. ${config.nomes[Number(v)]}` : "";
+      n.hidden = !v;
+    });
     const faltam = config.problemas.filter((k) => !s.notas[k.id]).length;
     exp.definir(faltam ? `faltam ${faltam} problemas` : config.problemas.map((k) => s.notas[k.id]).join("-"));
     camadas.replaceChildren(...config.problemas.map((k) => el("button", { type: "button", class: `layer-row${k.id === selecionado ? " is-selected" : ""}`, onclick: () => selecionar(k.id) }, [icone("message"), el("span", { text: `${k.id}${s.notas[k.id] ? ` · heurística ${s.notas[k.id]}` : ""}` })])));

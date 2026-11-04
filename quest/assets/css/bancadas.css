@@ -62,7 +62,8 @@
 
 .order-item.is-selected { border-color: var(--ac-select); background: var(--ac-select-soft); }
 .order-pos { width: 24px; height: 24px; display: grid; place-items: center; border-radius: 50%; background: var(--ac-redline); color: #ffffff; font-size: var(--fs-12); font-weight: 700; flex: none; }
-.order-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.order-name { flex: 1; min-width: 0; white-space: normal; overflow-wrap: anywhere; line-height: 1.3; }
+.heur-escolha { margin: 2px 0 0; font-size: var(--fs-12); line-height: 1.4; color: var(--tx-2); overflow-wrap: anywhere; }
 
 .sel-overlay { position: absolute; inset: -1px; border: 1px solid var(--ac-select); pointer-events: none; z-index: 5; }
 .sel-h { position: absolute; width: 8px; height: 8px; background: #ffffff; border: 1px solid var(--ac-select); }
@@ -146,9 +147,11 @@
 .phone-dim { background: #8a909c; align-content: center; }
 .ph-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s-1); min-height: 40px; padding: 0 var(--s-05); border-bottom: 1px solid var(--ws-border); font-size: 14px; }
 .ph-icons { display: inline-flex; gap: var(--s-1); }
-.ph-ic { position: relative; display: inline-flex; align-items: center; gap: 2px; }
+.ph-ic { position: relative; display: inline-flex; align-items: center; gap: var(--s-05); }
+/* Room for the selected marker (scaled + outline) so it never covers the icon it points at. */
+.ph-ic .audit-marker { margin-left: 2px; }
 .ph-mini { font-size: 10px; color: var(--tx-3); }
-.ph-urgent { position: relative; padding: var(--s-1); border-radius: var(--r-4); background: #b42323; color: #ffffff; font-weight: 700; }
+.ph-urgent { position: relative; display: flex; align-items: center; justify-content: space-between; gap: var(--s-05); padding: var(--s-1); border-radius: var(--r-4); background: #b42323; color: #ffffff; font-weight: 700; }
 .ph-item { position: relative; display: flex; align-items: center; gap: var(--s-1); padding: var(--s-05) 0; border-bottom: 1px solid var(--ws-border); }
 .ph-thumb { width: 40px; height: 40px; border-radius: var(--r-4); background: linear-gradient(135deg, #c6d4f8, #e3c6f2); flex: none; }
 .ph-item-text { flex: 1; display: grid; }
@@ -259,6 +262,8 @@
 .pt-wait { display: grid; gap: var(--s-05); padding: var(--s-1); background: #ffffff; border: 1px solid var(--ws-border); }
 .pt-blank { display: grid; place-items: center; height: 64px; background: #ffffff; border: 1px dashed var(--ws-border-strong); color: var(--tx-3); font-family: var(--ff-mono); font-size: 11px; }
 .heur-detail .callout { margin: 0; }
+.pt-wait .audit-marker { justify-self: end; }
+.pt-field .audit-marker { margin-right: -2px; }
 
 /* ---------- Lock 7: auto layout ---------- */
 .al-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--s-2); }
