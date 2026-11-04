@@ -7,6 +7,12 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet" href="../assets/css/quest.css">
   <style>
+    .placar-nota {
+      margin-top: 16px;
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
     .scoreboard-table {
       width: 100%;
       border-collapse: collapse;
@@ -177,6 +183,12 @@
             </tbody>
           </table>
         </div>
+        <p class="placar-nota">
+          Sobre a coluna Autenticidade: ela detecta códigos alterados por engano ou editados à mão.
+          Como a atividade roda inteira no navegador, um aluno com conhecimento técnico avançado
+          consegue gerar um código falso que aparece como válido. Em caso de dúvida, confira o
+          progresso da dupla na tela do computador dela.
+        </p>
       </section>
     </div>
   </main>
@@ -189,7 +201,15 @@
     import { decodificarCodigoProgresso } from "../assets/js/progress.js";
     import { escaparHtml } from "../assets/js/util.js";
 
-    const PASSPHRASE = "placar2026";
+    // SHA-256 of the teacher password (only the hash is published).
+    // To change it: node -e "console.log(require('crypto').createHash('sha256').update('NEW_PASSWORD').digest('hex'))"
+    // This only keeps the password out of plain sight; it is not access control (everything runs client-side).
+    const PASSPHRASE_SHA256 = "c14ef8f3ce3673a9b25eb6ba21571d3790aefefd7aade02ce2ce1bdbca675d62";
+
+    async function sha256Hex(texto) {
+      const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
+      return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
+    }
     const STORAGE_KEY = "web-quests-placar:v1";
 
     const dom = {
@@ -236,9 +256,9 @@
       }
     }
 
-    dom.formAuth.addEventListener("submit", (e) => {
+    dom.formAuth.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (dom.inputPass.value === PASSPHRASE) {
+      if ((await sha256Hex(dom.inputPass.value)) === PASSPHRASE_SHA256) {
         sessionStorage.setItem("placar_auth", "true");
         dom.inputPass.value = "";
         dom.authFeedback.style.display = "none";
