@@ -56,9 +56,9 @@ export const etapas = [
         dica_revelada: "Excelente olhar clínico! O padrão clássico de leitura e escaneamento ocidental em blocos de texto chama-se: F-PATTERN"
       },
       pistas: [
-        "Consulte o Slide 3 sobre Hierarquia Visual. O título principal deve ter peso e escala superiores ao texto de apoio.",
+        "Consulte o Slide 3 (F-Pattern e Z-Pattern) e o Slide 4 (Tipografia). O título principal deve ter peso e escala superiores ao texto de apoio.",
         "Em interfaces com texto denso, os usuários leem as linhas superiores inteiras e descem escaneando apenas as bordas esquerdas.",
-        "A resposta esperada é o nome do padrão de leitura em bloco: F-PATTERN"
+        "O padrão recebe o nome da letra que o trajeto do olhar desenha na tela. Escrevam a letra, um hífen e a palavra inglesa para 'padrão'."
       ],
       resposta_esperada: "F-PATTERN",
       feedback_sucesso: "Hierarquia decifrada! Vocês reconheceram como tamanho, peso e contraste direcionam o foco antes mesmo da leitura consciente."
@@ -117,9 +117,9 @@ export const etapas = [
         dica_revelada: "Perfeito! Donald Norman destacou que na tela plana o sinal visual que comunica a ação ao usuário chama-se: SIGNIFIER"
       },
       pistas: [
-        "Consulte os slides de Affordance. Em telas digitais, o vidro tem affordance de toque, mas não de clique em elemento específico.",
+        "Consulte o Slide 6 (Affordance vs Signifier). Em telas digitais, o vidro tem affordance de toque, mas não de clique em elemento específico.",
         "O elemento gráfico que indica a interatividade de um botão chama-se signifier (sinalizador).",
-        "A resposta é a palavra conceitual em inglês formulada por Don Norman: SIGNIFIER"
+        "A chave é o termo original em inglês de Don Norman para esse 'sinalizador'. Cuidado: não é affordance."
       ],
       resposta_esperada: "SIGNIFIER",
       feedback_sucesso: "Excelente trabalho! Vocês dominaram a máquina de estados e compreenderam por que um botão precisa comunicar visualmente seu status."
@@ -170,9 +170,9 @@ export const etapas = [
         dica_revelada: "Armadilhas desarmadas com sucesso! O pilar fundamental que respeita as convenções universais do usuário chama-se: CONSISTENCIA"
       },
       pistas: [
-        "Consulte os slides sobre Consistência e Dark Patterns. A Lei de Jakob é a base deste desafio.",
+        "Consulte o Slide 9 (Lei de Jakob) e o Slide 10 (Dark Patterns). A Lei de Jakob é a base deste desafio.",
         "Inverter botões de ação e esconder caixas pré-marcadas quebra a previsibilidade do usuário.",
-        "A resposta é o nome do terceiro pilar de UI que garante previsibilidade: CONSISTENCIA"
+        "A chave é o nome, em português e sem acento, do pilar de UI que garante previsibilidade entre telas e produtos."
       ],
       resposta_esperada: "CONSISTENCIA",
       feedback_sucesso: "Consciência ética afiada! Uma interface de qualidade respeita a autonomia do usuário e preserva padrões universais."
@@ -211,7 +211,7 @@ export const etapas = [
       pistas: [
         "Consulte o Slide 11 sobre Grid de 8px. Valores ímpares causam quebra de alinhamento em diferentes telas.",
         "Todos os valores devem pertencer à escala modular: 8, 16, 24, 32, 40...",
-        "A resposta esperada une a palavra 'ritmo' ao valor do grid: RITMO8PX"
+        "Juntem, sem espaços, a palavra portuguesa para a cadência visual de um layout e o tamanho da unidade do grid (número seguido de 'px')."
       ],
       resposta_esperada: "RITMO8PX",
       feedback_sucesso: "Cadência matemática perfeita! Vocês comprovaram na prática como múltiplos de 8 removem a arbitrariedade do design."
@@ -254,9 +254,9 @@ export const etapas = [
         dica_revelada: "Esqueleto montado com sucesso! A representação esquemática em baixa fidelidade da interface chama-se: WIREFRAME"
       },
       pistas: [
-        "Consulte os slides sobre preparação para o Figma. A primeira etapa é sempre o rascunho estrutural.",
+        "Consulte o Slide 14 (Roteiro da Missão). A primeira etapa é sempre o rascunho estrutural.",
         "O termo em inglês designa o desenho de 'arame' que ancora o layout sem preocupação com cores.",
-        "A resposta esperada é o substantivo singular em inglês: WIREFRAME"
+        "A chave une, em uma só palavra e no singular, os termos ingleses para 'arame' e 'moldura'."
       ],
       resposta_esperada: "WIREFRAME",
       feedback_sucesso: "Arquitetura validada! Separar layout de cosmética visual é a marca registrada de designers e desenvolvedores maduros."
@@ -309,9 +309,9 @@ export const etapas = [
         dica_revelada: "Diagnóstico preciso! A técnica de avaliação baseada nas regras de ouro de usabilidade é conhecida como avaliação: HEURISTICA"
       },
       pistas: [
-        "Consulte os slides sobre usabilidade e princípios de Nielsen.",
+        "Este desafio vai além dos slides: pensem nas 10 regras clássicas de usabilidade de Jakob Nielsen (o mesmo da Lei de Jakob, Slide 9).",
         "As 10 regras consolidadas por Nielsen para diagnosticar falhas de interface são chamadas de heurísticas.",
-        "A resposta esperada é a palavra no singular feminino sem acento: HEURISTICA"
+        "A chave é o nome dessas regras, no singular e sem acento."
       ],
       resposta_esperada: "HEURISTICA",
       feedback_sucesso: "Sentença justa proferida! Vocês identificaram a falha de comunicação do sistema e propuseram uma solução focada no usuário."
@@ -345,9 +345,9 @@ export const etapas = [
             titulo: "Desafio 1 de 5: Contraste WCAG 2.2 AA",
             pergunta: "Qual combinação de botão atinge o contraste mínimo de 4.5:1 para leitura acessível?",
             opcoes: [
-              { id: "opt-1", texto: "Texto cinza claro (#94a3b8) sobre fundo branco (#ffffff) - Contraste 2.6:1", correto: false },
-              { id: "opt-2", texto: "Texto azul profundo (#0f172a) sobre fundo branco (#ffffff) - Contraste 17.9:1", correto: true },
-              { id: "opt-3", texto: "Texto amarelo ouro (#fbbf24) sobre fundo branco (#ffffff) - Contraste 1.7:1", correto: false }
+              { id: "opt-1", texto: "Texto cinza claro (#94a3b8) sobre fundo branco (#ffffff)", detalhe: "contraste 2.6:1", correto: false },
+              { id: "opt-2", texto: "Texto azul profundo (#0f172a) sobre fundo branco (#ffffff)", detalhe: "contraste 17.9:1", correto: true },
+              { id: "opt-3", texto: "Texto amarelo ouro (#fbbf24) sobre fundo branco (#ffffff)", detalhe: "contraste 1.7:1", correto: false }
             ]
           },
           {
@@ -394,9 +394,9 @@ export const etapas = [
         dica_revelada: "Impressionante agilidade perceptiva! O talento visual refinado de um profissional de interface chama-se: OLHOCLINICO"
       },
       pistas: [
-        "Consulte os slides sobre hierarquia e contraste. O teste avalia sua acuidade técnica.",
+        "Consulte o Slide 4 (Tipografia e Contraste) e o Slide 5 (Teste do Card). O teste avalia sua acuidade técnica.",
         "A expressão descreve a visão atenta e analítica desenvolvida pela prática contínua.",
-        "A resposta esperada une 'olho' e 'clínico' sem separação ou acento: OLHOCLINICO"
+        "Pensem no olhar treinado de um médico ao examinar um paciente: duas palavras, escritas juntas, sem espaço e sem acento."
       ],
       resposta_esperada: "OLHOCLINICO",
       feedback_sucesso: "Circuito concluído sem falhas! Vocês provaram que conseguem identificar sutilezas de interface em segundos."
@@ -455,9 +455,9 @@ export const etapas = [
         dica_revelada: "A Chave Mestra final foi encontrada! A poderosa ferramenta do Figma baseada em flexbox visual chama-se: AUTOLAYOUT"
       },
       pistas: [
-        "Consulte os slides finais sobre o Figma. O recurso é ativado com o atalho Shift + A.",
+        "Consulte o Slide 13 (Os 4 Pilares no Figma). O recurso é ativado com o atalho Shift + A.",
         "Essa propriedade substitui retângulos fixos por caixas adaptáveis de conteúdo.",
-        "A resposta é o nome em inglês da funcionalidade: AUTOLAYOUT"
+        "A chave é o nome em inglês desse recurso do Figma, escrito sem espaço nem hífen."
       ],
       resposta_esperada: "AUTOLAYOUT",
       feedback_sucesso: "Chave Mestra conquistada! Vocês dominaram todos os alicerces teóricos e práticos de UI Design e estão 100% prontos para o Figma."

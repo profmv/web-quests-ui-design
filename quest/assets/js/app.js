@@ -144,7 +144,6 @@ async function descriptografarEtapasConhecidas() {
   etapasDecifradas[0] = stage0;
 
   // Subsequent stages decoded with answers recorded in state
-  let senhaAtual = stage0?.resposta_esperada || "f-pattern";
   for (let i = 0; i < (estado.answers || []).length; i++) {
     const tentativa = estado.answers[i];
     if (i + 1 < etapasCifradas.etapas.length) {
@@ -287,10 +286,10 @@ function renderizarEtapaAtual() {
 
   // Mount Workbench Widget
   const wbContainer = document.getElementById("workbench-container");
-  montarBancada(etapa.tipo_desafio, wbContainer, etapa.dados_desafio, (chaveRevelada) => {
+  montarBancada(etapa.tipo_desafio, wbContainer, etapa.dados_desafio, () => {
     const input = document.getElementById("answer-input");
-    if (input && !input.value) {
-      input.value = chaveRevelada;
+    if (input && !input.value && etapa.resposta_esperada) {
+      input.value = etapa.resposta_esperada;
       input.focus();
     }
   });
@@ -493,6 +492,31 @@ function alternarDrawer() {
   }
 }
 
+/**
+ * Opens the slides drawer on a given slide (1-based) via the slides JUMP_TO_SLIDE API.
+ */
+function abrirSlide(numero) {
+  dom.drawer.classList.add("open");
+  dom.drawerBackdrop.classList.add("open");
+  const frame = dom.drawer.querySelector("iframe");
+  if (frame && frame.contentWindow) {
+    frame.contentWindow.postMessage({ type: "JUMP_TO_SLIDE", slideIndex: numero }, window.location.origin);
+  }
+}
+
+/**
+ * Renders one "Abrir Slide N" button per slide number mentioned in a hint.
+ */
+function botoesSlides(texto) {
+  const numeros = [...new Set([...String(texto).matchAll(/\bSlide (\d{1,2})\b/g)].map((m) => Number(m[1])))];
+  if (numeros.length === 0) return "";
+  return `<div class="hint-slide-links">${numeros.map((n) => `
+    <button type="button" class="btn btn-secondary btn-ir-slide" data-slide="${n}">
+      <svg class="icon icon-sm"><use href="#icon-slides"></use></svg>
+      Abrir Slide ${n}
+    </button>`).join("")}</div>`;
+}
+
 function fecharDrawer() {
   dom.drawer.classList.remove("open");
   dom.drawerBackdrop.classList.remove("open");
@@ -562,11 +586,18 @@ function renderizarMochila() {
                   ${motivo || "Revelar (gasta 1)"}
                 </button>`}
           </div>
-          ${aberta ? `<div class="hint-text">${pista}</div>` : ""}
+          ${aberta ? `<div class="hint-text">${pista}</div>${botoesSlides(pista)}` : ""}
         </li>`;
       }).join("")}
     </ul>
   `;
+
+  dom.backpackContent.querySelectorAll(".btn-ir-slide").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      fecharModal(dom.modalBackpack);
+      abrirSlide(Number(btn.dataset.slide));
+    });
+  });
 
   dom.backpackContent.querySelectorAll(".btn-revelar-dica").forEach((btn) => {
     btn.addEventListener("click", () => {

@@ -416,6 +416,8 @@
 
   // Inter-frame PostMessage Listener (Quest <-> Slides API)
   window.addEventListener('message', (event) => {
+    // Only the hosting quest page (same origin) may drive the deck
+    if (event.origin !== window.location.origin) return;
     if (!event.data || typeof event.data !== 'object') return;
     const msg = event.data;
 

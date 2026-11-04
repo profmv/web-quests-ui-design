@@ -1093,3 +1093,26 @@ body {
     overflow-wrap: anywhere;
   }
 }
+
+/* Gauntlet: measured values revealed only after answering */
+.gauntlet-details {
+  margin: 8px 0 0;
+  padding-left: 24px;
+  font-weight: 400;
+}
+
+.gauntlet-details li + li {
+  margin-top: 4px;
+}
+
+.wireframe-slot:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.hint-slide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}

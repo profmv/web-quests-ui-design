@@ -7,6 +7,45 @@
 
 import { escaparHtml, nomeArquivoSeguro } from "./util.js";
 
+/**
+ * Returns a shuffled copy (Fisher-Yates). Option order must not reveal the answer.
+ */
+function embaralhar(lista) {
+  const copia = [...lista];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+/**
+ * Shuffles options and replaces their ids with opaque per-render tokens.
+ * Correctness stays in JS memory (returned map), never in the DOM.
+ */
+function prepararOpcoes(opcoes) {
+  const corretas = new Map();
+  const lista = embaralhar(opcoes).map((opt, idx) => {
+    const token = `o${idx}`;
+    corretas.set(token, opt.correto === true);
+    return { ...opt, token };
+  });
+  return { lista, corretas };
+}
+
+function caixaPista(texto) {
+  return `
+    <div class="clue-reveal-box">
+      <svg class="icon"><use href="#icon-key"></use></svg>
+      <span>${texto}</span>
+    </div>
+  `;
+}
+
+/**
+ * Mounts the workbench for a stage. onRevealedClue() is called (without the answer:
+ * the caller already holds it in the decrypted stage) when the bench is solved.
+ */
 export function montarBancada(tipo, containerEl, dados, onRevealedClue) {
   if (!containerEl) return;
   containerEl.innerHTML = "";
@@ -48,6 +87,23 @@ export function montarBancada(tipo, containerEl, dados, onRevealedClue) {
 // 1. Diff Picker (Can't Unsee Style)
 // ---------------------------------------------------------------------------
 function montarDiffPicker(container, dados, onClue) {
+  // Random left/right order; labels follow the on-screen position, not the data key.
+  const chaves = embaralhar(["A", "B"]);
+  const cartao = (chave, pos) => {
+    const op = chave === "A" ? dados.opcao_a : dados.opcao_b;
+    const rotulo = pos === 0 ? "Cartão A" : "Cartão B";
+    return `
+      <div class="diff-card" data-pos="${pos}" tabindex="0" role="radio" aria-checked="false">
+        <div>
+          <span class="diff-card-label">${rotulo}</span>
+          <div style="${op.titulo_estilo} margin-top: 8px;">${op.titulo_texto}</div>
+          <div style="${op.corpo_estilo} margin-top: 8px;">${op.corpo_texto}</div>
+        </div>
+        <button type="button" tabindex="-1" style="${op.botao_estilo} margin-top: 16px;">${op.botao_texto}</button>
+      </div>
+    `;
+  };
+
   const html = `
     <div class="workbench-title-bar">
       <span class="workbench-label">
@@ -57,68 +113,54 @@ function montarDiffPicker(container, dados, onClue) {
       <span class="stat-pill">${dados.pergunta || "Selecione o cartão correto"}</span>
     </div>
     <div class="diff-container" role="radiogroup" aria-label="Opções de Cartão">
-      <div class="diff-card" id="diff-card-a" tabindex="0" role="radio" aria-checked="false">
-        <div>
-          <span class="diff-card-label">${dados.opcao_a.rotulo}</span>
-          <div style="${dados.opcao_a.titulo_estilo} margin-top: 8px;">${dados.opcao_a.titulo_texto}</div>
-          <div style="${dados.opcao_a.corpo_estilo} margin-top: 8px;">${dados.opcao_a.corpo_texto}</div>
-        </div>
-        <button type="button" style="${dados.opcao_a.botao_estilo} margin-top: 16px;">${dados.opcao_a.botao_texto}</button>
-      </div>
-
-      <div class="diff-card" id="diff-card-b" tabindex="0" role="radio" aria-checked="false">
-        <div>
-          <span class="diff-card-label">${dados.opcao_b.rotulo}</span>
-          <div style="${dados.opcao_b.titulo_estilo} margin-top: 8px;">${dados.opcao_b.titulo_texto}</div>
-          <div style="${dados.opcao_b.corpo_estilo} margin-top: 8px;">${dados.opcao_b.corpo_texto}</div>
-        </div>
-        <button type="button" style="${dados.opcao_b.botao_estilo} margin-top: 16px;">${dados.opcao_b.botao_texto}</button>
-      </div>
+      ${chaves.map((ch, pos) => cartao(ch, pos)).join("")}
     </div>
     <div id="diff-feedback-slot"></div>
   `;
   container.innerHTML = html;
 
-  const cardA = container.querySelector("#diff-card-a");
-  const cardB = container.querySelector("#diff-card-b");
+  const cards = [...container.querySelectorAll(".diff-card")];
   const slot = container.querySelector("#diff-feedback-slot");
 
-  function escolher(opcao) {
-    cardA.classList.remove("selected-correct", "selected-incorrect");
-    cardB.classList.remove("selected-correct", "selected-incorrect");
+  function escolher(pos) {
+    cards.forEach((c) => {
+      c.classList.remove("selected-correct", "selected-incorrect");
+      c.setAttribute("aria-checked", "false");
+    });
+    const el = cards[pos];
+    el.setAttribute("aria-checked", "true");
 
-    if (opcao === dados.opcao_correta) {
-      const elCorreto = opcao === "A" ? cardA : cardB;
-      elCorreto.classList.add("selected-correct");
-      elCorreto.setAttribute("aria-checked", "true");
-      slot.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
-        </div>
-      `;
-      if (onClue) onClue("F-PATTERN");
+    if (chaves[pos] === dados.opcao_correta) {
+      el.classList.add("selected-correct");
+      slot.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
     } else {
-      const elErrado = opcao === "A" ? cardA : cardB;
-      elErrado.classList.add("selected-incorrect");
+      el.classList.add("selected-incorrect");
       slot.innerHTML = `
         <div class="answer-feedback error" style="display: block; margin-top: 12px;">
-          [AVISO] No Cartão A, o corpo tem tamanho 22px em negrito e o título apenas 13px cinza. A hierarquia está invertida e confunde o escaneamento natural!
+          [AVISO] Neste cartão o corpo do texto (22px em negrito) pesa mais que o título (13px cinza). A hierarquia está invertida e confunde o escaneamento natural!
         </div>
       `;
     }
   }
 
-  cardA.addEventListener("click", () => escolher("A"));
-  cardB.addEventListener("click", () => escolher("B"));
-  cardA.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); escolher("A"); } });
-  cardB.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); escolher("B"); } });
+  cards.forEach((card, pos) => {
+    card.addEventListener("click", () => escolher(pos));
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); escolher(pos); }
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------
 // 2. State Fixer (Affordance & Button State Machine)
 // ---------------------------------------------------------------------------
 function montarStateFixer(container, dados, onClue) {
+  const opcoesPorEstado = {};
+  dados.estados_obrigatorios.forEach((est) => {
+    opcoesPorEstado[est] = prepararOpcoes(dados.configuracoes_disponiveis[est] || []);
+  });
+
   const html = `
     <div class="workbench-title-bar">
       <span class="workbench-label">
@@ -133,8 +175,8 @@ function montarStateFixer(container, dados, onClue) {
           <div class="state-name">Estado: ${est.toUpperCase()}</div>
           <select class="state-select" data-estado="${est}">
             <option value="">-- Selecione o signifier adequado --</option>
-            ${(dados.configuracoes_disponiveis[est] || []).map((cfg, idx) => `
-              <option value="${cfg.id}" data-correto="${cfg.correto}">${cfg.texto}</option>
+            ${opcoesPorEstado[est].lista.map((cfg) => `
+              <option value="${cfg.token}">${cfg.texto}</option>
             `).join("")}
           </select>
         </div>
@@ -162,20 +204,14 @@ function montarStateFixer(container, dados, onClue) {
 
     selects.forEach((sel) => {
       if (!sel.value) todosRespondidos = false;
-      const opt = sel.selectedOptions[0];
-      if (!opt || opt.dataset.correto !== "true") {
+      if (!opcoesPorEstado[sel.dataset.estado].corretas.get(sel.value)) {
         todosCorretos = false;
       }
     });
 
     if (todosRespondidos && todosCorretos) {
-      slot.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
-        </div>
-      `;
-      if (onClue) onClue("SIGNIFIER");
+      slot.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
     } else if (todosRespondidos) {
       slot.innerHTML = `
         <div class="answer-feedback error" style="display: block; margin-top: 12px;">
@@ -238,13 +274,8 @@ function montarPatternHunter(container, dados, onClue) {
     onDone();
 
     if (neutralizados >= total) {
-      slot.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
-        </div>
-      `;
-      if (onClue) onClue("CONSISTENCIA");
+      slot.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
     }
   }
 
@@ -368,13 +399,8 @@ function montarGridAligner(container, dados, onClue) {
 
     if (padCardOk && gapTitOk && gapCorpoOk && padBtnOk) {
       card.style.borderColor = "var(--success)";
-      slot.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
-        </div>
-      `;
-      if (onClue) onClue("RITMO8PX");
+      slot.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
     } else {
       card.style.borderColor = "var(--border-color)";
       slot.innerHTML = "";
@@ -423,7 +449,7 @@ function montarWireframeBuilder(container, dados, onClue) {
           Banco de Blocos Estruturais (Clique para posicionar)
         </div>
         <div style="display: flex; flex-direction: column; gap: 8px;" id="wire-blocks-bank">
-          ${dados.blocos_disponiveis.map((b) => `
+          ${embaralhar(dados.blocos_disponiveis).map((b) => `
             <button type="button" class="btn btn-secondary wire-bank-btn" data-id="${b.id}" style="justify-content: flex-start; text-align: left;">
               <div>
                 <div style="font-weight: 700;">${b.titulo}</div>
@@ -440,7 +466,7 @@ function montarWireframeBuilder(container, dados, onClue) {
         </div>
         <div class="wireframe-slots-container">
           ${dados.posicoes.map((pos, idx) => `
-            <div class="wireframe-slot" data-index="${idx}" data-expected="${pos.bloco_correto}">
+            <div class="wireframe-slot" data-index="${idx}" tabindex="0" role="button">
               <span style="font-size: 0.75rem; color: var(--text-subtle);">${pos.rotulo}</span>
             </div>
           `).join("")}
@@ -469,6 +495,9 @@ function montarWireframeBuilder(container, dados, onClue) {
   });
 
   slots.forEach((slot) => {
+    slot.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); slot.click(); }
+    });
     slot.addEventListener("click", () => {
       if (!blocoSelecionado) return;
       const idx = parseInt(slot.dataset.index, 10);
@@ -487,19 +516,14 @@ function montarWireframeBuilder(container, dados, onClue) {
     let correto = true;
 
     slots.forEach((slot, idx) => {
-      const exp = slot.dataset.expected;
+      const exp = dados.posicoes[idx].bloco_correto;
       if (!slotsState[idx]) completo = false;
       if (slotsState[idx] !== exp) correto = false;
     });
 
     if (completo && correto) {
-      feedbackSlot.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
-        </div>
-      `;
-      if (onClue) onClue("WIREFRAME");
+      feedbackSlot.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
     } else if (completo) {
       feedbackSlot.innerHTML = `
         <div class="answer-feedback error" style="display: block; margin-top: 12px;">
@@ -514,6 +538,8 @@ function montarWireframeBuilder(container, dados, onClue) {
 // 6. Critique Evaluator (Heurísticas de Usabilidade)
 // ---------------------------------------------------------------------------
 function montarCritiqueEvaluator(container, dados, onClue) {
+  const questoes = dados.questoes.map((q) => ({ ...q, preparadas: prepararOpcoes(q.opcoes) }));
+
   const html = `
     <div class="workbench-title-bar">
       <span class="workbench-label">
@@ -529,13 +555,13 @@ function montarCritiqueEvaluator(container, dados, onClue) {
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 16px;">
-      ${dados.questoes.map((q) => `
+      ${questoes.map((q) => `
         <div class="critique-q" data-qid="${q.id}">
           <div style="font-weight: 700; font-size: 0.875rem; margin-bottom: 8px;">${q.enunciado}</div>
           <div style="display: flex; flex-direction: column; gap: 6px;">
-            ${q.opcoes.map((opt) => `
+            ${q.preparadas.lista.map((opt) => `
               <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.875rem; cursor: pointer; padding: 6px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-surface);">
-                <input type="radio" name="critique_${q.id}" value="${opt.id}" data-correto="${opt.correto}" />
+                <input type="radio" name="critique_${q.id}" value="${opt.token}" />
                 <span>${opt.texto}</span>
               </label>
             `).join("")}
@@ -551,18 +577,12 @@ function montarCritiqueEvaluator(container, dados, onClue) {
   const radios = container.querySelectorAll("input[type=radio]");
 
   function checarCritique() {
-    const q1 = container.querySelector("input[name='critique_q1']:checked");
-    const q2 = container.querySelector("input[name='critique_q2']:checked");
+    const marcadas = questoes.map((q) => container.querySelector(`input[name='critique_${q.id}']:checked`));
 
-    if (q1 && q2) {
-      if (q1.dataset.correto === "true" && q2.dataset.correto === "true") {
-        slot.innerHTML = `
-          <div class="clue-reveal-box">
-            <svg class="icon"><use href="#icon-key"></use></svg>
-            <span>${dados.dica_revelada}</span>
-          </div>
-        `;
-        if (onClue) onClue("HEURISTICA");
+    if (marcadas.every(Boolean)) {
+      if (questoes.every((q, i) => q.preparadas.corretas.get(marcadas[i].value))) {
+        slot.innerHTML = caixaPista(dados.dica_revelada);
+        if (onClue) onClue();
       } else {
         slot.innerHTML = `
           <div class="answer-feedback error" style="display: block; margin-top: 12px;">
@@ -582,20 +602,24 @@ function montarCritiqueEvaluator(container, dados, onClue) {
 function montarClinicalGauntlet(container, dados, onClue) {
   let rodadaAtual = 0;
   const etapas = dados.etapas_gauntlet;
+  const PAUSA_MS = 1800;
+
+  // Optional per-option detail (e.g. measured contrast ratio) is shown only after answering.
+  function listaDetalhes(opcoes) {
+    const comDetalhe = opcoes.filter((o) => o.detalhe);
+    if (comDetalhe.length === 0) return "";
+    return `<ul class="gauntlet-details">${comDetalhe.map((o) => `<li>${o.texto}: <strong>${o.detalhe}</strong></li>`).join("")}</ul>`;
+  }
 
   function renderizarRodada() {
     if (rodadaAtual >= etapas.length) {
-      container.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
-        </div>
-      `;
-      if (onClue) onClue("OLHOCLINICO");
+      container.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
       return;
     }
 
     const item = etapas[rodadaAtual];
+    const { lista, corretas } = prepararOpcoes(item.opcoes);
     container.innerHTML = `
       <div class="workbench-title-bar">
         <span class="workbench-label">
@@ -606,32 +630,40 @@ function montarClinicalGauntlet(container, dados, onClue) {
       </div>
       <div style="font-weight: 700; font-size: 0.9375rem; margin-bottom: 12px;">${item.pergunta}</div>
       <div style="display: flex; flex-direction: column; gap: 8px;">
-        ${item.opcoes.map((opt) => `
-          <button type="button" class="btn btn-secondary gauntlet-opt-btn" data-correto="${opt.correto}" style="justify-content: flex-start; text-align: left; padding: 10px 14px;">
+        ${lista.map((opt) => `
+          <button type="button" class="btn btn-secondary gauntlet-opt-btn" data-token="${opt.token}" style="justify-content: flex-start; text-align: left; padding: 10px 14px;">
             ${opt.texto}
           </button>
         `).join("")}
       </div>
-      <div id="gauntlet-alert-slot"></div>
+      <div id="gauntlet-alert-slot" aria-live="polite"></div>
     `;
 
     const btns = container.querySelectorAll(".gauntlet-opt-btn");
     const alertSlot = container.querySelector("#gauntlet-alert-slot");
+    const detalhes = listaDetalhes(item.opcoes);
 
     btns.forEach((btn) => {
       btn.addEventListener("click", () => {
-        if (btn.dataset.correto === "true") {
+        // Lock the round while feedback is shown (prevents skipping rounds)
+        btns.forEach((b) => { b.disabled = true; });
+        if (corretas.get(btn.dataset.token)) {
           rodadaAtual++;
-          renderizarRodada();
-        } else {
-          rodadaAtual = 0;
-          btns.forEach((b) => { b.disabled = true; });
+          if (!detalhes) { renderizarRodada(); return; }
           alertSlot.innerHTML = `
-            <div class="answer-feedback error" style="display: block; margin-top: 12px;">
-              [ERRO DE PRECISÃO] Resposta incorreta! O circuito do gauntlet foi reiniciado. Calibre o olhar e tente novamente.
+            <div class="answer-feedback success" style="display: block; margin-top: 12px;">
+              [OK] Correto! Medições desta rodada:${detalhes}
             </div>
           `;
-          setTimeout(renderizarRodada, 1800);
+          setTimeout(renderizarRodada, PAUSA_MS);
+        } else {
+          rodadaAtual = 0;
+          alertSlot.innerHTML = `
+            <div class="answer-feedback error" style="display: block; margin-top: 12px;">
+              [ERRO DE PRECISÃO] Resposta incorreta! O circuito do gauntlet foi reiniciado. Calibre o olhar e tente novamente.${detalhes}
+            </div>
+          `;
+          setTimeout(renderizarRodada, detalhes ? PAUSA_MS * 2 : PAUSA_MS);
         }
       });
     });
@@ -644,11 +676,31 @@ function montarClinicalGauntlet(container, dados, onClue) {
 // 8. Figma Ready (Auto-Layout Configurator)
 // ---------------------------------------------------------------------------
 function montarFigmaReady(container, dados, onClue) {
-  const estado = {
-    direcao: "",
-    gap: "",
-    padding: "",
-  };
+  const campos = [
+    {
+      id: "figma-direcao", rotulo: "Direção do Frame", vazio: "-- Selecione a direção --",
+      opcoes: [
+        { texto: "Horizontal (Row)", valor: "row", correto: false },
+        { texto: "Vertical (Column)", valor: "column", correto: true },
+      ],
+    },
+    {
+      id: "figma-gap", rotulo: "Gap entre Itens (Espaçamento)", vazio: "-- Selecione o token de gap --",
+      opcoes: [
+        { texto: "5px", valor: 5, correto: false },
+        { texto: "16px", valor: 16, correto: true },
+        { texto: "33px", valor: 33, correto: false },
+      ],
+    },
+    {
+      id: "figma-padding", rotulo: "Padding Interno", vazio: "-- Selecione o token de padding --",
+      opcoes: [
+        { texto: "10px", valor: 10, correto: false },
+        { texto: "24px", valor: 24, correto: true },
+        { texto: "45px", valor: 45, correto: false },
+      ],
+    },
+  ].map((c) => ({ ...c, preparadas: prepararOpcoes(c.opcoes) }));
 
   const html = `
     <div class="workbench-title-bar">
@@ -661,34 +713,15 @@ function montarFigmaReady(container, dados, onClue) {
 
     <div class="bench-split">
       <div style="display: flex; flex-direction: column; gap: 12px;">
-        <div>
-          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-subtle); margin-bottom: 4px;">Direção do Frame</div>
-          <select class="state-select" id="figma-direcao">
-            <option value="">-- Selecione a direção --</option>
-            <option value="horizontal">Horizontal (Row)</option>
-            <option value="vertical" data-correto="true">Vertical (Column)</option>
-          </select>
-        </div>
-
-        <div>
-          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-subtle); margin-bottom: 4px;">Gap entre Itens (Espaçamento)</div>
-          <select class="state-select" id="figma-gap">
-            <option value="">-- Selecione o token de gap --</option>
-            <option value="5">5px (Aleatório)</option>
-            <option value="16" data-correto="true">16px (Grid 8px)</option>
-            <option value="33">33px (Arbitrário)</option>
-          </select>
-        </div>
-
-        <div>
-          <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-subtle); margin-bottom: 4px;">Padding Interno</div>
-          <select class="state-select" id="figma-padding">
-            <option value="">-- Selecione o token de padding --</option>
-            <option value="10">10px</option>
-            <option value="24" data-correto="true">24px (Grid 8px)</option>
-            <option value="45">45px</option>
-          </select>
-        </div>
+        ${campos.map((c) => `
+          <div>
+            <label for="${c.id}" style="display: block; font-size: 0.8125rem; font-weight: 700; color: var(--text-subtle); margin-bottom: 4px;">${c.rotulo}</label>
+            <select class="state-select" id="${c.id}">
+              <option value="">${c.vazio}</option>
+              ${c.preparadas.lista.map((o) => `<option value="${o.token}">${o.texto}</option>`).join("")}
+            </select>
+          </div>
+        `).join("")}
       </div>
 
       <div style="background: var(--bg-page); border: 2px dashed var(--border-color); border-radius: 8px; padding: 16px; display: flex; align-items: center; justify-content: center;">
@@ -703,36 +736,38 @@ function montarFigmaReady(container, dados, onClue) {
   `;
   container.innerHTML = html;
 
-  const selDir = container.querySelector("#figma-direcao");
-  const selGap = container.querySelector("#figma-gap");
-  const selPad = container.querySelector("#figma-padding");
   const frame = container.querySelector("#figma-preview-frame");
   const slot = container.querySelector("#figma-feedback-slot");
+  const selects = campos.map((c) => container.querySelector(`#${c.id}`));
+
+  function escolhida(i) {
+    const token = selects[i].value;
+    return campos[i].preparadas.lista.find((o) => o.token === token) || null;
+  }
 
   function atualizarFigma() {
-    if (selDir.value) frame.style.flexDirection = selDir.value === "vertical" ? "column" : "row";
-    if (selGap.value) frame.style.gap = `${selGap.value}px`;
-    if (selPad.value) frame.style.padding = `${selPad.value}px`;
+    const [dir, gap, pad] = [0, 1, 2].map(escolhida);
+    if (dir) frame.style.flexDirection = dir.valor;
+    if (gap) frame.style.gap = `${gap.valor}px`;
+    if (pad) frame.style.padding = `${pad.valor}px`;
 
-    const dirOk = selDir.selectedOptions[0]?.dataset.correto === "true";
-    const gapOk = selGap.selectedOptions[0]?.dataset.correto === "true";
-    const padOk = selPad.selectedOptions[0]?.dataset.correto === "true";
-
-    if (dirOk && gapOk && padOk) {
-      frame.style.borderColor = "var(--success)";
+    const todosOk = [dir, gap, pad].every((o) => o && o.correto);
+    frame.style.borderColor = todosOk ? "var(--success)" : "var(--border-color)";
+    if (todosOk) {
+      slot.innerHTML = caixaPista(dados.dica_revelada);
+      if (onClue) onClue();
+    } else if ([dir, gap, pad].every(Boolean)) {
       slot.innerHTML = `
-        <div class="clue-reveal-box">
-          <svg class="icon"><use href="#icon-key"></use></svg>
-          <span>${dados.dica_revelada}</span>
+        <div class="answer-feedback error" style="display: block; margin-top: 12px;">
+          [AVISO] O frame ainda não está pronto: confira a direção dos itens empilhados e se os tokens pertencem ao grid de 8px.
         </div>
       `;
-      if (onClue) onClue("AUTOLAYOUT");
+    } else {
+      slot.innerHTML = "";
     }
   }
 
-  selDir.addEventListener("change", atualizarFigma);
-  selGap.addEventListener("change", atualizarFigma);
-  selPad.addEventListener("change", atualizarFigma);
+  selects.forEach((sel) => sel.addEventListener("change", atualizarFigma));
 }
 
 // ---------------------------------------------------------------------------
