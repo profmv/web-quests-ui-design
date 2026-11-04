@@ -13,14 +13,20 @@ import {
   gerarCodigoProgresso,
   decodificarCodigoProgresso,
   baixarArquivoProgresso,
+  garantirCreditosDicas,
+  aplicarRecuperacaoDica,
+  HINT_LIMIT,
+  HINT_RESTORE_EVERY,
 } from "./progress.js";
 import { montarBancada } from "./bancadas.js";
+import { escaparHtml } from "./util.js";
 
 // Global cache for decrypted stages
 let etapasCifradas = null;
 let etapasDecifradas = [];
 let estado = null;
 let timerInterval = null;
+let avisoPendente = ""; // Message carried over to the next rendered stage
 
 // DOM References
 const dom = {
@@ -41,6 +47,7 @@ const dom = {
   formOnboarding: document.getElementById("form-onboarding"),
   inputTeam1: document.getElementById("input-team-1"),
   inputTeam2: document.getElementById("input-team-2"),
+  btnOnboardingRestore: document.getElementById("btn-onboarding-restore"),
   
   // Backpack Modal
   btnBackpack: document.getElementById("btn-open-backpack"),
@@ -82,7 +89,7 @@ async function inicializar() {
   }
 
   // Load or request team state
-  estado = carregarEstadoLocal();
+  estado = garantirCreditosDicas(carregarEstadoLocal());
   if (!estado || !estado.team || !estado.team[0]) {
     abrirModal(dom.modalOnboarding);
   } else {
@@ -121,7 +128,8 @@ function atualizarCabecalho() {
   if (!estado) return;
   const nomes = (estado.team || []).filter(Boolean).join(" & ") || "Equipe";
   dom.headerTeam.textContent = nomes;
-  dom.headerHints.textContent = estado.hintsUsed || 0;
+  dom.headerHints.textContent = `${estado.hintCredits}/${HINT_LIMIT}`;
+  dom.btnBackpack.setAttribute("aria-label", `Mochila de Dicas: ${estado.hintCredits} de ${HINT_LIMIT} disponíveis`);
   window.__QUEST_TEAM__ = estado.team;
 }
 
@@ -226,14 +234,14 @@ function renderizarEtapaAtual() {
           <div class="role-col">
             <div class="role-header">
               <svg class="icon icon-sm"><use href="#icon-eye"></use></svg>
-              <span>Navegador (${estado.team[0] || "Integrante 1"})</span>
+              <span>Navegador (${escaparHtml(estado.team[0] || "Integrante 1")})</span>
             </div>
             <p class="role-desc">${etapa.instrucoes_dupla.navegador}</p>
           </div>
           <div class="role-col">
             <div class="role-header">
               <svg class="icon icon-sm"><use href="#icon-pointer"></use></svg>
-              <span>Piloto (${estado.team[1] || "Integrante 2"})</span>
+              <span>Piloto (${escaparHtml(estado.team[1] || "Integrante 2")})</span>
             </div>
             <p class="role-desc">${etapa.instrucoes_dupla.piloto}</p>
           </div>
@@ -267,6 +275,15 @@ function renderizarEtapaAtual() {
       ` : ""}
     </article>
   `;
+
+  if (avisoPendente && !isAlreadySolved) {
+    const fbEl = document.getElementById("answer-feedback");
+    if (fbEl) {
+      fbEl.className = "answer-feedback info";
+      fbEl.textContent = avisoPendente;
+    }
+  }
+  avisoPendente = "";
 
   // Mount Workbench Widget
   const wbContainer = document.getElementById("workbench-container");
@@ -329,6 +346,9 @@ async function tentarDesbloquearFechadura(indice) {
     }
     etapasDecifradas[proximoIndice] = etapaDecifrada;
 
+    const dicaRecuperada = aplicarRecuperacaoDica(estado);
+    atualizarCabecalho();
+
     // Check if completed last lock
     if (proximoIndice === 8) {
       estado.completedAt = Date.now();
@@ -339,6 +359,9 @@ async function tentarDesbloquearFechadura(indice) {
 
     feedback.className = "answer-feedback success";
     feedback.textContent = etapasDecifradas[indice].feedback_sucesso || "Fechadura decifrada com sucesso!";
+    if (dicaRecuperada) {
+      avisoPendente = `[+1 DICA] A dupla recuperou uma dica. Disponíveis: ${estado.hintCredits} de ${HINT_LIMIT}.`;
+    }
 
     setTimeout(() => {
       renderizarTrilhaFechaduras();
@@ -368,6 +391,21 @@ function configurarEventosGlobais() {
   dom.btnCloseDrawer.addEventListener("click", fecharDrawer);
   dom.drawerBackdrop.addEventListener("click", fecharDrawer);
 
+  // Keyboard shortcuts pressed while focus is inside the slides iframe
+  window.addEventListener("message", (e) => {
+    if (e.origin !== window.location.origin || !e.data || typeof e.data !== "object") return;
+    if (e.data.type === "CLOSE_DRAWER") fecharDrawer();
+    if (e.data.type === "TOGGLE_DRAWER") alternarDrawer();
+  });
+
+  // Onboarding: restore an existing code on a new computer
+  dom.btnOnboardingRestore.addEventListener("click", () => {
+    fecharModal(dom.modalOnboarding);
+    dom.txtExportCode.value = "";
+    abrirModal(dom.modalSaveLoad);
+    dom.txtRestoreCode.focus();
+  });
+
   window.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.altKey) && (e.key === "s" || e.key === "S")) {
       e.preventDefault();
@@ -376,7 +414,7 @@ function configurarEventosGlobais() {
     if (e.key === "Escape") {
       fecharDrawer();
       fecharModal(dom.modalBackpack);
-      fecharModal(dom.modalSaveLoad);
+      fecharSaveLoad();
     }
   });
 
@@ -408,7 +446,7 @@ function configurarEventosGlobais() {
     }
     abrirModal(dom.modalSaveLoad);
   });
-  dom.btnCloseSaveLoad.addEventListener("click", () => fecharModal(dom.modalSaveLoad));
+  dom.btnCloseSaveLoad.addEventListener("click", fecharSaveLoad);
 
   dom.btnCopyCode.addEventListener("click", async () => {
     try {
@@ -431,8 +469,8 @@ function configurarEventosGlobais() {
 
     if (resultado.valido) {
       dom.restoreFeedback.className = "answer-feedback success";
-      dom.restoreFeedback.textContent = `[VALID] Progresso autenticado com sucesso para a equipe: ${resultado.dados.team.join(" & ")}. Carregando...`;
-      estado = resultado.dados;
+      dom.restoreFeedback.textContent = `[OK] Progresso restaurado para a equipe: ${resultado.dados.team.join(" & ")}. Carregando...`;
+      estado = garantirCreditosDicas(resultado.dados);
       salvarEstadoLocal(estado);
       setTimeout(() => {
         fecharModal(dom.modalSaveLoad);
@@ -460,6 +498,12 @@ function fecharDrawer() {
   dom.drawerBackdrop.classList.remove("open");
 }
 
+function fecharSaveLoad() {
+  fecharModal(dom.modalSaveLoad);
+  // Without a team there is nothing to play: return to onboarding
+  if (!estado || !estado.team || !estado.team[0]) abrirModal(dom.modalOnboarding);
+}
+
 function abrirModal(modalEl) {
   modalEl.classList.add("open");
 }
@@ -475,48 +519,65 @@ function renderizarMochila() {
   if (!estado) return;
   const idx = estado.currentLock;
   const etapa = etapasDecifradas[idx];
+  const creditos = estado.hintCredits;
+  const resumo = `
+    <div class="hint-budget" role="status">
+      <strong>Dicas disponíveis: ${creditos} de ${HINT_LIMIT}</strong>
+      <span>A cada ${HINT_RESTORE_EVERY} fechaduras abertas, a dupla recupera 1 dica (máximo ${HINT_LIMIT}).</span>
+    </div>
+  `;
 
   if (!etapa || !etapa.pistas || etapa.pistas.length === 0) {
-    dom.backpackContent.innerHTML = `<p class="role-desc">Não há dicas adicionais disponíveis nesta etapa.</p>`;
+    dom.backpackContent.innerHTML = `${resumo}<p class="role-desc">Não há dicas disponíveis nesta etapa.</p>`;
     return;
   }
 
   const pistas = etapa.pistas;
+  const reveladas = Math.min(estado.hintsPerLock[idx] || 0, pistas.length);
+  const resolvida = !!(estado.answers && estado.answers[idx]);
+
+  function motivoBloqueio(pIdx) {
+    if (resolvida) return "Fechadura já aberta";
+    if (pIdx > reveladas) return "Revele a anterior";
+    if (creditos <= 0) return "Sem dicas";
+    return "";
+  }
+
   dom.backpackContent.innerHTML = `
+    ${resumo}
     <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 12px;">
-      As dicas são progressivas e devem ser usadas em comum acordo pela dupla.
+      As dicas são progressivas: cada uma revela mais que a anterior. Decidam juntos antes de gastar.
     </p>
     <ul class="hints-list">
-      ${pistas.map((pista, pIdx) => `
+      ${pistas.map((pista, pIdx) => {
+        const aberta = pIdx < reveladas;
+        const motivo = motivoBloqueio(pIdx);
+        return `
         <li class="hint-item">
           <div class="hint-header">
             <span>Dica ${pIdx + 1} de ${pistas.length}</span>
-            <button type="button" class="btn btn-secondary btn-revelar-dica" data-pidx="${pIdx}">
-              Revelar Dica (+1 uso)
-            </button>
+            ${aberta
+              ? `<span class="stat-pill">Revelada</span>`
+              : `<button type="button" class="btn btn-secondary btn-revelar-dica" data-pidx="${pIdx}" ${motivo ? "disabled" : ""}>
+                  ${motivo || "Revelar (gasta 1)"}
+                </button>`}
           </div>
-          <div class="hint-text" id="pista-text-${pIdx}" style="display: none;">
-            ${pista}
-          </div>
-        </li>
-      `).join("")}
+          ${aberta ? `<div class="hint-text">${pista}</div>` : ""}
+        </li>`;
+      }).join("")}
     </ul>
   `;
 
-  const btns = dom.backpackContent.querySelectorAll(".btn-revelar-dica");
-  btns.forEach((btn) => {
+  dom.backpackContent.querySelectorAll(".btn-revelar-dica").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const pIdx = btn.dataset.pidx;
-      const elTexto = document.getElementById(`pista-text-${pIdx}`);
-      if (elTexto.style.display === "none") {
-        elTexto.style.display = "block";
-        btn.disabled = true;
-        btn.textContent = "Revelada";
-        estado.hintsUsed = (estado.hintsUsed || 0) + 1;
-        estado.hintsPerLock[idx] = (estado.hintsPerLock[idx] || 0) + 1;
-        salvarEstadoLocal(estado);
-        atualizarCabecalho();
-      }
+      const pIdx = Number(btn.dataset.pidx);
+      if (resolvida || pIdx !== reveladas || estado.hintCredits <= 0) return;
+      estado.hintCredits -= 1;
+      estado.hintsUsed = (estado.hintsUsed || 0) + 1;
+      estado.hintsPerLock[idx] = reveladas + 1;
+      salvarEstadoLocal(estado);
+      atualizarCabecalho();
+      renderizarMochila();
     });
   });
 }

@@ -473,6 +473,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
   margin-bottom: var(--sp-3);
   border-bottom: 1px dashed var(--border-color);
   padding-bottom: var(--sp-2);
@@ -741,7 +743,7 @@ body {
 
 .answer-input {
   flex: 1;
-  min-width: 240px;
+  min-width: min(240px, 100%);
   padding: var(--sp-2);
   font-size: 1rem;
   font-family: var(--font-mono);
@@ -959,6 +961,22 @@ body {
 }
 
 /* Hints Backpack Accordion */
+.hint-budget {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-page);
+  font-size: 0.875rem;
+}
+
+.hint-budget span {
+  color: var(--text-muted);
+}
+
 .hints-list {
   list-style: none;
   display: flex;
@@ -1039,4 +1057,39 @@ body {
   border-top: 1px solid var(--border-color);
   background-color: var(--bg-surface);
   margin-top: auto;
+}
+
+/* Two-column workbench layout (wireframe, auto-layout) that stacks on phones */
+.bench-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+
+/* Workbench options carry long sentences: let them wrap instead of overflowing */
+.workbench-panel .btn {
+  white-space: normal;
+}
+
+@media (max-width: 640px) {
+  .bench-split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The wrapped header is too tall to stay pinned on small screens */
+  .top-header {
+    position: static;
+  }
+
+  /* Nested cards: reclaim horizontal room for workbench content */
+  .stage-card,
+  .certificate-frame {
+    padding: var(--sp-2);
+  }
+
+  .cert-title {
+    font-size: 1.25rem;
+    overflow-wrap: anywhere;
+  }
 }

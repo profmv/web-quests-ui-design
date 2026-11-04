@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web Quests: UI Design de Apps &amp; Figma Ready</title>
-  <meta name="description" content="Trilha criptografada em duplas sobre os 4 pilares de UI Design com bancadas interativas e preparação para o Figma.">
+  <meta name="description" content="Trilha em duplas sobre os 4 pilares de UI Design com bancadas interativas e preparação para o Figma.">
   <link rel="stylesheet" href="assets/css/quest.css">
 </head>
 <body>
@@ -157,7 +157,7 @@
     <div id="stage-container" aria-live="polite">
       <!-- Dynamic Stage Render -->
       <div class="stage-card">
-        <p class="stage-enunciado">Carregando fechadura criptografada...</p>
+        <p class="stage-enunciado">Carregando fechadura...</p>
       </div>
     </div>
   </main>
@@ -206,6 +206,10 @@
             <span>Iniciar Trilha de Fechaduras</span>
           </button>
         </form>
+        <button type="button" class="btn btn-secondary" id="btn-onboarding-restore" style="width: 100%; margin-top: 8px;">
+          <svg class="icon icon-sm"><use href="#icon-upload"></use></svg>
+          <span>Já temos um código: restaurar progresso</span>
+        </button>
       </div>
     </div>
   </div>
@@ -244,7 +248,7 @@
         <div style="margin-bottom: 20px;">
           <h3 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 6px;">Código Oficial da Dupla:</h3>
           <p style="font-size: 0.8125rem; color: var(--text-subtle); margin-bottom: 8px;">
-            Este código é assinado criptograficamente (HMAC-SHA-256) e serve tanto para continuar em outro computador quanto para entregar ao professor no placar.
+            Use este código para continuar em outro computador ou para entregar ao professor.
           </p>
           <textarea id="txt-export-code" class="form-textarea" readonly></textarea>
           <div style="display: flex; gap: 8px; margin-top: 8px;">
@@ -279,9 +283,6 @@
   <!-- Page Footer -->
   <footer class="page-footer">
     <p>Web Quests: UI Design &amp; Preparação para o Figma &bull; Atividade Pedagógica Interativa em Duplas</p>
-    <p style="margin-top: 4px; font-size: 0.75rem; color: var(--text-subtle);">
-      Criptografia AES-256-GCM + PBKDF2 (150.000 iterações) &bull; Acessibilidade WCAG 2.2 AA &bull; Zero Emojis
-    </p>
   </footer>
 
   <!-- Application Entrypoint -->

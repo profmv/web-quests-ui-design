@@ -5,10 +5,49 @@
  */
 
 import { calcularHmac, verificarHmac, paraBase64Url, deBase64Url } from "./crypto.js";
+import { nomeArquivoSeguro } from "./util.js";
 
 export const PEPPER_KEY = "web-quests-ui-design-2026-auth-token";
 export const STORAGE_KEY = "web-quests-ui-design:state:v1";
 export const CODE_PREFIX = "WQ-UI26-";
+
+// Hint economy: the team holds at most HINT_LIMIT hint credits and recovers
+// one credit for every HINT_RESTORE_EVERY locks solved (never above the limit).
+export const HINT_LIMIT = 3;
+export const HINT_RESTORE_EVERY = 2;
+
+/**
+ * Counts solved locks (non-empty answers).
+ */
+export function contarFechadurasResolvidas(estado) {
+  return (estado?.answers || []).filter(Boolean).length;
+}
+
+/**
+ * Ensures estado.hintCredits exists. States created before the hint limit
+ * existed are migrated with a best-effort estimate from solved locks and hints used.
+ */
+export function garantirCreditosDicas(estado) {
+  if (!estado) return estado;
+  if (typeof estado.hintCredits !== "number") {
+    const recuperadas = Math.floor(contarFechadurasResolvidas(estado) / HINT_RESTORE_EVERY);
+    estado.hintCredits = Math.max(0, Math.min(HINT_LIMIT, HINT_LIMIT + recuperadas - (estado.hintsUsed || 0)));
+  }
+  if (!Array.isArray(estado.hintsPerLock)) estado.hintsPerLock = [];
+  return estado;
+}
+
+/**
+ * Applies the restore rule after a lock is solved. Returns true when a credit was restored.
+ */
+export function aplicarRecuperacaoDica(estado) {
+  const resolvidas = contarFechadurasResolvidas(estado);
+  if (resolvidas > 0 && resolvidas % HINT_RESTORE_EVERY === 0 && estado.hintCredits < HINT_LIMIT) {
+    estado.hintCredits += 1;
+    return true;
+  }
+  return false;
+}
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -22,6 +61,7 @@ export function criarEstadoInicial(nome1, nome2) {
     currentLock: 0,
     unlockedLocks: [0],
     hintsUsed: 0,
+    hintCredits: HINT_LIMIT,
     errorCount: 0,
     completedAt: null,
     answers: [],
@@ -68,6 +108,8 @@ function montarDadosParaAssinatura(estado) {
     errorCount: estado.errorCount || 0,
     completedAt: estado.completedAt || null,
     answers: estado.answers || [],
+    // Signed only when present so codes generated before the hint limit stay valid.
+    ...(typeof estado.hintCredits === "number" ? { hintCredits: estado.hintCredits } : {}),
   });
 }
 
@@ -132,8 +174,8 @@ export async function decodificarCodigoProgresso(codigoTexto) {
 
 export async function baixarArquivoProgresso(estado) {
   const codigo = await gerarCodigoProgresso(estado);
-  const t1 = (estado.team[0] || "aluno1").replace(/[^a-zA-Z0-9]/g, "_");
-  const t2 = (estado.team[1] || "aluno2").replace(/[^a-zA-Z0-9]/g, "_");
+  const t1 = nomeArquivoSeguro(estado.team[0], "aluno1");
+  const t2 = nomeArquivoSeguro(estado.team[1], "aluno2");
   const nomeArquivo = `progresso-equipe-${t1}-${t2}.txt`;
 
   const conteudo = [
@@ -142,9 +184,10 @@ export async function baixarArquivoProgresso(estado) {
     "============================================================",
     `Equipe: ${estado.team.join(" & ")}`,
     `Início: ${new Date(estado.startedAt).toLocaleString("pt-BR")}`,
-    `Etapa Atual: Fechadura ${estado.currentLock} de 8`,
+    estado.completedAt ? "Etapa Atual: Trilha concluída" : `Etapa Atual: Fechadura ${Math.min((estado.unlockedLocks || [0]).length, 8)} de 8`,
     `Etapas Concluídas: ${estado.unlockedLocks.length - 1} / 8`,
     `Dicas Utilizadas: ${estado.hintsUsed}`,
+    `Dicas Disponíveis: ${estado.hintCredits ?? "-"} de ${HINT_LIMIT}`,
     `Tentativas Incorretas: ${estado.errorCount}`,
     estado.completedAt ? `Concluído em: ${new Date(estado.completedAt).toLocaleString("pt-BR")}` : "Status: Em andamento",
     "------------------------------------------------------------",

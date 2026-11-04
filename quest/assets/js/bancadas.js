@@ -5,6 +5,8 @@
  * RULE 5: Strictly ZERO emojis. Inline SVGs only.
  */
 
+import { escaparHtml, nomeArquivoSeguro } from "./util.js";
+
 export function montarBancada(tipo, containerEl, dados, onRevealedClue) {
   if (!containerEl) return;
   containerEl.innerHTML = "";
@@ -375,6 +377,7 @@ function montarGridAligner(container, dados, onClue) {
       if (onClue) onClue("RITMO8PX");
     } else {
       card.style.borderColor = "var(--border-color)";
+      slot.innerHTML = "";
     }
   }
 
@@ -414,7 +417,7 @@ function montarWireframeBuilder(container, dados, onClue) {
       <span class="stat-pill">4 Seções Estruturais</span>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+    <div class="bench-split">
       <div>
         <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-subtle); margin-bottom: 8px;">
           Banco de Blocos Estruturais (Clique para posicionar)
@@ -622,6 +625,7 @@ function montarClinicalGauntlet(container, dados, onClue) {
           renderizarRodada();
         } else {
           rodadaAtual = 0;
+          btns.forEach((b) => { b.disabled = true; });
           alertSlot.innerHTML = `
             <div class="answer-feedback error" style="display: block; margin-top: 12px;">
               [ERRO DE PRECISÃO] Resposta incorreta! O circuito do gauntlet foi reiniciado. Calibre o olhar e tente novamente.
@@ -655,7 +659,7 @@ function montarFigmaReady(container, dados, onClue) {
       <span class="stat-pill">Atalho: Shift + A</span>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+    <div class="bench-split">
       <div style="display: flex; flex-direction: column; gap: 12px;">
         <div>
           <div style="font-size: 0.8125rem; font-weight: 700; color: var(--text-subtle); margin-bottom: 4px;">Direção do Frame</div>
@@ -735,7 +739,8 @@ function montarFigmaReady(container, dados, onClue) {
 // 9. Certificate Generator (SVG Export & Team Validation)
 // ---------------------------------------------------------------------------
 function montarCertificado(container, dados) {
-  const equipeStr = (window.__QUEST_TEAM__ || ["Designers", "Web Devs"]).join(" & ");
+  const equipeBruta = (window.__QUEST_TEAM__ || ["Designers", "Web Devs"]).join(" & ");
+  const equipeStr = escaparHtml(equipeBruta);
   const tempoSegundos = window.__QUEST_ELAPSED__ || 0;
   const minutos = Math.floor(tempoSegundos / 60);
   const segundos = tempoSegundos % 60;
@@ -750,7 +755,7 @@ function montarCertificado(container, dados) {
         Web Quests: UI Design de Aplicativos & Preparação para o Figma
       </div>
       <p style="font-size: 0.875rem; color: var(--text-subtle);">
-        Certificamos que a valorosa dupla abaixo desvendou as 8 fechaduras criptografadas,
+        Certificamos que a valorosa dupla abaixo desvendou as 8 fechaduras,
         dominando os 4 pilares essenciais de Design de Interface.
       </p>
 
@@ -763,9 +768,6 @@ function montarCertificado(container, dados) {
         <span class="stat-pill">Data: ${dataHoje}</span>
       </div>
 
-      <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-subtle); margin-top: 12px;">
-        Código Autenticado WebCrypto: [PROVA-VERIFICADA]
-      </div>
     </div>
 
     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 16px;">
@@ -815,7 +817,7 @@ function montarCertificado(container, dados) {
     Tempo de Conclusão: ${tempoFormatado} | 8 Fechaduras Decifradas | Selo: Figma Ready
   </text>
   <text x="400" y="410" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="13" fill="#64748b">
-    Emitido em: ${dataHoje} | Verificação de Autenticidade: [VALID]
+    Emitido em: ${dataHoje}
   </text>
 
   <rect x="280" y="470" width="240" height="44" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1"/>
@@ -829,7 +831,7 @@ function montarCertificado(container, dados) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `certificado-${equipeStr.replace(/[^a-zA-Z0-9]/g, "_")}.svg`;
+    a.download = `certificado-${nomeArquivoSeguro(equipeBruta)}.svg`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

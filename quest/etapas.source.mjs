@@ -340,8 +340,8 @@ export const etapas = [
             titulo: "Desafio 1 de 5: Contraste WCAG 2.2 AA",
             pergunta: "Qual combinação de botão atinge o contraste mínimo de 4.5:1 para leitura acessível?",
             opcoes: [
-              { id: "opt-1", texto: "Texto cinza claro (#94a3b8) sobre fundo branco (#ffffff) - Contraste 2.1:1", correto: false },
-              { id: "opt-2", texto: "Texto azul profundo (#0f172a) sobre fundo branco (#ffffff) - Contraste 16.2:1", correto: true },
+              { id: "opt-1", texto: "Texto cinza claro (#94a3b8) sobre fundo branco (#ffffff) - Contraste 2.6:1", correto: false },
+              { id: "opt-2", texto: "Texto azul profundo (#0f172a) sobre fundo branco (#ffffff) - Contraste 17.9:1", correto: true },
               { id: "opt-3", texto: "Texto amarelo ouro (#fbbf24) sobre fundo branco (#ffffff) - Contraste 1.7:1", correto: false }
             ]
           },
@@ -475,7 +475,7 @@ export const etapas = [
       pilar: "Trilha Concluída",
       enunciado: "Missão cumprida! Vocês desvendaram as 8 fechaduras da Web Quest, compreendendo na prática os 4 pilares do Design de Interfaces: Hierarquia Visual, Affordance & Signifiers, Consistência & Padrões e Espaçamento no Grid de 8px. Vocês conquistaram o Certificado Oficial de Conclusão da Dupla!",
       instrucoes_dupla: {
-        navegador: "Verifiquem o tempo final de resolução, a quantidade de tentativas e o selo de autenticidade no certificado abaixo.",
+        navegador: "Verifiquem o tempo final de resolução e os nomes da dupla no certificado abaixo.",
         piloto: "Baixem o código oficial de conclusão para entregar ao professor e exportem o Certificado Oficial da Equipe em formato vetorial SVG ou impressão."
       },
       tipo_desafio: "certificate-generator",

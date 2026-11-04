@@ -320,8 +320,21 @@
       return;
     }
 
+    const embedded = window.parent && window.parent !== window;
+
+    // Inside the quest drawer: forward drawer shortcuts to the parent page
+    if (embedded && (e.ctrlKey || e.altKey) && (e.key === 's' || e.key === 'S')) {
+      e.preventDefault();
+      window.parent.postMessage({ type: 'TOGGLE_DRAWER' }, window.location.origin);
+      return;
+    }
+
     if (e.key === 'Escape') {
+      const anyOpen = document.querySelector('#deck-drawer.open, #deck-search-modal.open, #deck-help-modal.open');
       closeAllOverlays();
+      if (embedded && !anyOpen) {
+        window.parent.postMessage({ type: 'CLOSE_DRAWER' }, window.location.origin);
+      }
       return;
     }
 
