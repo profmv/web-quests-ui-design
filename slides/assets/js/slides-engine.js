@@ -224,7 +224,9 @@
   function renderSearchResults(query) {
     if (!searchResults) return;
     searchResults.innerHTML = '';
-    const q = query.toLowerCase().trim();
+    // Accent-insensitive: "botao" finds "botão"
+    const semAcento = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const q = semAcento(query.trim());
 
     const matches = slides.map((slide, index) => {
       const titleElem = slide.querySelector('.slide-title');
@@ -233,7 +235,7 @@
       const title = titleElem ? titleElem.textContent : '';
       const tag = tagElem ? tagElem.textContent : '';
       const content = bodyElem ? bodyElem.textContent : '';
-      return { index, title, tag, fullText: `${tag} ${title} ${content}`.toLowerCase() };
+      return { index, title, tag, fullText: semAcento(`${tag} ${title} ${content}`) };
     }).filter(item => !q || item.fullText.includes(q));
 
     if (matches.length === 0) {
