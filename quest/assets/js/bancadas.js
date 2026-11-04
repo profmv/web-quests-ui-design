@@ -125,7 +125,7 @@ function montarStateFixer(container, dados, onClue) {
         <svg class="icon icon-sm"><use href="#icon-sliders"></use></svg>
         Bancada de Estados de Componente (Signifiers)
       </span>
-      <span class="stat-pill">4 Estados Necessários</span>
+      <span class="stat-pill">${dados.estados_obrigatorios.length} Estados Necessários</span>
     </div>
     <div class="state-fixer-grid">
       ${dados.estados_obrigatorios.map((est) => `
@@ -179,7 +179,7 @@ function montarStateFixer(container, dados, onClue) {
     } else if (todosRespondidos) {
       slot.innerHTML = `
         <div class="answer-feedback error" style="display: block; margin-top: 12px;">
-          [AVISO] Alguns estados ainda não comunicam o affordance correto. Revise os estados Hover, Active e Disabled.
+          [AVISO] Alguns estados ainda não comunicam o affordance correto. Revise cada estado com base no Slide 7.
         </div>
       `;
     }

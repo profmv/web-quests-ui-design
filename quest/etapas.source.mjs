@@ -81,12 +81,12 @@ export const etapas = [
       pilar: "Affordance & Signifiers",
       enunciado: "Donald Norman esclareceu que 'affordance' é a propriedade real e física que determina como um objeto pode ser usado, enquanto 'signifier' é o sinal perceptível que comunica onde e como agir. Telas touch têm affordance física de toque em qualquer ponto, mas apenas os signifiers visuais (relevo, sombras, estados de botão) dizem ao usuário: 'este retângulo executa uma ação'.",
       instrucoes_dupla: {
-        navegador: "Abra os slides de Affordance & Signifiers (Ctrl+S). Verifique os 4 estados essenciais de um botão acessível: Padrão (Default), Ao passar o mouse (Hover), Pressionado (Active) e Desabilitado (Disabled).",
-        piloto: "Na bancada abaixo, o botão de pagamento perdeu seus sinais visuais. Configure cada um dos 4 estados com as pistas visuais adequadas (cor de fundo, elevação e cursor) para restabelecer a máquina de estados e liberar a palavra-chave."
+        navegador: "Abra os slides de Affordance & Signifiers (Ctrl+S). Verifique os 5 estados essenciais de um botão acessível (Slide 7): Padrão (Default), Ao passar o mouse (Hover), Pressionado (Active), Com foco de teclado (Focused) e Desabilitado (Disabled).",
+        piloto: "Na bancada abaixo, o botão de pagamento perdeu seus sinais visuais. Configure cada um dos 5 estados com as pistas visuais adequadas (cor de fundo, elevação, anel de foco e cursor) para restabelecer a máquina de estados e liberar a palavra-chave."
       },
       tipo_desafio: "state-fixer",
       dados_desafio: {
-        estados_obrigatorios: ["default", "hover", "active", "disabled"],
+        estados_obrigatorios: ["default", "hover", "active", "focused", "disabled"],
         configuracoes_disponiveis: {
           default: [
             { id: "opt-1", texto: "Fundo azul royal (#2563eb), texto branco, cursor ponteiro, sombra sutil", correto: true },
@@ -102,6 +102,11 @@ export const etapas = [
             { id: "opt-1", texto: "Fundo azul profundo (#1e40af), escala 0.98 (sensação de afundamento físico)", correto: true },
             { id: "opt-2", texto: "Fundo branco com texto invisível", correto: false },
             { id: "opt-3", texto: "Sem resposta ao clique", correto: false }
+          ],
+          focused: [
+            { id: "opt-1", texto: "Anel de foco visível de alto contraste (outline 2px com afastamento), cor de fundo mantida", correto: true },
+            { id: "opt-2", texto: "Outline removido (outline: none) sem nenhum indicador substituto", correto: false },
+            { id: "opt-3", texto: "Texto do botão some enquanto ele tem foco", correto: false }
           ],
           disabled: [
             { id: "opt-1", texto: "Fundo cinza desbotado (#e2e8f0), texto opaco (#94a3b8), cursor não permitido (not-allowed)", correto: true },
@@ -204,7 +209,7 @@ export const etapas = [
         dica_revelada: "Layout encaixado com harmonia milimétrica! O compasso estético criado pela escala de oito pontos chama-se: RITMO8PX"
       },
       pistas: [
-        "Consulte o Slide 5 sobre Grid de 8px. Valores ímpares causam quebra de alinhamento em diferentes telas.",
+        "Consulte o Slide 11 sobre Grid de 8px. Valores ímpares causam quebra de alinhamento em diferentes telas.",
         "Todos os valores devem pertencer à escala modular: 8, 16, 24, 32, 40...",
         "A resposta esperada une a palavra 'ritmo' ao valor do grid: RITMO8PX"
       ],
