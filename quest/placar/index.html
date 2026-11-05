@@ -3,429 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Placar do Professor &bull; Web Quests UI Design</title>
+  <title>Placar da turma</title>
   <meta name="robots" content="noindex, nofollow">
-  <link rel="stylesheet" href="../assets/css/quest.css">
-  <style>
-    .placar-nota {
-      margin-top: 16px;
-      font-size: 0.8125rem;
-      line-height: 1.5;
-      color: var(--text-muted);
-    }
-    .scoreboard-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: var(--sp-3);
-      font-size: 0.875rem;
-    }
-    .scoreboard-table th, .scoreboard-table td {
-      padding: var(--sp-2);
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .scoreboard-table th {
-      background-color: var(--bg-page);
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-    }
-    .status-valid {
-      color: var(--success);
-      font-weight: 700;
-      background-color: var(--success-bg);
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-    }
-    .status-tampered {
-      color: var(--error);
-      font-weight: 700;
-      background-color: var(--error-bg);
-      padding: 2px 8px;
-      border-radius: var(--radius-sm);
-      display: inline-block;
-    }
-  </style>
+  <meta name="description" content="Placar do professor: confere os códigos de progresso das duplas do Estúdio Oito.">
+  <link rel="stylesheet" href="../../assets/css/tokens.css">
+  <link rel="stylesheet" href="placar.css">
 </head>
 <body>
-  <!-- Inline SVG Sprite for Placar (Zero Emojis) -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <defs>
-      <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </symbol>
-      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </symbol>
-      <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </symbol>
-      <symbol id="icon-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="7"></circle>
-        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-      </symbol>
-      <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="7 10 12 15 17 10"></polyline>
-        <line x1="12" y1="15" x2="12" y2="3"></line>
-      </symbol>
-      <symbol id="icon-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="3 6 5 6 21 6"></polyline>
-        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-      </symbol>
-      <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-        <circle cx="9" cy="7" r="4"></circle>
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-      </symbol>
-      <symbol id="icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21 2-2 2m-1.5 1.5L16 7l-1.5-1.5M19 5l-1.5 1.5M9.5 13.5a5.5 5.5 0 1 1 7.78-7.78l5.22 5.22v3.56l-3.56 3.56-1.78-1.78-1.78 1.78L13 17l-3.5 3.5-3-3 7-7Z"></path>
-      </symbol>
-    </defs>
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h0"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2M7 14h10v7H7z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
   </svg>
 
-  <header class="top-header">
-    <div class="header-container">
-      <div class="brand-section">
-        <svg class="icon icon-lg" style="color: var(--primary);"><use href="#icon-award"></use></svg>
-        <h1 class="brand-title">Placar do Professor &bull; Web Quests</h1>
-      </div>
-      <div class="header-actions">
-        <a href="../" class="btn btn-secondary">
-          <span>Acessar a Trilha</span>
-        </a>
-        <button type="button" class="btn btn-secondary" id="btn-logout" style="display: none;">
-          <span>Sair</span>
-        </button>
-      </div>
-    </div>
+  <header class="ws-toolbar">
+    <a class="ws-brand" href="../../index.html"><span class="ws-brand-mark" aria-hidden="true">8</span><span>Estúdio Oito</span></a>
+    <span class="ws-toolbar-sep" aria-hidden="true"></span>
+    <span class="toolbar-title">Placar da turma</span>
+    <span class="ws-toolbar-spacer"></span>
+    <button type="button" class="ws-tool-btn" id="btn-bloquear" hidden><svg class="ic ic-16" aria-hidden="true"><use href="#i-lock"/></svg>Bloquear placar</button>
   </header>
 
-  <main class="main-wrapper">
-    <!-- Auth Gate Form -->
-    <div id="gate-container" class="stage-card" style="max-width: 440px; margin: 40px auto;">
-      <h2 class="stage-title" style="margin-bottom: 8px;">Acesso Docente</h2>
-      <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px;">
-        Digite a senha do professor para gerenciar o placar oficial da turma.
-      </p>
-      <form id="form-auth">
-        <div class="form-group">
-          <label for="input-passphrase" class="form-label">Senha de Acesso:</label>
-          <input type="password" id="input-passphrase" class="form-input" required autocomplete="current-password" />
+  <main class="placar ws-canvas-bg" id="principal">
+    <section class="panel-card lock-card" id="tela-senha" aria-labelledby="senha-titulo">
+      <h1 id="senha-titulo">Placar do professor</h1>
+      <p>Digite a frase-senha do professor para abrir o arquivo de verificação das respostas.</p>
+      <form id="form-senha" autocomplete="off">
+        <label class="ws-label" for="campo-senha">Frase-senha</label>
+        <div class="row">
+          <input class="field" id="campo-senha" type="password" required>
+          <button class="btn btn-primary" type="submit">Abrir</button>
         </div>
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px;">
-          <svg class="icon icon-sm"><use href="#icon-key"></use></svg>
-          <span>Entrar no Placar</span>
-        </button>
-        <div id="auth-feedback" class="answer-feedback" style="margin-top: 8px;"></div>
+        <p class="form-msg" id="senha-msg" role="status"></p>
       </form>
-    </div>
+      <p class="small muted">A conferência leva alguns segundos (a chave é derivada 600 mil vezes de propósito).</p>
+    </section>
 
-    <!-- Authenticated Scoreboard Area -->
-    <div id="placar-area" style="display: none;">
-      <!-- Paste Code Panel -->
-      <section class="stage-card">
-        <h2 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 8px;">Adicionar Progresso da Equipe</h2>
-        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 12px;">
-          Cole o código oficial gerado pela dupla (formato <code>WQ-UI26-...</code>) para registrar ou atualizar o placar.
-        </p>
-        <form id="form-add-code" style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <input type="text" id="input-code" class="form-input" placeholder="Cole o código WQ-UI26-... aqui" style="flex: 1; min-width: 280px; font-family: var(--font-mono);" required />
-          <button type="submit" class="btn btn-primary">
-            <svg class="icon icon-sm"><use href="#icon-check"></use></svg>
-            <span>Registrar Equipe</span>
-          </button>
-        </form>
-        <div id="code-feedback" class="answer-feedback" style="margin-top: 8px;"></div>
+    <div id="tela-placar" hidden>
+      <section class="panel-card" aria-labelledby="colar-titulo">
+        <h2 id="colar-titulo">Códigos das duplas</h2>
+        <p class="small">Colem um ou vários códigos (WQ2....), mesmo quebrados em linhas. Códigos repetidos da mesma dupla ficam só com o mais avançado.</p>
+        <textarea class="field field-mono" id="campo-codigos" rows="4" aria-label="Códigos de progresso" spellcheck="false"></textarea>
+        <div class="row actions">
+          <button class="btn btn-primary" id="btn-adicionar" type="button">Conferir e adicionar</button>
+          <button class="btn btn-secondary" id="btn-csv" type="button"><svg class="ic ic-16" aria-hidden="true"><use href="#i-download"/></svg>CSV</button>
+          <button class="btn btn-secondary" id="btn-imprimir" type="button"><svg class="ic ic-16" aria-hidden="true"><use href="#i-printer"/></svg>Imprimir</button>
+          <button class="btn btn-danger" id="btn-limpar" type="button"><svg class="ic ic-16" aria-hidden="true"><use href="#i-trash"/></svg>Limpar placar</button>
+        </div>
+        <p class="form-msg" id="codigos-msg" role="status"></p>
       </section>
 
-      <!-- Scoreboard List -->
-      <section class="stage-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
-          <div>
-            <h2 class="stage-title" style="font-size: 1.25rem;">Classificação Geral das Equipes</h2>
-            <span id="placar-count" style="font-size: 0.875rem; color: var(--text-subtle);">0 equipes registradas</span>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn btn-secondary" id="btn-export-csv">
-              <svg class="icon icon-sm"><use href="#icon-download"></use></svg>
-              <span>Exportar CSV</span>
-            </button>
-            <button type="button" class="btn btn-secondary" id="btn-clear-placar" style="color: var(--error);">
-              <svg class="icon icon-sm"><use href="#icon-trash"></use></svg>
-              <span>Limpar Placar</span>
-            </button>
-          </div>
-        </div>
+      <details class="panel-card regras">
+        <summary>Regras de pontuação (editáveis)</summary>
+        <div class="rules-grid" id="regras"></div>
+      </details>
 
-        <div style="overflow-x: auto;">
-          <table class="scoreboard-table">
+      <section class="panel-card" aria-labelledby="ranking-titulo">
+        <h2 id="ranking-titulo">Ranking</h2>
+        <div class="table-wrap">
+          <table class="ranking">
             <thead>
-              <tr>
-                <th>#</th>
-                <th>Equipe (Navegador &amp; Piloto)</th>
-                <th>Etapa / Fechaduras</th>
-                <th>Tempo</th>
-                <th>Dicas</th>
-                <th>Erros</th>
-                <th>Autenticidade</th>
-                <th>Ações</th>
-              </tr>
+              <tr><th scope="col">#</th><th scope="col">Dupla</th><th scope="col">Trilha</th><th scope="col">Pontos</th><th scope="col">Tempo</th><th scope="col">Erros</th><th scope="col">Dicas</th><th scope="col">Intervalos</th><th scope="col">Situação</th></tr>
             </thead>
-            <tbody id="placar-tbody">
-              <!-- Populated dynamically -->
-            </tbody>
+            <tbody id="ranking-corpo"><tr><td colspan="9" class="muted">Nenhum código ainda.</td></tr></tbody>
           </table>
         </div>
-        <p class="placar-nota">
-          Sobre a coluna Autenticidade: ela detecta códigos alterados por engano ou editados à mão.
-          Como a atividade roda inteira no navegador, um aluno com conhecimento técnico avançado
-          consegue gerar um código falso que aparece como válido. Em caso de dúvida, confira o
-          progresso da dupla na tela do computador dela.
-        </p>
+        <p class="small muted note">Só conta a sequência de fechaduras conferidas a partir da 0: a primeira resposta que não confere encerra a contagem daquela dupla. Tudo roda no navegador; quem já conhece todas as respostas consegue forjar um código, por isso os alertas servem de pista, não de prova.</p>
       </section>
     </div>
   </main>
 
-  <footer class="page-footer">
-    <p>Painel de Auditoria e Placar &bull; Web Quests UI Design &bull; Apenas para uso docente</p>
-  </footer>
-
-  <script type="module">
-    import { decodificarCodigoProgresso } from "../assets/js/progress.js";
-    import { escaparHtml } from "../assets/js/util.js";
-
-    // SHA-256 of the teacher password (only the hash is published).
-    // To change it: node -e "console.log(require('crypto').createHash('sha256').update('NEW_PASSWORD').digest('hex'))"
-    // This only keeps the password out of plain sight; it is not access control (everything runs client-side).
-    const PASSPHRASE_SHA256 = "c14ef8f3ce3673a9b25eb6ba21571d3790aefefd7aade02ce2ce1bdbca675d62";
-
-    async function sha256Hex(texto) {
-      const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
-      return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
-    }
-    const STORAGE_KEY = "web-quests-placar:v1";
-
-    const dom = {
-      gate: document.getElementById("gate-container"),
-      placar: document.getElementById("placar-area"),
-      formAuth: document.getElementById("form-auth"),
-      inputPass: document.getElementById("input-passphrase"),
-      authFeedback: document.getElementById("auth-feedback"),
-      btnLogout: document.getElementById("btn-logout"),
-      formAdd: document.getElementById("form-add-code"),
-      inputCode: document.getElementById("input-code"),
-      codeFeedback: document.getElementById("code-feedback"),
-      tbody: document.getElementById("placar-tbody"),
-      count: document.getElementById("placar-count"),
-      btnExportCsv: document.getElementById("btn-export-csv"),
-      btnClear: document.getElementById("btn-clear-placar"),
-    };
-
-    let equipes = [];
-
-    function carregarEquipes() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        equipes = raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        equipes = [];
-      }
-    }
-
-    function salvarEquipes() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(equipes));
-    }
-
-    function checkAuth() {
-      if (sessionStorage.getItem("placar_auth") === "true") {
-        dom.gate.style.display = "none";
-        dom.placar.style.display = "block";
-        dom.btnLogout.style.display = "inline-flex";
-        renderizarTabela();
-      } else {
-        dom.gate.style.display = "block";
-        dom.placar.style.display = "none";
-        dom.btnLogout.style.display = "none";
-      }
-    }
-
-    dom.formAuth.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      if ((await sha256Hex(dom.inputPass.value)) === PASSPHRASE_SHA256) {
-        sessionStorage.setItem("placar_auth", "true");
-        dom.inputPass.value = "";
-        dom.authFeedback.style.display = "none";
-        checkAuth();
-      } else {
-        dom.authFeedback.className = "answer-feedback error";
-        dom.authFeedback.textContent = "[ERRO] Senha incorreta. Consulte o manual do professor.";
-      }
-    });
-
-    dom.btnLogout.addEventListener("click", () => {
-      sessionStorage.removeItem("placar_auth");
-      checkAuth();
-    });
-
-    dom.formAdd.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const codigo = dom.inputCode.value.trim();
-      const res = await decodificarCodigoProgresso(codigo);
-
-      if (!res.dados || !res.dados.team) {
-        dom.codeFeedback.className = "answer-feedback error";
-        dom.codeFeedback.textContent = `[FALHA] ${res.erro || "Código inválido."}`;
-        return;
-      }
-
-      const teamName = res.dados.team.join(" & ");
-      const existingIdx = equipes.findIndex((eq) => eq.team.join(" & ") === teamName);
-
-      const entry = {
-        team: res.dados.team,
-        currentLock: res.dados.currentLock,
-        totalUnlocked: res.dados.unlockedLocks ? res.dados.unlockedLocks.length - 1 : 0,
-        hintsUsed: res.dados.hintsUsed || 0,
-        errorCount: res.dados.errorCount || 0,
-        startedAt: res.dados.startedAt,
-        completedAt: res.dados.completedAt,
-        valido: res.valido,
-        adicionadoEm: Date.now(),
-      };
-
-      if (existingIdx >= 0) {
-        equipes[existingIdx] = entry;
-      } else {
-        equipes.push(entry);
-      }
-
-      salvarEquipes();
-      dom.inputCode.value = "";
-      dom.codeFeedback.className = "answer-feedback success";
-      dom.codeFeedback.textContent = `[OK] Equipe '${teamName}' registrada com status ${res.valido ? "[VALID]" : "[TAMPERED]"}.`;
-      renderizarTabela();
-    });
-
-    function formatarTempo(inicio, fim) {
-      if (!inicio) return "-";
-      const end = fim || Date.now();
-      const seg = Math.max(0, Math.floor((end - inicio) / 1000));
-      const m = Math.floor(seg / 60);
-      const s = seg % 60;
-      return `${m}m ${s}s`;
-    }
-
-    function renderizarTabela() {
-      carregarEquipes();
-
-      // Sort: Completed / highest locks first, then lowest time
-      equipes.sort((a, b) => {
-        if (b.totalUnlocked !== a.totalUnlocked) {
-          return b.totalUnlocked - a.totalUnlocked;
-        }
-        const timeA = (a.completedAt || a.adicionadoEm) - a.startedAt;
-        const timeB = (b.completedAt || b.adicionadoEm) - b.startedAt;
-        return timeA - timeB;
-      });
-
-      dom.count.textContent = `${equipes.length} equipes registradas`;
-
-      if (equipes.length === 0) {
-        dom.tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-subtle); padding: 24px;">Nenhuma equipe registrada ainda. Cole o código acima.</td></tr>`;
-        return;
-      }
-
-      dom.tbody.innerHTML = equipes.map((eq, idx) => {
-        const isFinished = eq.completedAt != null || eq.totalUnlocked >= 8;
-        const statusHtml = eq.valido 
-          ? `<span class="status-valid">[VALID]</span>` 
-          : `<span class="status-tampered">[TAMPERED]</span>`;
-        const etapaTxt = isFinished ? "8 / 8 [CONCLUÍDO]" : `${eq.totalUnlocked} / 8`;
-
-        return `
-          <tr>
-            <td><strong>${idx + 1}º</strong></td>
-            <td><strong>${escaparHtml(eq.team.join(" & "))}</strong></td>
-            <td>${etapaTxt}</td>
-            <td>${formatarTempo(eq.startedAt, eq.completedAt)}</td>
-            <td>${eq.hintsUsed}</td>
-            <td>${eq.errorCount}</td>
-            <td>${statusHtml}</td>
-            <td>
-              <button type="button" class="btn btn-secondary btn-del-eq" data-index="${idx}" style="padding: 4px 8px; font-size: 0.75rem;">
-                <svg class="icon icon-sm"><use href="#icon-x"></use></svg>
-                <span>Remover</span>
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      dom.tbody.querySelectorAll(".btn-del-eq").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const i = parseInt(btn.dataset.index, 10);
-          equipes.splice(i, 1);
-          salvarEquipes();
-          renderizarTabela();
-        });
-      });
-    }
-
-    dom.btnExportCsv.addEventListener("click", () => {
-      if (equipes.length === 0) {
-        alert("Nenhum dado para exportar.");
-        return;
-      }
-
-      const linhas = [
-        ["Posicao", "Integrante_1", "Integrante_2", "Fechaduras_Desbloqueadas", "Tempo_Segundos", "Dicas", "Erros", "Autenticidade", "Concluido"].join(";"),
-      ];
-
-      equipes.forEach((eq, idx) => {
-        const duracaoSeg = Math.max(0, Math.floor(((eq.completedAt || Date.now()) - eq.startedAt) / 1000));
-        linhas.push([
-          idx + 1,
-          `"${String(eq.team[0] || "").replace(/"/g, '""')}"`,
-          `"${String(eq.team[1] || "").replace(/"/g, '""')}"`,
-          eq.totalUnlocked,
-          duracaoSeg,
-          eq.hintsUsed,
-          eq.errorCount,
-          eq.valido ? "VALID" : "TAMPERED",
-          eq.completedAt ? "SIM" : "NAO",
-        ].join(";"));
-      });
-
-      const csvContent = linhas.join("\r\n");
-      // Encoding exception (Rule 2): UTF-8 BOM so Excel (pt-BR) reads accented names correctly.
-      const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `placar-turma-ui-design-${new Date().toISOString().slice(0, 10)}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-
-    dom.btnClear.addEventListener("click", () => {
-      if (confirm("Tem certeza que deseja zerar todo o placar da turma? Esta ação não pode ser desfeita.")) {
-        equipes = [];
-        salvarEquipes();
-        renderizarTabela();
-      }
-    });
-
-    // Check auth on load
-    checkAuth();
-  </script>
+  <script type="module" src="placar.js"></script>
 </body>
 </html>

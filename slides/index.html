@@ -3,581 +3,467 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Design de Interfaces de Aplicativos &amp; Fundamentos para Figma</title>
+  <title>Slides &mdash; Design de Interfaces e Ponte para o Figma</title>
+  <meta name="description" content="Apresentação do Estúdio Oito: hierarquia, affordance, consistência, grid de 8px, wireframe, heurísticas de Nielsen e a ponte para o Figma.">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/slides.css">
 </head>
 <body>
-  <!-- Embedded SVG Sprite Reference -->
-  <div style="display: none;">
-    <!-- Inline fallback if external sprite loading is blocked in strict environments -->
-  </div>
+  <a class="skip-link" href="#deck-stage">Pular para o slide</a>
 
-  <div class="deck-viewport">
-    <!-- Top Progress Track -->
-    <div class="deck-progress-track" aria-hidden="true">
-      <div class="deck-progress-fill"></div>
-    </div>
-
-    <!-- Header Bar -->
-    <header class="deck-header">
-      <div style="display: flex; align-items: center; gap: var(--space-2); min-width: 0;">
-        <span class="deck-badge-brand">
-          <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-figma"></use></svg>
-          UI Deck
-        </span>
-        <span class="deck-topic-title">Introdução | Design de Interfaces</span>
+  <div class="deck-app">
+    <!-- Toolbar -->
+    <header class="ws-toolbar deck-toolbar">
+      <a class="ws-brand" href="../index.html" title="Voltar ao portal">
+        <span class="ws-brand-mark" aria-hidden="true">8</span>
+        <span>Estúdio Oito</span>
+      </a>
+      <span class="ws-toolbar-sep" aria-hidden="true"></span>
+      <div class="deck-topic">
+        <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>
+        <span class="deck-topic-title" aria-live="polite">Capa</span>
       </div>
-
-      <div class="deck-header-actions">
-        <button type="button" class="btn-icon" id="btn-search" title="Busca Rápida (Tecla / ou K)" aria-label="Buscar slide">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>
-        </button>
-        <button type="button" class="btn-icon" id="btn-drawer" title="Índice de Slides (Tecla M)" aria-label="Abrir índice de slides">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-list"></use></svg>
-        </button>
-        <button type="button" class="btn-icon" id="btn-help" title="Atalhos de Teclado (Tecla H)" aria-label="Ajuda e atalhos">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-help-circle"></use></svg>
-        </button>
-        <button type="button" class="btn-icon" id="btn-fullscreen" title="Tela Cheia (Tecla F)" aria-label="Alternar tela cheia">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-maximize"></use></svg>
-        </button>
-      </div>
+      <span class="ws-toolbar-spacer"></span>
+      <button type="button" class="ws-tool-btn" id="btn-search" title="Buscar (K ou /)" aria-label="Buscar slide">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>
+      </button>
+      <button type="button" class="ws-tool-btn" id="btn-drawer" title="Índice de slides (M)" aria-label="Abrir índice de slides">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-list"></use></svg>
+      </button>
+      <button type="button" class="ws-tool-btn" id="btn-help" title="Atalhos (H)" aria-label="Ajuda e atalhos">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-help-circle"></use></svg>
+      </button>
+      <button type="button" class="ws-tool-btn" id="btn-fullscreen" title="Tela cheia (F)" aria-label="Entrar em Tela Cheia">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-maximize"></use></svg>
+      </button>
     </header>
 
-    <!-- Main Slides Stage -->
-    <main class="deck-stage" id="deck-stage" tabindex="0" aria-label="Palco de Apresentação">
+    <div class="deck-progress-track" aria-hidden="true"><div class="deck-progress-fill"></div></div>
 
-      <!-- SLIDE 1: Capa & Setup -->
-      <section class="slide active" id="slide-1" aria-label="Slide 1: Capa">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-users"></use></svg>
-            Atividade em Duplas &middot; Trilha Prática
-          </span>
-          <h1 class="slide-title">Design de Interfaces de Aplicativos &amp; Fundamentos para Figma</h1>
-          <p class="slide-subtitle">Uma jornada conceitual e técnica para dominar os 4 pilares visuais antes de abrir o software de prototipagem.</p>
+    <main class="deck-stage ws-canvas-bg" id="deck-stage" tabindex="-1" aria-label="Palco da apresentação">
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 1: Capa e missao                                        -->
+      <!-- ============================================================ -->
+      <section class="slide active" id="slide-1" aria-label="Slide 1: Capa e missão">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>01-capa-missao
         </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h2 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-target"></use></svg>
-                Objetivos de Aprendizagem
-              </h2>
-              <p class="card-desc">Ao longo desta sessão e da Quest subsequente, sua dupla irá:</p>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <span>Dominar os 4 pilares: <strong>Hierarquia Visual</strong>, <strong>Affordance</strong>, <strong>Consistência</strong> e <strong>Grid Modular 8px</strong>.</span>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <span>Aprender a escanear telas com olho clínico, diagnosticando problemas de contraste e usabilidade.</span>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <span>Conectar cada princípio teórico diretamente com recursos do Figma: <em>Frames</em>, <em>Auto-Layout</em> e <em>Componentes</em>.</span>
-                </li>
-              </ul>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-users"></use></svg>
+                Capa &middot; Atividade em duplas
+              </span>
             </div>
+            <h1 class="slide-title">Capa e missão: o card quebrado do Estúdio Oito</h1>
+            <p class="slide-subtitle">Design de Interfaces de Aplicativos e a ponte para o Figma.</p>
+          </header>
 
-            <div class="surface-card surface-card-elevated">
-              <h2 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-help-circle"></use></svg>
-                Como Navegar nesta Apresentação
-              </h2>
-              <p class="card-desc">Controles rápidos disponíveis durante a aula:</p>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="shortcut-key">Seta Direita / Espaço</span>
-                  <span>Avançar para o próximo slide</span>
-                </li>
-                <li class="concept-item">
-                  <span class="shortcut-key">Seta Esquerda</span>
-                  <span>Retornar ao slide anterior</span>
-                </li>
-                <li class="concept-item">
-                  <span class="shortcut-key">Tecla F</span>
-                  <span>Alternar modo Tela Cheia</span>
-                </li>
-                <li class="concept-item">
-                  <span class="shortcut-key">Tecla K ou /</span>
-                  <span>Abrir busca rápida de tópicos</span>
-                </li>
-                <li class="concept-item">
-                  <span class="shortcut-key">Tecla M</span>
-                  <span>Abrir gaveta com índice completo</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 2: Fundamento Zero -->
-      <section class="slide" id="slide-2" aria-label="Slide 2: Fundamento Zero">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-compass"></use></svg>
-            Fundamento Zero &middot; Propósito
-          </span>
-          <h2 class="slide-title">Interface não é Enfeite: É Comunicação Visual</h2>
-          <p class="slide-subtitle">Design de Interface não é sobre "deixar bonito" no final. É sobre reduzir o esforço cognitivo para que o usuário atinja seu objetivo sem atrito.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-3col">
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>
-                Carga Cognitiva Mínima
-              </h3>
-              <p class="card-desc">O cérebro humano possui memória de trabalho limitada. Interfaces excelentes reduzem o esforço de interpretação com padrões intuitivos e caminhos evidentes.</p>
-            </div>
-
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-target"></use></svg>
-                A Regra dos 3 Segundos
-              </h3>
-              <p class="card-desc">Ao abrir qualquer tela, o usuário precisa responder instantaneamente a três perguntas essenciais: <em>Onde estou?</em>, <em>O que posso fazer aqui?</em> e <em>Qual o próximo passo?</em></p>
-            </div>
-
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-figma"></use></svg>
-                Do Conceito ao Figma
-              </h3>
-              <p class="card-desc">Nenhum elemento no Figma existe sem intenção funcional. Uma cor indica estado, um espaçamento agrupa informações e um estilo tipográfico define a ordem de leitura.</p>
-            </div>
-          </div>
-
-          <div class="surface-card" style="border-left: 4px solid var(--accent-cyan);">
-            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Premissa Fundamental da Disciplina:</div>
-            <div style="font-size: var(--font-small); color: var(--text-secondary);">
-              "Se o usuário precisou ler um manual ou hesitou por mais de 5 segundos para encontrar o botão de continuar, a falha não é do usuário: é da arquitetura visual da tela."
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 3: Pilar 1 - Escaneamento -->
-      <section class="slide" id="slide-3" aria-label="Slide 3: Pilar 1 - Escaneamento">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>
-            Pilar 1 &middot; Hierarquia Visual
-          </span>
-          <h2 class="slide-title">Onde o Olho Bate Primeiro: F-Pattern e Z-Pattern</h2>
-          <p class="slide-subtitle">Estudos científicos de Eye-Tracking (Nielsen Norman Group) comprovam que usuários não leem telas linha por linha: eles escaneiam em padrões previsíveis.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h3 class="card-title">Padrões Universais de Escaneamento</h3>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>F-Pattern (Telas Ricas em Texto e Feeds):</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      O usuário lê o topo na horizontal, desce os olhos na borda esquerda, faz uma leitura horizontal mais curta e depois varre verticalmente para baixo.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Z-Pattern (Landing Pages e Apps Visuais):</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      O olhar parte do topo esquerdo (Logo), corre para o topo direito (Menu/Perfil), cruza em diagonal até a base esquerda e atinge a base direita (Ação Principal).
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Ponto Focal Inicial:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Elementos com maior peso visual (contraste, tamanho e isolamento) capturam a atenção nos primeiros 50 milissegundos.
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="surface-card">
-              <h3 class="card-title">Demonstração Visual do Z-Pattern</h3>
-              <div class="pattern-demo-box">
-                <!-- Eye Scan Points -->
-                <div class="eye-scan-point" style="top: 25px; left: 25px;">1</div>
-                <div class="eye-scan-point" style="top: 25px; left: calc(100% - 25px);">2</div>
-                <div class="eye-scan-point" style="top: calc(100% - 25px); left: 25px;">3</div>
-                <div class="eye-scan-point" style="top: calc(100% - 25px); left: calc(100% - 25px);">4</div>
-
-                <!-- SVG Connecting Scan Line -->
-                <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;" aria-hidden="true">
-                  <line x1="25" y1="25" x2="92%" y2="25" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4"></line>
-                  <line x1="92%" y1="25" x2="25" y2="85%" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4"></line>
-                  <line x1="25" y1="85%" x2="92%" y2="85%" stroke="#ef4444" stroke-width="2" stroke-dasharray="6 4"></line>
-                </svg>
-
-                <div style="display: flex; justify-content: space-between; margin-bottom: 30px;">
-                  <span style="font-weight: 700; color: #0f172a; font-size: 14px;">[1] Marca / Identidade</span>
-                  <span style="font-weight: 600; color: #64748b; font-size: 13px;">[2] Perfil / Ajuda</span>
-                </div>
-                <div style="text-align: center; margin: 20px 0; color: #334155;">
-                  <div style="font-weight: 700; font-size: 16px;">Proposta Central de Valor</div>
-                  <div style="font-size: 12px; color: #64748b;">Informação visual em diagonal</div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px;">
-                  <span style="font-size: 12px; color: #64748b;">[3] Detalhe Suporte</span>
-                  <span style="background: #2563eb; color: #ffffff; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 700;">[4] Call to Action</span>
-                </div>
+          <div class="slide-body s1-body">
+            <div class="stack s1-story">
+              <p class="txt-16">
+                Vocês são a <strong>dupla júnior do Estúdio Oito</strong> (o nome vem do grid de 8px).
+                O cliente mandou o app <strong>Agenda do Campus</strong> com um card quebrado:
+                <strong>Dia do Design</strong>. Cada fechadura da trilha conserta um aspecto do
+                mesmo card, do caos ao componente pronto para o Figma.
+              </p>
+              <div class="s1-cast">
+                <div class="cast-item"><span class="avatar">B</span><span><strong>Bia</strong>designer líder</span></div>
+                <div class="cast-item"><span class="avatar is-ok">R</span><span><strong>Prof. Ramos</strong>cliente</span></div>
+                <div class="cast-item"><span class="avatar is-blue">V</span><span><strong>Vocês</strong>dupla júnior</span></div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 4: Pilar 1 - Tipografia & Contraste -->
-      <section class="slide" id="slide-4" aria-label="Slide 4: Pilar 1 - Escala Tipográfica">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-typography"></use></svg>
-            Pilar 1 &middot; Escala Tipográfica &amp; Contraste
-          </span>
-          <h2 class="slide-title">A Tríade da Tipografia: Tamanho, Peso e Contraste</h2>
-          <p class="slide-subtitle">Hierarquia não significa apenas aumentar a fonte: ela nasce da combinação proporcional entre escala tipográfica, espessura e contraste com o fundo.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-typography"></use></svg>
-                Escala Tipográfica Modular
-              </h3>
-              <div style="display: flex; flex-direction: column; gap: var(--space-1); margin-top: var(--space-1);">
-                <div class="type-scale-item">
-                  <span style="font-size: 24px; font-weight: 700;">Display Título</span>
-                  <span class="type-meta">32px &middot; Bold 700</span>
-                </div>
-                <div class="type-scale-item">
-                  <span style="font-size: 20px; font-weight: 600;">Seção Principal</span>
-                  <span class="type-meta">24px &middot; SemiBold 600</span>
-                </div>
-                <div class="type-scale-item">
-                  <span style="font-size: 16px; font-weight: 600;">Subtítulo de Card</span>
-                  <span class="type-meta">18px &middot; Medium 500</span>
-                </div>
-                <div class="type-scale-item">
-                  <span style="font-size: 15px; font-weight: 400; color: var(--text-secondary);">Corpo de Leitura</span>
-                  <span class="type-meta">16px &middot; Regular 400</span>
-                </div>
-                <div class="type-scale-item">
-                  <span style="font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase;">Metadados / Tags</span>
-                  <span class="type-meta">12-14px &middot; Medium 500</span>
-                </div>
+              <div class="callout callout-info">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-help-circle"></use></svg>
+                <p>Navegue com <kbd>&larr;</kbd> <kbd>&rarr;</kbd> ou <kbd>Espaço</kbd>. <kbd>K</kbd> busca, <kbd>M</kbd> abre o índice, <kbd>F</kbd> tela cheia.</p>
               </div>
             </div>
 
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-shield-check"></use></svg>
-                Portão de Acessibilidade WCAG 2.2 AA
-              </h3>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Texto Normal (menor que 18px):</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Exige razão de contraste mínima de <strong>4.5 : 1</strong> com o plano de fundo.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Texto Grande (&gt;= 18px bold ou &gt;= 24px):</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Exige razão de contraste mínima de <strong>3.0 : 1</strong> com o fundo.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Erro Crítico Comum:</strong>
-                    <div style="color: var(--color-danger); font-size: var(--font-small);">
-                      Texto cinza claro (#999999) sobre branco (#ffffff) tem contraste de apenas 2.8:1 [REPROVADO NA WCAG]. Use no mínimo #475569.
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 5: Pilar 1 - Comparativo Bom vs Ruim -->
-      <section class="slide" id="slide-5" aria-label="Slide 5: Pilar 1 - Comparativo">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-contrast"></use></svg>
-            Pilar 1 &middot; Estudo de Caso
-          </span>
-          <h2 class="slide-title">Hierarquia Visual na Prática: O Teste do Card</h2>
-          <p class="slide-subtitle">Compare como a mesmíssima informação estrutural pode ser indecifrável ou instantaneamente compreendida apenas ajustando a hierarquia.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="compare-container">
-            <!-- Bad UI -->
-            <div class="compare-box bad">
-              <div class="compare-header">
-                <span style="display: flex; align-items: center; gap: 4px;">
-                  <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
-                  [FAIL] Sem Hierarquia Visual
+            <div class="canvas-box canvas-dots s1-canvas">
+              <div class="sel-wrap">
+                <span class="comp-label">
+                  <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
+                  card-quebrado
                 </span>
-                <span>Baixo Desempenho</span>
-              </div>
-              <div class="compare-content">
-                <div class="bad-preview-card">
-                  <h4>Curso de Prototipagem Avançada</h4>
-                  <p>Aprenda Figma do básico ao profissional em duplas dinâmicas com desafios reais.</p>
-                  <div style="margin-bottom: 8px; font-size: 13px; color: #555555;">R$ 299,00 a vista ou 12x</div>
-                  <button type="button" class="bad-action">Inscrever-se Agora</button>
+                <div class="ev-card is-broken" aria-label="Card quebrado: tamanhos, alinhamentos e espaços aleatórios">
+                  <span class="ev-tag">workshop</span>
+                  <span class="ev-title">Dia do Design</span>
+                  <span class="ev-meta">16 de maio, Auditório B</span>
+                  <span class="ev-meta">Oficinas, revisão de portfólio e conversas com designers.</span>
+                  <span class="broken-btn">inscrever</span>
                 </div>
               </div>
-              <div class="compare-notes">
-                <strong>Diagnóstico:</strong> O título é apagado, o texto tem o mesmo peso visual que a ação e o botão cinza falha no contraste de acessibilidade.
-              </div>
-            </div>
 
-            <!-- Good UI -->
-            <div class="compare-box good">
-              <div class="compare-header">
-                <span style="display: flex; align-items: center; gap: 4px;">
-                  <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg>
-                  [OK] Hierarquia Refinada
+              <span class="s1-arrow" aria-hidden="true">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-arrow-right"></use></svg>
+              </span>
+
+              <div class="comp-wrap">
+                <span class="comp-label">
+                  <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>
+                  Card/Evento
                 </span>
-                <span>Alta Usabilidade</span>
-              </div>
-              <div class="compare-content">
-                <div class="good-preview-card">
-                  <div class="meta-tag">Formação UI &middot; Nível Pro</div>
-                  <h4>Curso de Prototipagem Avançada</h4>
-                  <p>Aprenda Figma do básico ao profissional em duplas dinâmicas com desafios reais.</p>
-                  <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-2);">
-                    <div>
-                      <span style="font-size: var(--font-micro); color: #64748b; display: block;">Valor total:</span>
-                      <span style="font-size: 20px; font-weight: 700; color: #0f172a;">R$ 299,00</span>
-                    </div>
-                    <button type="button" class="good-action">
-                      Inscrever-se
-                      <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right"></use></svg>
-                    </button>
-                  </div>
+                <div class="ev-card">
+                  <span class="ev-tag">Workshop</span>
+                  <span class="ev-title">Dia do Design</span>
+                  <span class="ev-meta"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-calendar"></use></svg>16 de maio, Auditório B</span>
+                  <span class="ev-desc">Oficinas, revisão de portfólio e conversas com designers.</span>
+                  <span class="btn btn-primary btn-demo">Inscrever-se</span>
                 </div>
               </div>
-              <div class="compare-notes">
-                <strong>Solução:</strong> Tag categórica com cor de destaque, título forte, preço evidenciado e ação principal com alto contraste (#2563eb) e seta indicativa.
+
+              <div class="comment s1-comment">
+                <span class="avatar">B</span>
+                <span><strong>Bia comentou</strong>Vamos levar este card do caos ao componente? Uma regra por fechadura.</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SLIDE 6: Pilar 2 - Affordance & Signifiers -->
-      <section class="slide" id="slide-6" aria-label="Slide 6: Pilar 2 - Affordance">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-mouse-pointer"></use></svg>
-            Pilar 2 &middot; Affordance &amp; Signifiers
-          </span>
-          <h2 class="slide-title">Affordance vs Signifier: A Lição de Don Norman</h2>
-          <p class="slide-subtitle">Conceitos fundamentais definidos por Don Norman no livro "O Design do Dia a Dia" que distinguem a capacidade real da pista visual.</p>
+      <!-- ============================================================ -->
+      <!-- SLIDE 2: Interface e comunicacao                              -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-2" aria-label="Slide 2: Interface e comunicação">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>02-interface-comunicacao
         </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-compass"></use></svg>
+                Fundamento &middot; Propósito
+              </span>
+            </div>
+            <h2 class="slide-title">Interface é comunicação, não enfeite</h2>
+            <p class="slide-subtitle">Uma boa tela reduz o esforço para entender e agir. Cada cor, tamanho e espaço tem uma função.</p>
+          </header>
 
-        <div class="slide-body">
-          <div class="grid-3col">
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-mouse-pointer"></use></svg>
-                Affordance (Capacidade Real)
-              </h3>
-              <p class="card-desc">
-                É a relação física ou lógica entre um objeto e o usuário. Uma tela sensível ao toque tem a affordance de ser tocada. Um botão tem a affordance de disparar um evento.
-              </p>
+          <div class="slide-body s2-body">
+            <div class="stack">
+              <div class="card">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>Carga cognitiva mínima</h3>
+                <p>A memória de trabalho é limitada. Padrões conhecidos e caminhos evidentes poupam esforço de interpretação.</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-target"></use></svg>As 3 perguntas de toda tela</h3>
+                <p>Onde estou? O que posso fazer aqui? Qual é o próximo passo? Se a tela não responde de relance, ela falhou.</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>Do conceito ao Figma</h3>
+                <p>No Figma nada existe sem intenção: uma cor indica estado, um espaço agrupa, um estilo de texto define a ordem de leitura.</p>
+              </div>
             </div>
 
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>
-                Signifier (Pista Visual)
-              </h3>
-              <p class="card-desc">
-                É o sinal perceptível que comunica <strong>como</strong> e <strong>onde</strong> a interação ocorre. Uma sombra de relevo, uma cor azul, ou um ícone de play são signifiers de que algo é clicável.
-              </p>
-            </div>
-
-            <div class="surface-card">
-              <h3 class="card-title" style="color: var(--color-danger);">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
-                Falsos Signifiers
-              </h3>
-              <p class="card-desc">
-                Ocorre quando um elemento parece clicável mas não faz nada, ou quando uma ação crítica parece texto estático inerte. É a maior fonte de frustração em interfaces amadoras.
-              </p>
-            </div>
-          </div>
-
-          <div class="surface-card" style="background: rgba(30, 41, 59, 0.7);">
-            <div style="font-weight: 600; color: var(--accent-cyan); margin-bottom: 6px;">Exemplo Prático do Cotidiano:</div>
-            <div style="font-size: var(--font-small); color: var(--text-secondary); line-height: 1.6;">
-              A famosa <strong>"Porta de Norman"</strong>: uma porta que possui uma barra horizontal (signifier de empurrar), mas precisa ser puxada para abrir. Em apps, ocorre quando um link azul sublinhado não reage ao clique ou um botão cinza claro não parece ativo.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 7: Pilar 2 - Anatomia do Botao -->
-      <section class="slide" id="slide-7" aria-label="Slide 7: Pilar 2 - Anatomia de Botão">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-sliders"></use></svg>
-            Pilar 2 &middot; Estados de Interação
-          </span>
-          <h2 class="slide-title">A Anatomia Completa de um Botão e Seus 5 Estados</h2>
-          <p class="slide-subtitle">Um botão profissional nunca é apenas uma caixa colorida: ele fornece feedback dinâmico para cada momento do ciclo de vida da interação.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="button-states-grid">
-            <!-- Default -->
-            <div class="state-column">
-              <span class="state-label">1. Default</span>
-              <button type="button" class="demo-btn default">Salvar Projeto</button>
-              <span class="state-desc">Estado de repouso com contraste e cor primários estáveis.</span>
-            </div>
-
-            <!-- Hover -->
-            <div class="state-column">
-              <span class="state-label">2. Hover</span>
-              <button type="button" class="demo-btn hover">Salvar Projeto</button>
-              <span class="state-desc">Cursor sobre o botão: escurecimento sutil (10%) e elevação.</span>
-            </div>
-
-            <!-- Active -->
-            <div class="state-column">
-              <span class="state-label">3. Active</span>
-              <button type="button" class="demo-btn active">Salvar Projeto</button>
-              <span class="state-desc">Momento do clique: simulação tátil de compressão (1px para baixo).</span>
-            </div>
-
-            <!-- Focused -->
-            <div class="state-column">
-              <span class="state-label">4. Focused</span>
-              <button type="button" class="demo-btn focused">Salvar Projeto</button>
-              <span class="state-desc">Navegação por teclado (Tab): anel visível de alto contraste.</span>
-            </div>
-
-            <!-- Disabled -->
-            <div class="state-column">
-              <span class="state-label">5. Disabled</span>
-              <button type="button" class="demo-btn disabled" disabled>Salvar Projeto</button>
-              <span class="state-desc">Opacidade reduzida (50%) e cursor de bloqueio até condição válida.</span>
-            </div>
-          </div>
-
-          <div class="surface-card" style="margin-top: var(--space-2);">
-            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Dica para o Figma:</div>
-            <div style="font-size: var(--font-small); color: var(--text-secondary);">
-              No Figma, construa um <strong>Component Set</strong> com as variantes <em>State=Default, Hover, Pressed, Focused, Disabled</em>. Com o modo interativo de protótipo, seu time pode testar o comportamento antes de escrever qualquer linha de código.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 8: Pilar 2 - Affordances em Mobile -->
-      <section class="slide" id="slide-8" aria-label="Slide 8: Pilar 2 - Mobile UI">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-smartphone"></use></svg>
-            Pilar 2 &middot; Mobile Ergonomics
-          </span>
-          <h2 class="slide-title">A Zona do Polegar (Thumb Zone) e Bottom Navigation</h2>
-          <p class="slide-subtitle">Em smartphones, a ergonomia biológica da mão dita o posicionamento dos componentes críticos de navegação.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h3 class="card-title">Por que Navegação Inferior (Bottom Bar)?</h3>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Zona de Conforto Natural:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Mais de 75% dos usuários operam smartphones usando apenas uma mão. A região inferior é alcançável sem contorcer os dedos.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Regra de Ouro: Ícone + Rótulo de Texto:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Ícones sozinhos são ambíguos. Adicionar o rótulo de texto abaixo do ícone reduz erros de navegação drasticamente.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Limite de Destinos:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Utilize entre 3 e 5 destinos no máximo. Mais que 5 itens gera poluição visual e toques acidentais.
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="surface-card" style="display: flex; align-items: center; justify-content: center;">
-              <!-- Phone Mockup Preview -->
-              <div class="phone-mockup">
-                <div class="phone-top-notch"></div>
+            <div class="canvas-box canvas-dots s2-demo">
+              <div class="phone">
+                <span class="num marker" style="left: -12px; top: 28px;">1</span>
+                <span class="num marker" style="left: -12px; top: 136px;">2</span>
+                <span class="num marker" style="left: -12px; top: 352px;">3</span>
                 <div class="phone-screen">
-                  <div style="padding: 12px; font-size: 11px; color: #64748b; background: #f1f5f9; border-radius: 6px;">
-                    <div style="font-weight: 700; color: #0f172a; margin-bottom: 2px;">Feed Principal</div>
-                    <span>Área de visualização e rolagem com uma mão.</span>
+                  <div class="app-bar">
+                    <span>Agenda do Campus</span>
+                    <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bell"></use></svg>
                   </div>
+                  <div class="mini-list-item"><span class="mini-thumb"></span><span><b>Palestra de abertura</b>Hoje, 10h</span></div>
+                  <div class="mini-list-item"><span class="mini-thumb"></span><span><b>Oficina de protótipos</b>Amanhã, 14h</span></div>
+                  <div class="mini-list-item"><span class="mini-thumb"></span><span><b>Feira de projetos</b>Sexta, 9h</span></div>
+                  <div class="mini-cta">Ver minha agenda</div>
+                </div>
+              </div>
+              <div class="pin-list">
+                <div class="pin"><span class="num">1</span><span><strong>Onde estou?</strong>Título claro da tela.</span></div>
+                <div class="pin"><span class="num">2</span><span><strong>O que posso fazer?</strong>Itens que parecem tocáveis.</span></div>
+                <div class="pin"><span class="num">3</span><span><strong>Qual o próximo passo?</strong>Uma ação principal em destaque.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                  <div style="margin: auto 0; padding: 8px; text-align: center; background: rgba(16, 185, 129, 0.1); border: 1px dashed #10b981; border-radius: 6px;">
-                    <span style="font-size: 10px; font-weight: 700; color: #047857;">ZONA FÁCIL DE ALCANCE</span>
-                  </div>
+      <!-- ============================================================ -->
+      <!-- SLIDE 3: Escaneamento F e Z                                   -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-3" aria-label="Slide 3: Escaneamento, padrões F e Z">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>03-escaneamento-f-z
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>
+                Hierarquia visual &middot; Escaneamento
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.nngroup.com/articles/f-shaped-pattern-reading-web-content/" target="_blank" rel="noopener">Padrão F (NN/g)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Escaneamento: padrões F e Z</h2>
+            <p class="slide-subtitle">Ninguém lê uma tela linha por linha: o olho varre em padrões previsíveis (estudos de eye-tracking do Nielsen Norman Group).</p>
+          </header>
 
-                  <!-- Bottom Nav Bar -->
-                  <div class="phone-bottom-nav">
-                    <a href="#" class="nav-item active" onclick="return false;">
-                      <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layout-grid"></use></svg>
-                      <span>Início</span>
-                    </a>
-                    <a href="#" class="nav-item" onclick="return false;">
-                      <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>
-                      <span>Busca</span>
-                    </a>
-                    <a href="#" class="nav-item" onclick="return false;">
-                      <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-sliders"></use></svg>
-                      <span>Ajustes</span>
-                    </a>
-                  </div>
+          <div class="slide-body s3-body">
+            <div class="card">
+              <h3 class="card-title">Padrão F &middot; texto, feeds e listas</h3>
+              <svg class="scan-svg" viewBox="0 0 240 280" role="img" aria-label="Tela de texto com faixas em F: leitura no topo, uma faixa mais curta abaixo e descida pela margem esquerda">
+                <g fill="#d9dde4">
+                  <rect x="16" y="20" width="208" height="12" rx="2" fill="#5c6474"/>
+                  <rect x="16" y="48" width="200" height="6" rx="3"/><rect x="16" y="62" width="180" height="6" rx="3"/>
+                  <rect x="16" y="88" width="208" height="10" rx="2" fill="#5c6474"/>
+                  <rect x="16" y="112" width="190" height="6" rx="3"/><rect x="16" y="126" width="150" height="6" rx="3"/>
+                  <rect x="16" y="152" width="200" height="6" rx="3"/><rect x="16" y="166" width="170" height="6" rx="3"/>
+                  <rect x="16" y="192" width="196" height="6" rx="3"/><rect x="16" y="206" width="120" height="6" rx="3"/>
+                  <rect x="16" y="232" width="188" height="6" rx="3"/><rect x="16" y="246" width="140" height="6" rx="3"/>
+                </g>
+                <g fill="#c2255c" fill-opacity="0.22">
+                  <rect x="8" y="12" width="224" height="60" rx="6"/>
+                  <rect x="8" y="80" width="150" height="56" rx="6"/>
+                  <rect x="8" y="140" width="56" height="128" rx="6"/>
+                </g>
+              </svg>
+              <p>Duas faixas horizontais no topo e uma descida pela margem esquerda.</p>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Padrão Z &middot; telas com poucos blocos</h3>
+              <svg class="scan-svg" viewBox="0 0 240 280" role="img" aria-label="Padrão Z: 1 logo no topo esquerdo, 2 perfil no topo direito, 3 detalhe na base esquerda, 4 botão na base direita">
+                <polyline points="56,46 184,46 56,238 184,238" fill="none" stroke="#c2255c" stroke-width="2" stroke-dasharray="6 4"/>
+                <rect x="36" y="32" width="72" height="28" rx="4" fill="#ffffff" stroke="#b9c0cc"/>
+                <text x="72" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="#171a21">Logo</text>
+                <rect x="132" y="32" width="72" height="28" rx="4" fill="#ffffff" stroke="#b9c0cc"/>
+                <text x="168" y="50" text-anchor="middle" font-size="12" fill="#444c5a">Perfil</text>
+                <rect x="60" y="112" width="120" height="44" rx="4" fill="#ffffff" stroke="#d9dde4"/>
+                <text x="120" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#171a21">Proposta de valor</text>
+                <text x="120" y="148" text-anchor="middle" font-size="10" fill="#5c6474">texto de apoio</text>
+                <rect x="36" y="224" width="72" height="28" rx="4" fill="#ffffff" stroke="#b9c0cc"/>
+                <text x="72" y="242" text-anchor="middle" font-size="12" fill="#444c5a">Detalhe</text>
+                <rect x="132" y="224" width="72" height="28" rx="4" fill="#2f5bd3"/>
+                <text x="168" y="242" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Ação</text>
+                <g font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">
+                  <circle cx="20" cy="46" r="10" fill="#2f5bd3"/><text x="20" y="50">1</text>
+                  <circle cx="220" cy="46" r="10" fill="#2f5bd3"/><text x="220" y="50">2</text>
+                  <circle cx="20" cy="238" r="10" fill="#2f5bd3"/><text x="20" y="242">3</text>
+                  <circle cx="220" cy="238" r="10" fill="#2f5bd3"/><text x="220" y="242">4</text>
+                </g>
+              </svg>
+              <p>Topo esquerdo, topo direito, diagonal, base esquerda, base direita.</p>
+            </div>
+
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-route"></use></svg>Quando cada um aparece</h3>
+                <ul class="list">
+                  <li><span><strong>F:</strong> muito texto, notícias, resultados de busca.</span></li>
+                  <li><span><strong>Z:</strong> poucos blocos, capas, telas de boas-vindas.</span></li>
+                </ul>
+              </div>
+              <div class="callout callout-info">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>
+                <p><strong>Desempate:</strong> se dois elementos têm o mesmo peso visual (slide 5), o padrão decide: de cima para baixo, depois da esquerda para a direita.</p>
+              </div>
+              <div class="callout">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-target"></use></svg>
+                <p>Coloque o que importa onde o olho já passa: início das linhas e cantos do Z.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 4: Escala tipografica modular (R1)                      -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-4" aria-label="Slide 4: Escala tipográfica modular">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>04-escala-tipografica
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-typography"></use></svg>
+                Hierarquia visual &middot; Tipografia
+              </span>
+            </div>
+            <h2 class="slide-title">Escala tipográfica modular</h2>
+            <p class="slide-subtitle">Os tamanhos de texto nascem de uma base multiplicada sempre pela mesma razão.</p>
+          </header>
+
+          <div class="slide-body s4-body">
+            <div class="stack">
+              <div class="formula">tamanho(n) = <strong>base</strong> &times; <strong>razão</strong><sup>n</sup></div>
+              <div>
+                <span class="ws-label">Razões com nome</span>
+                <div class="ratio-grid">
+                  <div class="ratio">Segunda Maior <span class="mono">1,125</span></div>
+                  <div class="ratio">Terça Maior <span class="mono">1,25</span></div>
+                  <div class="ratio">Quarta Justa <span class="mono">1,333</span></div>
+                  <div class="ratio">Quinta Justa <span class="mono">1,5</span></div>
+                </div>
+              </div>
+              <div class="callout callout-warn">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-ruler"></use></svg>
+                <p><strong>Regra do estúdio:</strong> arredonde cada tamanho de fonte para o <strong>múltiplo de 4 mais próximo</strong>.</p>
+              </div>
+              <div class="callout callout-warn">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>
+                <p><strong>Altura de linha:</strong> corpo = tamanho &times; 1,5; títulos = tamanho &times; 1,25. Depois arredonde para o múltiplo de 4 mais próximo.</p>
+              </div>
+              <div class="callout">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-route"></use></svg>
+                <p><strong>n é o degrau:</strong> n = 0 é a base (texto de corpo); n = 1, 2, 3 sobem para subtítulos e títulos; n negativo desce para legendas.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="row">
+                <h3 class="card-title">Exemplo: base 16, razão 1,2</h3>
+                <span class="chip">só para estudo</span>
+              </div>
+              <div class="type-steps">
+                <div class="type-step"><span class="n">n=3</span><span class="sample ts-28">Dia do Design</span><span class="calc">16 &times; 1,2&sup3; = 27,65 &rarr; <span class="redline-tag">28px</span></span></div>
+                <div class="type-step"><span class="n">n=2</span><span class="sample ts-24">Programação do dia</span><span class="calc">16 &times; 1,2&sup2; = 23,04 &rarr; <span class="redline-tag">24px</span></span></div>
+                <div class="type-step"><span class="n">n=1</span><span class="sample ts-20">Oficina de protótipos</span><span class="calc">16 &times; 1,2 = 19,2 &rarr; <span class="redline-tag">20px</span></span></div>
+                <div class="type-step"><span class="n">n=0</span><span class="sample ts-16">Traga notebook e um colega.</span><span class="calc">16 &rarr; <span class="redline-tag">16px</span></span></div>
+              </div>
+              <div class="formula">Corpo 16 &times; 1,5 = 24 &rarr; <strong>24</strong> &nbsp;&middot;&nbsp; Título 28 &times; 1,25 = 35 &rarr; <strong>36</strong></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 5: Peso visual e ordem de leitura (R2)                  -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-5" aria-label="Slide 5: Peso visual e ordem de leitura">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>05-peso-visual
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-contrast"></use></svg>
+                Hierarquia visual &middot; Peso
+              </span>
+            </div>
+            <h2 class="slide-title">Peso visual e ordem de leitura</h2>
+            <p class="slide-subtitle">O olho visita os elementos do mais pesado para o mais leve.</p>
+          </header>
+
+          <div class="slide-body s5-body">
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title">Compare nesta ordem</h3>
+                <ol class="list list-ol">
+                  <li><span><strong>Tamanho</strong> da fonte</span></li>
+                  <li><span><strong>Peso</strong> da fonte (bold vence regular)</span></li>
+                  <li><span><strong>Contraste</strong> com o fundo</span></li>
+                </ol>
+                <p>Empate nos três? O padrão de escaneamento decide: <strong>cima antes de baixo</strong>, depois <strong>esquerda antes de direita</strong> (slide 3).</p>
+              </div>
+              <div class="weight-duel">
+                <span class="ts-20 win">Agenda</span><span class="vs">vs</span><strong>Agenda</strong>
+                <p>20px regular vence 16px bold: o tamanho é comparado primeiro.</p>
+              </div>
+              <div class="weight-duel">
+                <strong style="color: #c2255c;">Agenda</strong><span class="vs">vs</span><strong class="win">Agenda</strong>
+                <p>Mesmo tamanho e peso: o grafite (17,41:1) vence o rosa (5,66:1). Matiz sozinha não pesa; contraste pesa.</p>
+              </div>
+            </div>
+
+            <div class="ba-pair">
+              <div class="canvas-box canvas-dots ba-pane">
+                <div class="verdict"><span class="chip chip-bad">[FAIL] antes</span><span>tudo com o mesmo peso</span></div>
+                <div class="ev-card is-flat">
+                  <span class="ev-tag">Workshop</span>
+                  <span class="ev-title">Dia do Design</span>
+                  <span class="ev-meta">16 de maio, Auditório B</span>
+                  <span class="ev-meta">Oficinas, revisão de portfólio e conversas com designers.</span>
+                  <span class="flat-btn">Inscrever-se</span>
+                </div>
+                <p class="txt">Nada se destaca: o olho não sabe por onde começar e a ação parece texto.</p>
+              </div>
+              <div class="canvas-box canvas-dots ba-pane">
+                <div class="verdict"><span class="chip chip-ok">[OK] depois</span><span>ordem pelo peso</span></div>
+                <div class="ev-card with-order">
+                  <span class="order-row"><span class="num">5</span><span class="ev-tag">Workshop</span></span>
+                  <span class="order-row ev-title"><span class="num">1</span>Dia do Design</span>
+                  <span class="order-row ev-meta"><span class="num">3</span>16 de maio, Auditório B</span>
+                  <span class="order-row ev-desc"><span class="num">4</span>Oficinas, revisão de portfólio e conversas com designers.</span>
+                  <span class="order-row"><span class="num">2</span><span class="btn btn-primary btn-demo">Inscrever-se</span></span>
+                </div>
+                <p class="txt">1 título 24px &middot; 2 botão 16px bold &middot; 3 data e 4 descrição, ambas 14px regular (empate: a de cima primeiro) &middot; 5 tag 12px.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 6: Affordance vs signifier                              -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-6" aria-label="Slide 6: Affordance vs signifier">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>06-affordance-signifier
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-mouse-pointer"></use></svg>
+                Affordance &middot; Don Norman
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.nngroup.com/articles/clickable-elements/" target="_blank" rel="noopener">Elementos clicáveis (NN/g)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Affordance vs signifier</h2>
+            <p class="slide-subtitle">Conceitos de Don Norman (O Design do Dia a Dia): o que o objeto permite e a pista que mostra como.</p>
+          </header>
+
+          <div class="slide-body s6-body">
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-pointer"></use></svg>Affordance</h3>
+              <p>A capacidade real: a tela sensível permite tocar; o botão permite disparar uma ação.</p>
+            </div>
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>Signifier</h3>
+              <p>A pista perceptível de como e onde agir: sombra, cor de link, sublinhado, seta, rótulo.</p>
+            </div>
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>Falso signifier</h3>
+              <p>Parece clicável e não faz nada, ou é clicável e parece texto parado. Gera frustração.</p>
+            </div>
+
+            <div class="s6-demo">
+              <div class="card card-alt door">
+                <svg width="88" height="128" viewBox="0 0 88 128" role="img" aria-label="Porta com barra de empurrar e placa escrita puxe">
+                  <rect x="4" y="4" width="80" height="120" rx="4" fill="#ffffff" stroke="#5c6474" stroke-width="2"/>
+                  <rect x="12" y="64" width="64" height="8" rx="4" fill="#5c6474"/>
+                  <rect x="22" y="24" width="44" height="20" rx="2" fill="#fbe9e9" stroke="#b42323"/>
+                  <text x="44" y="38" text-anchor="middle" font-size="11" font-weight="700" fill="#8f1b1b">PUXE</text>
+                </svg>
+                <p><strong>Porta de Norman:</strong> a barra diz &ldquo;empurre&rdquo;, a placa diz &ldquo;puxe&rdquo;. O signifier contradiz a ação.</p>
+              </div>
+              <div class="sig-row">
+                <div class="card">
+                  <div class="verdict"><span class="chip chip-ok">[OK] link</span></div>
+                  <div class="sig-sample"><span class="fake-link">Ver programação completa</span></div>
+                  <p>Cor de link e sublinhado dizem &ldquo;toque aqui&rdquo;.</p>
+                </div>
+                <div class="card">
+                  <div class="verdict"><span class="chip chip-ok">[OK] item tocável</span></div>
+                  <div class="sig-sample"><span class="tap-row">Minhas inscrições<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right"></use></svg></span></div>
+                  <p>Sombra, área de toque e seta indicam navegação.</p>
+                </div>
+                <div class="card">
+                  <div class="verdict"><span class="chip chip-bad">[FAIL] ação escondida</span></div>
+                  <div class="sig-sample"><span class="dead-text">cancelar inscrição</span></div>
+                  <p>É um botão, mas parece texto comum: ninguém encontra.</p>
                 </div>
               </div>
             </div>
@@ -585,270 +471,286 @@
         </div>
       </section>
 
-      <!-- SLIDE 9: Pilar 3 - Consistencia & Padroes -->
-      <section class="slide" id="slide-9" aria-label="Slide 9: Pilar 3 - Consistência">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-compass"></use></svg>
-            Pilar 3 &middot; Consistência &amp; Padrões
-          </span>
-          <h2 class="slide-title">A Lei de Jakob e Modelos Mentais Universais</h2>
-          <p class="slide-subtitle">"Os usuários passam a maior parte do tempo usando outros aplicativos." — Jakob Nielsen. Eles esperam que seu app funcione da mesma forma.</p>
+      <!-- ============================================================ -->
+      <!-- SLIDE 7: Os 5 estados do botao (R3)                           -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-7" aria-label="Slide 7: Os 5 estados do botão">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>07-estados-botao
         </div>
-
-        <div class="slide-body">
-          <div class="grid-3col">
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>
-                Convenções Universais
-              </h3>
-              <p class="card-desc">
-                A lupa sempre significa buscar. A engrenagem indica configurações. O 'X' fecha janelas. O sino representa notificações. Quebrar essas convenções obriga o usuário a reaprender.
-              </p>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-sliders"></use></svg>
+                Affordance &middot; Estados de interação
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html" target="_blank" rel="noopener">Foco visível (WCAG)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://help.figma.com/hc/en-us/search?query=variants" target="_blank" rel="noopener">Variantes (Figma)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
             </div>
+            <h2 class="slide-title">Os 5 estados do botão</h2>
+            <p class="slide-subtitle">Um botão responde a cada momento da interação. Os cinco estados, nesta ordem:</p>
+          </header>
 
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>
-                Consistência Interna
-              </h3>
-              <p class="card-desc">
-                Dentro do mesmo app, botões com a mesma hierarquia devem ter a mesma cor, as mensagens de sucesso devem usar o mesmo padrão visual e o espaçamento deve seguir o mesmo ritmo.
-              </p>
-            </div>
-
-            <div class="surface-card">
-              <h3 class="card-title">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-target"></use></svg>
-                Consistência Externa
-              </h3>
-              <p class="card-desc">
-                Respeitar as diretrizes de design do sistema operacional nativo (Human Interface Guidelines da Apple e Material Design do Android) reduz a curva de adoção.
-              </p>
-            </div>
-          </div>
-
-          <div class="surface-card" style="border-left: 4px solid var(--accent-purple);">
-            <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Regra do Bom Design:</div>
-            <div style="font-size: var(--font-small); color: var(--text-secondary);">
-              Inove no <strong>conteúdo</strong> e na <strong>solução do problema</strong> do seu usuário, nunca nos mecanismos básicos de navegação e entrada de dados.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 10: Pilar 3 - Atrito & Dark Patterns -->
-      <section class="slide" id="slide-10" aria-label="Slide 10: Pilar 3 - Dark Patterns">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
-            Pilar 3 &middot; Ética &amp; Usabilidade
-          </span>
-          <h2 class="slide-title">Atrito Cognitivo e Armadilhas Visuais (Dark Patterns)</h2>
-          <p class="slide-subtitle">O que acontece quando regras de consistência são quebradas por descuido ou manipulação intencional do comportamento do usuário.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h3 class="card-title" style="color: var(--color-warning);">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
-                Consequências do Atrito Cognitivo
-              </h3>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Hesitação e Incerteza:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      O usuário para o fluxo para tentar entender se a ação foi executada ou se clicou no lugar certo.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Toques Acidentais:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Disposição desordenada provoca acionamento involuntário de ações destrutivas (ex: exclusão de dados).
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Abandono de Carrinho / App:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Mais de 60% dos usuários desinstalam apps confusos logo no primeiro dia de uso.
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div class="surface-card">
-              <h3 class="card-title" style="color: var(--color-danger);">
-                <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
-                Dark Patterns: O que NUNCA Fazer
-              </h3>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet" style="background: var(--color-danger);"></span>
-                  <div>
-                    <strong>Botão Fantasma Invertido:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Destacar "Assinar Plano Mais Caro" e camuflar "Continuar Gratuito" com contraste quase invisível.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet" style="background: var(--color-danger);"></span>
-                  <div>
-                    <strong>Caixa de Seleção com Dupla Negação:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      "Desmarque aqui se NÃO deseja cancelar sua cobrança recorrente."
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet" style="background: var(--color-danger);"></span>
-                  <div>
-                    <strong>Falso Senso de Urgência:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      Contadores artificiais de tempo ou mensagens enganosas de estoque falso.
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SLIDE 11: Pilar 4 - Grid de 8px -->
-      <section class="slide" id="slide-11" aria-label="Slide 11: Pilar 4 - Grid 8px">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layout-grid"></use></svg>
-            Pilar 4 &middot; Grid &amp; Proporção
-          </span>
-          <h2 class="slide-title">Espaçamento e o Princípio do Grid Modular de 8px</h2>
-          <p class="slide-subtitle">Por que interfaces criadas por grandes empresas parecem tão limpas e harmoniosas? A resposta reside na matemática do Grid de 8px.</p>
-        </div>
-
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h3 class="card-title">A Matemática dos 8px</h3>
-              <p class="card-desc">
-                Quase todas as resoluções de monitores e smartphones modernos dividem perfeitamente por 8 (e por seu sub-grid de 4px).
-              </p>
-              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: var(--space-2);">
-                <div style="display: flex; justify-content: space-between; font-size: var(--font-small); border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px;">
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">4px</span>
-                  <span>Micro-espaçamento (entre ícone e rótulo próximo)</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: var(--font-small); border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px;">
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">8px</span>
-                  <span>Espaçamento base entre itens fortemente relacionados</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: var(--font-small); border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px;">
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">16px</span>
-                  <span>Padding interno padrão de cards e caixas de texto</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: var(--font-small); border-bottom: 1px solid var(--border-subtle); padding-bottom: 4px;">
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">24px / 32px</span>
-                  <span>Separação entre blocos e seções do mesmo grupo</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: var(--font-small); padding-bottom: 4px;">
-                  <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">48px / 64px</span>
-                  <span>Respiros generosos de cabeçalho e quebras de página</span>
-                </div>
+          <div class="slide-body s7-body">
+            <div class="states">
+              <div class="state">
+                <span class="state-name">1. Default</span>
+                <div class="state-stage canvas-dots"><span class="sbtn">Inscrever-se</span></div>
+                <span class="chip chip-ok">branco em #2F5BD3 &middot; 5,90:1</span>
+                <p>Repouso. O texto passa no 4,5:1.</p>
+              </div>
+              <div class="state">
+                <span class="state-name">2. Hover</span>
+                <div class="state-stage canvas-dots"><span class="sbtn is-hover">Inscrever-se</span></div>
+                <span class="chip chip-select">#2449B0 &middot; 7,91:1</span>
+                <p><strong>Um tom</strong> mais escuro que o Default.</p>
+              </div>
+              <div class="state">
+                <span class="state-name">3. Focus</span>
+                <div class="state-stage canvas-dots"><span class="sbtn is-focus">Inscrever-se</span></div>
+                <span class="chip chip-redline">anel 2px &middot; 5,90:1 no fundo</span>
+                <p>Anel visível de <strong>2px ou mais</strong>, com <strong>3:1</strong> contra o fundo ao lado.</p>
+              </div>
+              <div class="state">
+                <span class="state-name">4. Pressed</span>
+                <div class="state-stage canvas-dots"><span class="sbtn is-pressed">Inscrever-se</span></div>
+                <span class="chip chip-select">#1C3A8E &middot; 10,27:1</span>
+                <p><strong>Dois tons</strong> mais escuro que o Default.</p>
+              </div>
+              <div class="state">
+                <span class="state-name">5. Disabled</span>
+                <div class="state-stage canvas-dots"><span class="sbtn is-disabled"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-lock"></use></svg>Esgotado</span></div>
+                <span class="chip">sem sombra &middot; not-allowed</span>
+                <p>Contraste menor, sem elevação. Muda também rótulo ou ícone: <strong>nunca só a cor</strong>.</p>
               </div>
             </div>
 
-            <div class="surface-card">
-              <h3 class="card-title">Demonstração Visual com Grid Ativo</h3>
-              <div class="grid-visualizer-box">
-                <div class="grid-measure-row">
-                  <div class="grid-block" style="width: 32px; height: 32px;">4x4</div>
-                  <span style="font-size: 11px; color: #94a3b8;">Ícone Base (24px) com margem 4px</span>
-                </div>
-                <div class="grid-measure-row">
-                  <div class="grid-block" style="width: 64px; height: 32px;">8x4</div>
-                  <span style="font-size: 11px; color: #94a3b8;">Input Height padrão (40px = 5x8)</span>
-                </div>
-                <div class="grid-measure-row">
-                  <div class="grid-block" style="width: 128px; height: 40px;">16x5</div>
-                  <span style="font-size: 11px; color: #94a3b8;">Botão Principal (altura 48px = 6x8)</span>
-                </div>
+            <div class="cols-2 grid-gap">
+              <div class="callout callout-info">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-pointer"></use></svg>
+                <p>Teste ao vivo: passe o mouse, tecle <kbd>Tab</kbd> e clique em
+                  <button type="button" class="sbtn live-btn">Inscrever-se</button></p>
               </div>
-              <div style="margin-top: var(--space-2); font-size: var(--font-micro); color: var(--text-secondary);">
-                <em>Regra de Ouro:</em> Nunca utilize medidas arbitrárias como 7px, 13px ou 19px. Mantenha os múltiplos de 8 para alcançar harmonia e velocidade de desenvolvimento.
+              <div class="callout">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>
+                <p><strong>No Figma:</strong> um conjunto de variantes com <span class="mono">Estado=Default</span>, <span class="mono">Estado=Hover</span>, <span class="mono">Estado=Focus</span>, <span class="mono">Estado=Pressed</span> e <span class="mono">Estado=Disabled</span> (slide 20).</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SLIDE 12: Pilar 4 - Padding vs Margin -->
-      <section class="slide" id="slide-12" aria-label="Slide 12: Pilar 4 - Padding vs Margin">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-box-padding"></use></svg>
-            Pilar 4 &middot; Ritmo Vertical
-          </span>
-          <h2 class="slide-title">Padding vs Margin e a Lei da Proximidade de Gestalt</h2>
-          <p class="slide-subtitle">Elementos fisicamente mais próximos são percebidos pelo cérebro humano como pertencentes ao mesmo grupo funcional.</p>
+      <!-- ============================================================ -->
+      <!-- SLIDE 8: Zona do polegar e alvos de toque (R4)                -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-8" aria-label="Slide 8: Zona do polegar, navegação inferior e alvos de toque">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>08-polegar-alvos-toque
         </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-smartphone"></use></svg>
+                Affordance &middot; Ergonomia mobile
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html" target="_blank" rel="noopener">Tamanho do alvo (WCAG)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Zona do polegar, navegação inferior e alvos de toque</h2>
+            <p class="slide-subtitle">Com o celular em uma mão, a parte de baixo da tela é a mais fácil de alcançar.</p>
+          </header>
 
-        <div class="slide-body">
-          <div class="grid-2col">
-            <div class="surface-card">
-              <h3 class="card-title">Anatomia do Box Model no UI</h3>
-              <ul class="concept-list">
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Padding (Respiro Interno):</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      É a distância entre o conteúdo (texto, ícone) e a borda do próprio componente. Garante que o texto não "asfixie" nas extremidades.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Margin (Espaço Externo):</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      É a distância entre componentes vizinhos. Define o ritmo e o relacionamento de parentesco entre blocos.
-                    </div>
-                  </div>
-                </li>
-                <li class="concept-item">
-                  <span class="concept-bullet"></span>
-                  <div>
-                    <strong>Lei da Proximidade:</strong>
-                    <div style="color: var(--text-secondary); font-size: var(--font-small);">
-                      O espaço entre um rótulo e seu input deve ser <strong>menor</strong> do que a distância para o próximo campo do formulário.
-                    </div>
-                  </div>
-                </li>
-              </ul>
+          <div class="slide-body s8-body">
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-pointer"></use></svg>Zonas de alcance</h3>
+                <div class="zone-key"><span class="zone-swatch" style="background: rgba(31, 122, 54, 0.45);"></span>Fácil: ações frequentes</div>
+                <div class="zone-key"><span class="zone-swatch" style="background: rgba(154, 82, 0, 0.35);"></span>Esticar: conteúdo</div>
+                <div class="zone-key"><span class="zone-swatch" style="background: rgba(180, 35, 35, 0.25);"></span>Difícil: ações raras</div>
+              </div>
+              <div class="card">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layout-grid"></use></svg>Navegação inferior</h3>
+                <ul class="list">
+                  <li><span><strong>Ícone + rótulo:</strong> ícone sozinho é ambíguo.</span></li>
+                  <li><span><strong>3 a 5 destinos:</strong> mais que isso polui e gera toques errados.</span></li>
+                </ul>
+              </div>
             </div>
 
-            <div class="surface-card" style="display: flex; align-items: center; justify-content: center;">
-              <!-- Box Model Visualizer -->
-              <div style="width: 100%; max-width: 320px; background: rgba(59, 130, 246, 0.15); border: 2px dashed #3b82f6; border-radius: 8px; padding: 20px; text-align: center;">
-                <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: #60a5fa; display: block; margin-bottom: 8px;">MARGIN (Espaçamento Externo)</span>
-                
-                <div style="background: rgba(16, 185, 129, 0.2); border: 2px solid #10b981; border-radius: 6px; padding: 16px;">
-                  <span style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: #34d399; display: block; margin-bottom: 8px;">PADDING (Respiro Interno)</span>
+            <div class="canvas-box canvas-dots card-center pad-16" style="display: flex;">
+              <div class="phone">
+                <div class="phone-screen">
+                  <div class="thumb-zone" aria-hidden="true"></div>
+                  <div class="app-bar"><span>Agenda do Campus</span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bell"></use></svg></div>
+                  <div class="mini-list-item"><span class="mini-thumb"></span><span><b>Dia do Design</b>16 de maio</span></div>
+                  <div class="mini-list-item"><span class="mini-thumb"></span><span><b>Hackathon</b>Sábado</span></div>
+                  <nav class="bottom-nav" aria-label="Exemplo de navegação inferior">
+                    <span class="is-on"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-home"></use></svg>Início</span>
+                    <span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>Busca</span>
+                    <span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-calendar"></use></svg>Agenda</span>
+                    <span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-user"></use></svg>Perfil</span>
+                  </nav>
+                </div>
+              </div>
+            </div>
 
-                  <div style="background: #ffffff; color: #0f172a; padding: 12px; border-radius: 4px; font-weight: 700; font-size: 13px;">
-                    CONTEÚDO
-                  </div>
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-target"></use></svg>Alvos de toque em tamanho real</h3>
+              <div class="targets">
+                <div class="target"><span class="target-box" style="width: 24px; height: 24px;"></span><span><strong>24 &times; 24</strong>WCAG 2.2 &middot; 2.5.8 (mínimo, px CSS)</span></div>
+                <div class="target"><span class="target-box" style="width: 44px; height: 44px;"></span><span><strong>44pt</strong>Apple HIG</span></div>
+                <div class="target"><span class="target-box" style="width: 48px; height: 48px;"></span><span><strong>48dp</strong>Material</span></div>
+              </div>
+              <div class="callout callout-ok">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg>
+                <p><strong>Regra do estúdio: 48px.</strong> O ícone pode ter 24px; a área tocável ao redor dele tem 48 &times; 48.</p>
+              </div>
+              <div class="canvas-box canvas-dots touch-demo">
+                <span class="touch-area"><svg class="ic ic-24" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bell"></use></svg></span>
+                <span class="txt">ícone <span class="redline-tag">24</span> dentro da área tocável <span class="redline-tag">48 &times; 48</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 9: Contraste WCAG (R4)                                  -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-9" aria-label="Slide 9: Contraste WCAG">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>09-contraste-wcag
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-contrast"></use></svg>
+                Acessibilidade &middot; WCAG 2.2 AA
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" target="_blank" rel="noopener">1.4.3 Contraste<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html" target="_blank" rel="noopener">1.4.11 Não-texto<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html" target="_blank" rel="noopener">2.4.7 Foco<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Contraste WCAG: texto, texto grande, não-texto e foco</h2>
+            <p class="slide-subtitle">Contraste compara a luminância das duas cores, não a matiz.</p>
+          </header>
+
+          <div class="slide-body s9-body">
+            <div class="stack">
+              <div class="card card-alt">
+                <ul class="list">
+                  <li><span><strong>1.4.3 Texto normal:</strong> mínimo <strong>4,5:1</strong>.</span></li>
+                  <li><span><strong>1.4.3 Texto grande:</strong> mínimo <strong>3:1</strong> (&ge; 24px regular ou &ge; 18,66px bold).</span></li>
+                  <li><span><strong>1.4.11 Não-texto:</strong> bordas, ícones e anéis de foco, mínimo <strong>3:1</strong>.</span></li>
+                  <li><span><strong>2.4.7 Foco visível:</strong> quem usa teclado vê onde está.</span></li>
+                </ul>
+              </div>
+              <div class="formula">razão = (<strong>L1</strong> + 0,05) / (<strong>L2</strong> + 0,05)<br><span class="muted">L = luminância relativa; L1 é a cor mais clara.</span></div>
+              <div class="card">
+                <span class="ws-label">O que conta como texto grande</span>
+                <div class="big-sample">
+                  <span style="font-size: 24px; line-height: 32px;">24px regular</span>
+                  <span style="font-size: 18.66px; line-height: 28px; font-weight: 700;">18,66px bold</span>
+                </div>
+              </div>
+              <div class="card focus-demo">
+                <span class="sbtn btn-demo is-focus">Inscrever-se</span>
+                <p>Anel de foco #2F5BD3 sobre branco: <strong>5,90:1</strong>, acima do mínimo de 3:1 para não-texto.</p>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-ruler"></use></svg>Pares sobre fundo branco (#FFFFFF), valores calculados</h3>
+              <div class="table-scroll">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Amostra</th><th>Cor</th><th>Razão</th><th>Normal</th><th>Grande</th><th>Não-texto</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><span class="swatch-aa" style="color: #171a21;">Aa</span></td><td class="num-cell">#171A21</td><td class="num-cell">17,41:1</td><td class="pass">[OK]</td><td class="pass">[OK]</td><td class="pass">[OK]</td></tr>
+                  <tr><td><span class="swatch-aa" style="color: #5c6474;">Aa</span></td><td class="num-cell">#5C6474</td><td class="num-cell">5,95:1</td><td class="pass">[OK]</td><td class="pass">[OK]</td><td class="pass">[OK]</td></tr>
+                  <tr><td><span class="swatch-aa" style="color: #767676;">Aa</span></td><td class="num-cell">#767676</td><td class="num-cell">4,54:1</td><td class="pass">[OK]</td><td class="pass">[OK]</td><td class="pass">[OK]</td></tr>
+                  <tr><td><span class="swatch-aa" style="color: #8a8f98;">Aa</span></td><td class="num-cell">#8A8F98</td><td class="num-cell">3,25:1</td><td class="fail">[FAIL]</td><td class="pass">[OK]</td><td class="pass">[OK]</td></tr>
+                  <tr><td><span class="swatch-aa" style="color: #999999;">Aa</span></td><td class="num-cell">#999999</td><td class="num-cell">2,85:1</td><td class="fail">[FAIL]</td><td class="fail">[FAIL]</td><td class="fail">[FAIL]</td></tr>
+                  <tr><td><span class="swatch-line" style="border: 2px solid #d9dde4;"></span></td><td class="num-cell">#D9DDE4 (borda)</td><td class="num-cell">1,36:1</td><td class="muted">n/a</td><td class="muted">n/a</td><td class="fail">[FAIL]</td></tr>
+                </tbody>
+              </table>
+              </div>
+              <div class="callout callout-warn">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
+                <p>Uma borda de campo quase invisível falha no 1.4.11 se for a única pista de onde digitar.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 10: Lei de Jakob e consistencia (R5)                    -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-10" aria-label="Slide 10: Lei de Jakob e consistência">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>10-jakob-consistencia
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-compass"></use></svg>
+                Consistência &middot; Padrões
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noopener">Consistência e padrões (NN/g)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Lei de Jakob e consistência</h2>
+            <p class="slide-subtitle">As pessoas passam a maior parte do tempo em outros apps e esperam que o seu funcione do mesmo jeito.</p>
+          </header>
+
+          <div class="slide-body s10-body">
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>Consistência externa: convenções</h3>
+              <div class="icon-grid">
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>Buscar</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>Fechar</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-menu"></use></svg>Menu</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-settings"></use></svg>Configurações</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-heart"></use></svg>Favorito</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-arrow-left"></use></svg>Voltar</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bell"></use></svg>Notificações</div>
+                <div class="icon-tile"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-trash"></use></svg>Excluir</div>
+              </div>
+              <p>Lupa, X, três linhas, engrenagem, coração, seta para a esquerda, sino e lixeira. Mudar o significado obriga a reaprender.</p>
+            </div>
+
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>Consistência interna</h3>
+                <ul class="list">
+                  <li><span>A mesma ação tem sempre o <strong>mesmo visual, rótulo e posição</strong> no app inteiro.</span></li>
+                  <li><span><strong>Um botão primário por tela.</strong></span></li>
+                </ul>
+              </div>
+              <div class="cols-2 grid-gap">
+                <div class="mini-dialog">
+                  <div class="verdict"><span class="chip chip-ok">[OK] padrão correto</span></div>
+                  <h4>Salvar alterações?</h4>
+                  <div class="row"><span class="btn btn-secondary btn-demo">Cancelar</span><span class="btn btn-primary btn-demo">Salvar</span></div>
+                  <p class="txt">Secundário contornado ao lado do primário cheio não é inconsistência.</p>
+                </div>
+                <div class="mini-dialog">
+                  <div class="verdict"><span class="chip chip-bad">[FAIL] inconsistente</span></div>
+                  <h4>Salvar alterações?</h4>
+                  <div class="row"><span class="btn btn-primary btn-demo">Descartar</span><span class="btn btn-primary btn-demo">Gravar</span></div>
+                  <p class="txt">Dois primários competem, e &ldquo;Gravar&rdquo; aqui é &ldquo;Salvar&rdquo; nas outras telas.</p>
                 </div>
               </div>
             </div>
@@ -856,200 +758,905 @@
         </div>
       </section>
 
-      <!-- SLIDE 13: Ponte para o Figma -->
-      <section class="slide" id="slide-13" aria-label="Slide 13: Ponte para o Figma">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-figma"></use></svg>
-            Ponte Teórico-Prática &middot; Figma
-          </span>
-          <h2 class="slide-title">Como os 4 Pilares se Traduzem no Figma</h2>
-          <p class="slide-subtitle">O Figma não foi desenhado para pintura digital livre: ele reflete diretamente as regras de desenvolvimento e estruturação de interface.</p>
+      <!-- ============================================================ -->
+      <!-- SLIDE 11: Dark patterns (R6)                                  -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-11" aria-label="Slide 11: Dark patterns">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>11-dark-patterns
         </div>
-
-        <div class="slide-body">
-          <div class="grid-4col">
-            <div class="surface-card">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-cyan);">PILAR 1 &rarr; FIGMA</span>
-              <h3 class="card-title" style="margin-top: 4px;">Text Styles &amp; Color Tokens</h3>
-              <p class="card-desc">
-                Crie estilos de texto salvos para Display, H1 e Body. Use variáveis de cores semânticas (Primary, Neutral, Error) para garantir contraste constante.
-              </p>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
+                Consistência &middot; Ética
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.deceptive.design/types" target="_blank" rel="noopener">Catálogo de padrões enganosos<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
             </div>
+            <h2 class="slide-title">Dark patterns: armadilhas de interface</h2>
+            <p class="slide-subtitle">Interfaces desenhadas para fazer a pessoa agir contra o próprio interesse. Saiba reconhecer, nunca use.</p>
+          </header>
 
-            <div class="surface-card">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-cyan);">PILAR 2 &rarr; FIGMA</span>
-              <h3 class="card-title" style="margin-top: 4px;">Component Variants</h3>
-              <p class="card-desc">
-                Estruture botões e controles em variantes de componentes com estados <em>Default</em>, <em>Hover</em>, <em>Active</em>, <em>Focused</em> e <em>Disabled</em> já linkados no protótipo.
-              </p>
+          <div class="slide-body s11-body">
+            <div class="card dp">
+              <h3 class="card-title">Culpa na recusa</h3><span class="en">confirmshaming</span>
+              <div class="dp-mock"><span class="tiny-btn">Quero o desconto</span><span class="tiny-link">Não, prefiro pagar mais caro</span></div>
+              <p>A opção de recusar humilha quem clica.</p>
             </div>
-
-            <div class="surface-card">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-cyan);">PILAR 3 &rarr; FIGMA</span>
-              <h3 class="card-title" style="margin-top: 4px;">Design System &amp; Assets</h3>
-              <p class="card-desc">
-                Iconografia padronizada em componentes de 24x24px e biblioteca compartilhada impedem desalinhamentos visuais entre integrantes da dupla.
-              </p>
+            <div class="card dp">
+              <h3 class="card-title">Opt-in pré-marcado</h3><span class="en">pre-checked opt-in</span>
+              <div class="dp-mock"><span class="dp-check"><i><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg></i>Quero ofertas de parceiros</span></div>
+              <p>O &ldquo;sim&rdquo; já vem marcado.</p>
             </div>
-
-            <div class="surface-card">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-cyan);">PILAR 4 &rarr; FIGMA</span>
-              <h3 class="card-title" style="margin-top: 4px;">Auto-Layout (Shift + A)</h3>
-              <p class="card-desc">
-                A ferramenta mais poderosa do Figma: configura paddings e espaçamentos (gap) em múltiplos de 8px com fluxo responsivo automático.
-              </p>
+            <div class="card dp">
+              <h3 class="card-title">Armadilha de saída</h3><span class="en">roach motel</span>
+              <div class="dp-mock"><span>Assinar: <strong>1 toque</strong></span><span>Cancelar: ligue em horário comercial</span></div>
+              <p>Fácil de entrar, difícil de sair.</p>
+            </div>
+            <div class="card dp">
+              <h3 class="card-title">Custos ocultos</h3><span class="en">hidden costs</span>
+              <div class="dp-mock"><span>Ingresso: R$ 20,00</span><span>Último passo: <strong>R$ 31,90</strong> (taxas)</span></div>
+              <p>O preço real só aparece no fim.</p>
+            </div>
+            <div class="card dp">
+              <h3 class="card-title">Anúncio disfarçado</h3><span class="en">disguised ad / fake close</span>
+              <div class="dp-mock"><span class="row"><span class="tiny-btn">Baixar</span><svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg></span><span>O &ldquo;X&rdquo; abre o anúncio.</span></div>
+              <p>Propaganda vestida de botão do app.</p>
+            </div>
+            <div class="card dp">
+              <h3 class="card-title">Pergunta capciosa</h3><span class="en">trick question</span>
+              <div class="dp-mock"><span class="dp-check"><i><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg></i>Desmarque se não quiser deixar de receber avisos</span></div>
+              <p>Dupla negação confunde de propósito.</p>
+            </div>
+            <div class="card dp">
+              <h3 class="card-title">Falsa urgência</h3><span class="en">false urgency</span>
+              <div class="dp-mock"><span class="row"><svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-clock"></use></svg><strong>Oferta acaba em 04:59</strong></span><span>O relógio reinicia a cada visita.</span></div>
+              <p>Pressa inventada para impedir a reflexão.</p>
+            </div>
+            <div class="card dp dp-summary">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-shield-check"></use></svg>Como reconhecer</h3>
+              <p>Pergunte: esta tela ajuda a pessoa a decidir ou decide por ela? Se a interface trabalha contra quem usa, é armadilha.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SLIDE 14: Roteiro da Missao / Quest -->
-      <section class="slide" id="slide-14" aria-label="Slide 14: Rumo a Quest">
-        <div class="slide-header">
-          <span class="slide-tag">
-            <svg style="width: 14px; height: 14px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-key"></use></svg>
-            Missão em Duplas &middot; Trilha Prática
-          </span>
-          <h2 class="slide-title">Roteiro da Missão: Preparem suas Duplas!</h2>
-          <p class="slide-subtitle">A teoria foi absorvida. Agora sua dupla entrará na Quest de UI com desafios dinâmicos e fechaduras.</p>
+      <!-- ============================================================ -->
+      <!-- SLIDE 12: Grid de 8px (R7 scale)                              -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-12" aria-label="Slide 12: Grid de 8px">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>12-grid-8px
         </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layout-grid"></use></svg>
+                Espaçamento &middot; Escala
+              </span>
+            </div>
+            <h2 class="slide-title">Grid de 8px</h2>
+            <p class="slide-subtitle">Todo espaçamento é múltiplo de 8. O 4 entra só em pares apertados de ícone e texto.</p>
+          </header>
 
-        <div class="slide-body">
-          <div class="grid-4col">
-            <div class="surface-card" style="border-top: 4px solid var(--accent-cyan);">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-cyan);">ETAPA 1</span>
-              <h3 class="card-title" style="margin-top: 4px;">O Olho Clínico</h3>
-              <p class="card-desc">Identifique problemas críticos de contraste, hierarquia quebrada e fontes ilegíveis em interfaces reais.</p>
+          <div class="slide-body s12-body">
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-ruler"></use></svg>Escala em tamanho real</h3>
+              <div class="scale-squares" role="img" aria-label="Quadrados de 4, 8, 16, 24, 32, 48 e 64 pixels">
+                <span><i style="width: 4px; height: 4px;"></i>4</span>
+                <span><i style="width: 8px; height: 8px;"></i>8</span>
+                <span><i style="width: 16px; height: 16px;"></i>16</span>
+                <span><i style="width: 24px; height: 24px;"></i>24</span>
+                <span><i style="width: 32px; height: 32px;"></i>32</span>
+                <span><i style="width: 48px; height: 48px;"></i>48</span>
+                <span><i style="width: 64px; height: 64px;"></i>64</span>
+              </div>
+              <p>Nada de 7, 13 ou 19px: valores da escala deixam o ritmo previsível e o handoff mais rápido.</p>
             </div>
 
-            <div class="surface-card" style="border-top: 4px solid var(--accent-primary);">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-primary);">ETAPA 2</span>
-              <h3 class="card-title" style="margin-top: 4px;">A Bancada de Ajuste</h3>
-              <p class="card-desc">Restaure signifiers apagados e alinhe espaçamentos fora do grid com controles deslizantes em tempo real.</p>
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-box-padding"></use></svg>Medidas reais</h3>
+              <div class="demo-measure canvas-box canvas-dots">
+                <div class="dm-row">
+                  <span class="icon-label"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-calendar"></use></svg><span class="gap-4"></span>Agenda</span>
+                  <span class="txt">ícone <span class="redline-tag">24</span> + vão <span class="redline-tag">4</span></span>
+                </div>
+                <div class="dm-row">
+                  <span class="demo-input">Buscar evento</span>
+                  <span class="txt">altura <span class="redline-tag">40</span> = 5 &times; 8</span>
+                </div>
+                <div class="dm-row">
+                  <span class="sbtn btn-demo">Inscrever-se</span>
+                  <span class="txt">altura <span class="redline-tag">48</span> = 6 &times; 8</span>
+                </div>
+                <div class="dm-row">
+                  <span class="pad-demo"><span>conteúdo</span></span>
+                  <span class="txt">padding <span class="redline-tag">16</span> = 2 &times; 8</span>
+                </div>
+              </div>
             </div>
 
-            <div class="surface-card" style="border-top: 4px solid var(--accent-purple);">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--accent-purple);">ETAPA 3</span>
-              <h3 class="card-title" style="margin-top: 4px;">O Esqueletizador</h3>
-              <p class="card-desc">Traduza telas de alta fidelidade em wireframes funcionais de blocos cinzas antes de passar para o Figma.</p>
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title">Por que 8?</h3>
+                <p>Larguras comuns de tela são múltiplos de 8 ou ficam perto:</p>
+                <div class="width-chips">
+                  <span class="wchip is-exact">360 <em>&divide;8 = 45</em></span>
+                  <span class="wchip">375 <em>perto</em></span>
+                  <span class="wchip">390 <em>perto</em></span>
+                  <span class="wchip">412 <em>perto</em></span>
+                  <span class="wchip is-exact">768 <em>&divide;8 = 96</em></span>
+                  <span class="wchip is-exact">1280 <em>&divide;8 = 160</em></span>
+                  <span class="wchip is-exact">1440 <em>&divide;8 = 180</em></span>
+                </div>
+              </div>
+              <div class="card">
+                <h3 class="card-title">Densidades 1x, 1,5x, 2x, 3x</h3>
+                <p><span class="mono">8px &rarr; 8 / 12 / 16 / 24</span> pixels físicos: sempre inteiros. <span class="mono">5px a 1,5x = 7,5</span>: meio pixel, borda borrada.</p>
+              </div>
             </div>
-
-            <div class="surface-card" style="border-top: 4px solid var(--color-success);">
-              <span style="font-family: var(--font-mono); font-size: var(--font-micro); font-weight: 700; color: var(--color-success);">ETAPA 4</span>
-              <h3 class="card-title" style="margin-top: 4px;">A Chave Mestra</h3>
-              <p class="card-desc">Desbloqueie o cofre final, gere o certificado da dupla e acesse o placar geral.</p>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: center; margin-top: var(--space-2);">
-            <a href="../quest/index.html" class="btn-nav" style="background: var(--accent-primary); border-color: var(--accent-primary); color: #ffffff; padding: 12px 24px; font-size: var(--font-body); text-decoration: none;">
-              <span>Iniciar Desafio da Quest</span>
-              <svg style="width: 18px; height: 18px;" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right"></use></svg>
-            </a>
           </div>
         </div>
       </section>
 
+      <!-- ============================================================ -->
+      <!-- SLIDE 13: Proximidade e ritmo (R7 recipe)                     -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-13" aria-label="Slide 13: Proximidade e ritmo">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>13-proximidade-ritmo
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-box-padding"></use></svg>
+                Espaçamento &middot; Gestalt
+              </span>
+            </div>
+            <h2 class="slide-title">Proximidade e ritmo</h2>
+            <p class="slide-subtitle">Itens relacionados ficam mais perto do que os não relacionados. Espaço interno &le; espaço externo.</p>
+          </header>
+
+          <div class="slide-body s13-body">
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-ruler"></use></svg>Receita de ritmo do estúdio</h3>
+                <div class="recipe">
+                  <span class="redline-tag">8</span><span>dentro de um grupo</span>
+                  <span class="redline-tag">16</span><span>entre grupos</span>
+                  <span class="redline-tag">24</span><span>antes da ação principal</span>
+                  <span class="redline-tag">pad</span><span>padding do container = <strong>o maior vão dentro dele</strong></span>
+                </div>
+              </div>
+              <div class="box-model" aria-label="Margem ou vão fora, padding dentro, conteúdo no centro">
+                margem / vão: entre componentes
+                <div>padding: entre conteúdo e borda<span>conteúdo</span></div>
+              </div>
+              <div class="callout callout-info">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>
+                <p>No Figma, o vão vira <strong>gap</strong> e o respiro interno vira <strong>padding</strong> do auto layout (slide 19).</p>
+              </div>
+            </div>
+
+            <div class="ba-pair">
+              <div class="canvas-box canvas-dots ba-pane">
+                <div class="verdict"><span class="chip chip-bad">[FAIL] antes</span><span>tudo a 12px</span></div>
+                <div class="form-card" style="padding: 12px; align-self: center;">
+                  <span class="fc-title">Inscrição</span>
+                  <span class="gap-mark" style="height: 12px;"><span class="redline-tag">12</span></span>
+                  <span class="lbl">Nome</span>
+                  <span class="gap-mark" style="height: 12px;"><span class="redline-tag">12</span></span>
+                  <span class="inp"></span>
+                  <span class="gap-mark" style="height: 12px;"><span class="redline-tag">12</span></span>
+                  <span class="lbl">E-mail</span>
+                  <span class="gap-mark" style="height: 12px;"><span class="redline-tag">12</span></span>
+                  <span class="inp"></span>
+                  <span class="gap-mark" style="height: 12px;"><span class="redline-tag">12</span></span>
+                  <span class="cta">Confirmar</span>
+                </div>
+                <p class="txt">&ldquo;E-mail&rdquo; está tão perto do campo de cima quanto do seu: os grupos se misturam.</p>
+              </div>
+              <div class="canvas-box canvas-dots ba-pane">
+                <div class="verdict"><span class="chip chip-ok">[OK] depois</span><span>receita 8 / 16 / 24</span></div>
+                <div class="form-card" style="padding: 24px; align-self: center;">
+                  <span class="pad-mark" style="left: 0; right: 0; top: 0; height: 24px;"></span>
+                  <span class="fc-title">Inscrição</span>
+                  <span class="gap-mark" style="height: 16px;"><span class="redline-tag">16</span></span>
+                  <span class="lbl">Nome</span>
+                  <span class="gap-mark" style="height: 8px;"><span class="redline-tag">8</span></span>
+                  <span class="inp"></span>
+                  <span class="gap-mark" style="height: 16px;"><span class="redline-tag">16</span></span>
+                  <span class="lbl">E-mail</span>
+                  <span class="gap-mark" style="height: 8px;"><span class="redline-tag">8</span></span>
+                  <span class="inp"></span>
+                  <span class="gap-mark" style="height: 24px;"><span class="redline-tag">24</span></span>
+                  <span class="cta">Confirmar</span>
+                </div>
+                <p class="txt">Maior vão interno = 24, então o padding do card também é <span class="redline-tag">24</span>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 14: Layout grid mobile (R8)                             -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-14" aria-label="Slide 14: Layout grid mobile">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>14-layout-grid-mobile
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layout-grid"></use></svg>
+                Espaçamento &middot; Colunas
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://help.figma.com/hc/en-us/search?query=frames" target="_blank" rel="noopener">Frames e grids (Figma)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Layout grid mobile</h2>
+            <p class="slide-subtitle">Frame de 360px de largura: 4 colunas, margens laterais de 16px e gutters (calhas) de 16px.</p>
+          </header>
+
+          <div class="slide-body s14-body">
+            <div class="canvas-box canvas-dots lg-wrap">
+              <div class="lg-scale">
+                <div class="lg-frame" role="img" aria-label="Frame de 360 pixels com 4 colunas de 70, margens e gutters de 16">
+                  <div class="lg-cols" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                  <div class="lg-content" aria-hidden="true">
+                    <span class="lg-block lg-span-4">4 colunas &middot; 328</span>
+                    <span class="lg-block lg-span-2">2 col &middot; 156</span>
+                    <span class="lg-block lg-span-2">2 col &middot; 156</span>
+                  </div>
+                </div>
+                <div class="lg-measures" aria-hidden="true">
+                  <span>16</span><span class="is-col">70</span><span>16</span><span class="is-col">70</span><span>16</span><span class="is-col">70</span><span>16</span><span class="is-col">70</span><span>16</span>
+                </div>
+                <div class="lg-total"><span class="redline-tag">frame 360</span></div>
+              </div>
+            </div>
+
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-ruler"></use></svg>Largura da coluna</h3>
+                <div class="formula">coluna = (360 &minus; 2&times;16 &minus; 3&times;16) / 4<br>= (360 &minus; 32 &minus; 48) / 4 = 280 / 4 = <strong>70</strong></div>
+                <p>São 2 margens e 3 gutters (entre 4 colunas sempre cabem 3 gutters).</p>
+              </div>
+              <div class="card">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-box-padding"></use></svg>Largura do conteúdo</h3>
+                <div class="formula">conteúdo = frame &minus; 2 &times; margem = 360 &minus; 32 = <strong>328</strong></div>
+                <p>Um bloco de 2 colunas ocupa 2 &times; 70 + 1 gutter de 16 = 156.</p>
+              </div>
+              <div class="callout callout-info">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-smartphone"></use></svg>
+                <p>Outro aparelho, mesma regra: num frame de 390, o conteúdo tem 390 &minus; 32 = 358.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 15: Olho clinico (R9)                                   -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-15" aria-label="Slide 15: Olho clínico: alinhamento óptico, raio aninhado, kerning">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>15-olho-clinico
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg>
+                Olho clínico &middot; Detalhes
+              </span>
+            </div>
+            <h2 class="slide-title">Olho clínico: alinhamento óptico, raio aninhado e kerning</h2>
+            <p class="slide-subtitle">Três detalhes que separam uma tela correta de uma tela caprichada.</p>
+          </header>
+
+          <div class="slide-body s15-body">
+            <div class="card">
+              <h3 class="card-title">Alinhamento óptico</h3>
+              <p>Formas como o triângulo de play e ícones redondos pedem centro <strong>visual</strong>, não matemático.</p>
+              <div class="eye-pair">
+                <div class="eye-cell">
+                  <span class="play-circle"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5.5,4 5.5,20 18.5,12"/></svg></span>
+                  <span class="chip chip-bad">matemático</span>
+                  <span class="txt">parece puxado à esquerda</span>
+                </div>
+                <div class="eye-cell">
+                  <span class="play-circle is-optical"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5.5,4 5.5,20 18.5,12"/></svg></span>
+                  <span class="chip chip-ok">óptico</span>
+                  <span class="txt">deslocado 3px à direita</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Raio aninhado</h3>
+              <div class="formula">raio externo = raio interno + padding</div>
+              <div class="eye-pair">
+                <div class="eye-cell">
+                  <span class="nest-outer" style="border-radius: 12px;"><span class="nest-inner" style="border-radius: 12px;"></span></span>
+                  <span class="chip chip-bad">12 fora, 12 dentro</span>
+                  <span class="txt">cantos parecem desencaixados</span>
+                </div>
+                <div class="eye-cell">
+                  <span class="nest-outer" style="border-radius: 20px;"><span class="nest-inner" style="border-radius: 8px;"></span></span>
+                  <span class="chip chip-ok">8 + 12 = 20</span>
+                  <span class="txt">curvas paralelas</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title">Kerning</h3>
+              <p>Espaço entre pares de letras. Pares irregulares como <strong>AV</strong>, <strong>To</strong> e <strong>LT</strong> parecem frouxos.</p>
+              <div class="eye-pair is-stack">
+                <div class="eye-cell">
+                  <span class="kern is-loose" aria-label="AV To LT sem ajuste"><span>AV</span> <span>To</span> <span>LT</span></span>
+                  <span class="chip chip-bad">sem ajuste: buracos</span>
+                </div>
+                <div class="eye-cell">
+                  <span class="kern is-tight" aria-label="AV To LT com kerning"><span class="k-av">A</span>V <span class="k-to">T</span>o <span class="k-lt">L</span>T</span>
+                  <span class="chip chip-ok">com kerning: cor uniforme</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 16: Wireframe de baixa fidelidade (R10)                 -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-16" aria-label="Slide 16: Wireframe de baixa fidelidade">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>16-wireframe-low-fi
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>
+                Processo &middot; Esqueleto
+              </span>
+            </div>
+            <h2 class="slide-title">Wireframe de baixa fidelidade</h2>
+            <p class="slide-subtitle">Antes da cor, a estrutura: a mesma tela em alta fidelidade e em blocos cinza.</p>
+          </header>
+
+          <div class="slide-body s16-body">
+            <div class="canvas-box canvas-dots screen-pane pad-16">
+              <span class="chip chip-select pane-label">alta fidelidade</span>
+              <div class="phone">
+                <div class="phone-screen hf-screen">
+                  <div class="app-bar"><span>Biblioteca do Campus</span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bell"></use></svg></div>
+                  <div class="hf-wave" aria-hidden="true"></div>
+                  <div class="hf-search"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>Buscar livros</div>
+                  <div class="row hf-chips"><span class="hf-chip is-on">Todos</span><span class="hf-chip">Livros</span><span class="hf-chip">Salas</span></div>
+                  <div class="hf-banner">Semana do Livro<small>Retire até 5 títulos</small></div>
+                  <div class="hf-item"><span class="mini-thumb"></span><span><b>Design de Interfaces</b>Devolver em 3 dias</span></div>
+                  <div class="hf-item"><span class="mini-thumb"></span><span><b>Tipografia Básica</b>Disponível</span></div>
+                  <span class="hf-fab" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-plus"></use></svg></span>
+                  <div class="bottom-nav">
+                    <span class="is-on"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-home"></use></svg>Início</span>
+                    <span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-book"></use></svg>Livros</span>
+                    <span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-user"></use></svg>Perfil</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="canvas-box canvas-dots screen-pane pad-16">
+              <span class="chip pane-label">baixa fidelidade</span>
+              <div class="phone">
+                <div class="wf-screen" role="img" aria-label="Wireframe: app bar, campo de busca, chips de filtro, banner, dois itens de lista, botão flutuante e barra de abas">
+                  <div class="wf" style="height: 32px;"><span class="wf-label">App bar</span></div>
+                  <div class="wf" style="height: 32px; border-radius: 16px;"><span class="wf-label">Campo de busca</span></div>
+                  <div class="wf" style="height: 24px;"><span class="wf-label">Chips de filtro</span></div>
+                  <div class="wf" style="height: 72px;">
+                    <svg class="wf-x" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="0" x2="100" y2="100"/><line x1="100" y1="0" x2="0" y2="100"/></svg>
+                    <span class="wf-label">Banner</span>
+                  </div>
+                  <div class="wf" style="height: 40px;"><span class="wf-label">Item de lista</span><span class="wf-lines"><i></i><i></i></span></div>
+                  <div class="wf" style="height: 40px;"><span class="wf-label">Item de lista</span><span class="wf-lines"><i></i><i></i></span></div>
+                  <div class="wf wf-fab" style="border-radius: 12px;"><span class="wf-label">FAB</span></div>
+                  <div class="wf wf-tabs" style="height: 48px;"><span class="wf-label">Barra de abas</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg>Regras de abstração</h3>
+                <ul class="list">
+                  <li><span>Blocos cinza, sem cor nem imagem real: imagem vira <strong>caixa com X</strong>, texto vira <strong>linhas</strong>.</span></li>
+                  <li><span><strong>Um bloco por região</strong>, de cima para baixo.</span></li>
+                  <li><span>Item repetido: <strong>um bloco por ocorrência</strong> (2 itens = 2 blocos).</span></li>
+                  <li><span>Decoração sem função <strong>não é região</strong>: a faixa colorida sob o título sumiu.</span></li>
+                </ul>
+              </div>
+              <div class="card">
+                <span class="ws-label">Vocabulário de regiões mobile</span>
+                <div class="vocab">
+                  <span class="chip">App bar</span><span class="chip">Campo de busca</span><span class="chip">Chips de filtro</span>
+                  <span class="chip">Banner (hero)</span><span class="chip">Card</span><span class="chip">Item de lista</span>
+                  <span class="chip">Barra de abas</span><span class="chip">Botão flutuante (FAB)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 17: 10 heuristicas de Nielsen (R11)                     -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-17" aria-label="Slide 17: As 10 heurísticas de Nielsen">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>17-heuristicas-nielsen
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-shield-check"></use></svg>
+                Avaliação &middot; Usabilidade
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noopener">10 heurísticas (NN/g)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">As 10 heurísticas de Nielsen</h2>
+            <p class="slide-subtitle">Dez regras práticas para criticar qualquer tela. Cite pelo número.</p>
+          </header>
+
+          <div class="slide-body s17-body">
+            <div class="card heur"><span class="heur-num">1</span><h3>Visibilidade do status do sistema</h3><p>&ldquo;Enviando 3 de 5 fotos&rdquo; com barra de progresso.</p></div>
+            <div class="card heur"><span class="heur-num">2</span><h3>Correspondência entre o sistema e o mundo real</h3><p>Lixeira para apagar; &ldquo;ontem&rdquo; em vez de um código de data.</p></div>
+            <div class="card heur"><span class="heur-num">3</span><h3>Controle e liberdade do usuário</h3><p>&ldquo;Desfazer&rdquo; logo depois de arquivar um e-mail.</p></div>
+            <div class="card heur"><span class="heur-num">4</span><h3>Consistência e padrões</h3><p>Voltar sempre no topo esquerdo, com a mesma seta.</p></div>
+            <div class="card heur is-before"><span class="heur-num">5</span><h3>Prevenção de erros</h3><p>Calendário que não deixa escolher data passada.</p></div>
+            <div class="card heur"><span class="heur-num">6</span><h3>Reconhecer em vez de lembrar</h3><p>Buscas recentes aparecem ao tocar na busca.</p></div>
+            <div class="card heur"><span class="heur-num">7</span><h3>Flexibilidade e eficiência de uso</h3><p>Atalhos de teclado e gestos para quem já é experiente.</p></div>
+            <div class="card heur"><span class="heur-num">8</span><h3>Estética e design minimalista</h3><p>Tela de login só com o essencial.</p></div>
+            <div class="card heur is-after"><span class="heur-num">9</span><h3>Ajudar a reconhecer, diagnosticar e recuperar erros</h3><p>&ldquo;Cartão recusado: confira a validade&rdquo;, com o campo destacado.</p></div>
+            <div class="card heur"><span class="heur-num">10</span><h3>Ajuda e documentação</h3><p>Central de ajuda com busca e dica no primeiro uso.</p></div>
+            <div class="callout callout-info s17-foot">
+              <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-clock"></use></svg>
+              <p><strong>Prevenção (5)</strong> age <strong>antes</strong> do erro; <strong>recuperação (9)</strong> age <strong>depois</strong> que ele aconteceu.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 18: Ponte Figma 1 - frames, grupos, camadas e nomes     -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-18" aria-label="Slide 18: Ponte Figma 1, frames, grupos, camadas e nomes">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>18-ponte-figma-camadas
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>
+                Ponte Figma 1 de 4
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://help.figma.com/hc/en-us/search?query=frames" target="_blank" rel="noopener">Frames (Figma)<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Ponte Figma 1: frames, grupos, camadas e nomes</h2>
+            <p class="slide-subtitle">Um arquivo organizado é lido como código: estrutura clara e nomes que dizem a função.</p>
+          </header>
+
+          <div class="slide-body s18-body">
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>Frame vs grupo</h3>
+              <table class="data-table cmp-table">
+                <thead><tr><th>Recurso</th><th>Frame</th><th>Grupo</th></tr></thead>
+                <tbody>
+                  <tr><td>Tamanho próprio</td><td><svg class="ic ok-ic" aria-label="sim"><use href="assets/icons/sprite.svg#icon-check"></use></svg></td><td><svg class="ic no-ic" aria-label="não"><use href="assets/icons/sprite.svg#icon-x"></use></svg></td></tr>
+                  <tr><td>Preenchimento (fill)</td><td><svg class="ic ok-ic" aria-label="sim"><use href="assets/icons/sprite.svg#icon-check"></use></svg></td><td><svg class="ic no-ic" aria-label="não"><use href="assets/icons/sprite.svg#icon-x"></use></svg></td></tr>
+                  <tr><td>Recorte (clip)</td><td><svg class="ic ok-ic" aria-label="sim"><use href="assets/icons/sprite.svg#icon-check"></use></svg></td><td><svg class="ic no-ic" aria-label="não"><use href="assets/icons/sprite.svg#icon-x"></use></svg></td></tr>
+                  <tr><td>Layout grid</td><td><svg class="ic ok-ic" aria-label="sim"><use href="assets/icons/sprite.svg#icon-check"></use></svg></td><td><svg class="ic no-ic" aria-label="não"><use href="assets/icons/sprite.svg#icon-x"></use></svg></td></tr>
+                  <tr><td>Auto layout</td><td><svg class="ic ok-ic" aria-label="sim"><use href="assets/icons/sprite.svg#icon-check"></use></svg></td><td><svg class="ic no-ic" aria-label="não"><use href="assets/icons/sprite.svg#icon-x"></use></svg></td></tr>
+                </tbody>
+              </table>
+              <p>O grupo só junta camadas. Para telas e componentes, use frame.</p>
+            </div>
+
+            <div class="mock-panel">
+              <div class="ws-panel-head"><span>Camadas</span><span class="chip chip-bad">[FAIL] antes</span></div>
+              <div class="layer is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>Frame 1</div>
+              <div class="layer d1 is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-box-padding"></use></svg>Group 3</div>
+              <div class="layer d2 is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-square"></use></svg>Rectangle 12</div>
+              <div class="layer d2 is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>Text 7</div>
+              <div class="layer d2 is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>Text 8</div>
+              <div class="layer d1 is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-square"></use></svg>Rectangle 13</div>
+              <div class="layer d1 is-bad"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>Text 9</div>
+              <div class="ws-section"><p class="txt">Quem vai mexer amanhã não sabe o que é &ldquo;Rectangle 12&rdquo;.</p></div>
+            </div>
+
+            <div class="stack">
+              <div class="mock-panel">
+                <div class="ws-panel-head"><span>Camadas</span><span class="chip chip-ok">[OK] depois</span></div>
+                <div class="layer is-comp is-sel"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>Card/Evento</div>
+                <div class="layer d1"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>tag</div>
+                <div class="layer d1"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>titulo</div>
+                <div class="layer d1"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>info</div>
+                <div class="layer d2"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>data</div>
+                <div class="layer d2"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg>local</div>
+                <div class="layer d1"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>botao-inscrever</div>
+              </div>
+              <div class="callout callout-ok">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg>
+                <p><strong>Nomes semânticos</strong> dizem a função (<span class="mono">titulo</span>, <span class="mono">botao-inscrever</span>). Componentes usam barra: <span class="mono">Card/Evento</span>.</p>
+              </div>
+              <div class="callout">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>
+                <p>Atalhos: <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>G</kbd> envolve a seleção num frame; <kbd>Ctrl</kbd>+<kbd>G</kbd> só agrupa. Renomeie com dois cliques no nome da camada.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 19: Ponte Figma 2 - auto layout e redimensionamento     -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-19" aria-label="Slide 19: Ponte Figma 2, auto layout e redimensionamento">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>19-ponte-figma-auto-layout
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg>
+                Ponte Figma 2 de 4
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://help.figma.com/hc/en-us/search?query=auto+layout" target="_blank" rel="noopener">Auto layout<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://help.figma.com/hc/en-us/search?query=constraints" target="_blank" rel="noopener">Constraints<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Ponte Figma 2: auto layout e redimensionamento</h2>
+            <p class="slide-subtitle">Auto layout transforma a receita de espaçamento em regra: o frame se arruma sozinho.</p>
+          </header>
+
+          <div class="slide-body s19-body">
+            <div class="mock-panel">
+              <div class="ws-panel-head"><span>Auto layout</span><svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-sliders"></use></svg></div>
+              <div class="prop">Direção<b>Vertical</b></div>
+              <div class="prop">Gap (entre itens)<b>8</b></div>
+              <div class="prop">Padding (até a borda)<b>16</b></div>
+              <div class="prop">Alinhamento<b>Topo esq.</b></div>
+              <div class="ws-panel-head"><span>Redimensionar</span></div>
+              <div class="prop">Largura<b>Fixed 200</b></div>
+              <div class="prop">Altura<b class="is-comp">Hug</b></div>
+              <div class="ws-section"><p class="txt"><strong>Gap</strong> separa itens entre si; <strong>padding</strong> separa itens da borda do frame.</p></div>
+              <div class="ws-section"><p class="txt">Atalho para criar: <kbd>Shift</kbd>+<kbd>A</kbd> na seleção.</p></div>
+            </div>
+
+            <div class="canvas-box canvas-dots card-center stack pad-16">
+              <div class="al-frame" role="img" aria-label="Frame vertical com padding 16, gap 8 e filhos de 20, 48 e 40 pixels: altura 156">
+                <span class="al-pad" style="left: 0; right: 0; top: 0; height: 16px;"></span>
+                <span class="al-pad" style="left: 0; right: 0; bottom: 0; height: 16px;"></span>
+                <span class="al-gap" style="top: 36px;"></span>
+                <span class="al-gap" style="top: 92px;"></span>
+                <span class="al-child" style="height: 20px;">titulo &middot; 20</span>
+                <span class="al-child" style="height: 48px;">imagem &middot; 48</span>
+                <span class="al-child" style="height: 40px;">botao &middot; 40</span>
+                <span class="redline-tag al-tag" style="left: calc(100% + 8px); top: -1px;">pad 16</span>
+                <span class="redline-tag al-tag" style="left: calc(100% + 8px); top: 31px;">gap 8</span>
+                <span class="redline-tag al-tag" style="left: calc(100% + 8px); top: 87px;">gap 8</span>
+                <span class="redline-tag al-tag" style="left: calc(100% + 8px); top: 139px;">pad 16</span>
+                <span class="redline-tag al-tag" style="right: calc(100% + 8px); top: 68px;">H 156</span>
+              </div>
+              <div class="formula">H = pad topo + soma dos filhos + gap &times; (filhos &minus; 1) + pad base<br>= 16 + (20 + 48 + 40) + 8 &times; 2 + 16 = <strong>156</strong></div>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-maximize"></use></svg>Redimensionar cada camada</h3>
+              <div class="resize-demo">
+                <div class="rz-row"><span><strong>Fixed</strong>tamanho fixo</span><div class="rz-parent"><span class="rz-child rz-fixed">96px</span></div></div>
+                <div class="rz-row"><span><strong>Hug contents</strong>segue o conteúdo</span><div class="rz-parent"><span class="rz-child rz-hug">Texto</span></div></div>
+                <div class="rz-row"><span><strong>Fill container</strong>estica até o pai</span><div class="rz-parent"><span class="rz-child rz-fill">ocupa o resto</span></div></div>
+              </div>
+              <div class="callout callout-warn">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-alert-triangle"></use></svg>
+                <p>Texto que precisa <strong>quebrar linha</strong> usa largura <strong>Fill container</strong>; com Hug ele cresce numa linha só.</p>
+              </div>
+              <div class="wrap-demo">
+                <div class="wrap-box is-hug"><span class="chip chip-bad">Hug: não quebra, vaza</span><span class="wrap-text">Oficinas, revisão de portfólio e conversas com designers.</span></div>
+                <div class="wrap-box"><span class="chip chip-ok">Fill container: quebra</span><span class="wrap-text is-fill">Oficinas, revisão de portfólio e conversas com designers.</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 20: Ponte Figma 3 - componentes, variantes, variaveis   -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-20" aria-label="Slide 20: Ponte Figma 3, componentes, variantes, estilos e variáveis">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>20-ponte-figma-componentes
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>
+                Ponte Figma 3 de 4
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://help.figma.com/hc/en-us/search?query=components" target="_blank" rel="noopener">Componentes<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://help.figma.com/hc/en-us/search?query=variants" target="_blank" rel="noopener">Variantes<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://help.figma.com/hc/en-us/search?query=variables" target="_blank" rel="noopener">Variáveis<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Ponte Figma 3: componentes, variantes, estilos e variáveis</h2>
+            <p class="slide-subtitle">Desenhe uma vez, reutilize em todo lugar, mude num ponto só.</p>
+          </header>
+
+          <div class="slide-body s20-body">
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>Componente principal e instâncias</h3>
+              <div class="canvas-box canvas-dots stack inst-canvas">
+                <div class="inst">
+                  <span class="inst-tag"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>Botao/Primario (principal)</span>
+                  <span class="sbtn btn-demo is-main">Inscrever-se</span>
+                </div>
+                <div class="inst-row">
+                  <div class="inst"><span class="inst-tag"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-square"></use></svg>instância</span><span class="sbtn btn-demo">Inscrever-se</span></div>
+                  <div class="inst"><span class="inst-tag"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-square"></use></svg>instância + texto trocado</span><span class="sbtn btn-demo">Ver agenda</span></div>
+                </div>
+              </div>
+              <p>Mudou o principal, todas as instâncias mudam. A instância só troca o que foi liberado, como o texto.</p>
+            </div>
+
+            <div class="card">
+              <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layout-grid"></use></svg>Variantes: propriedade=valor</h3>
+              <div class="comp-set">
+                <span class="comp-label"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg>Botao</span>
+                <div class="variant"><span class="sbtn btn-demo">Inscrever-se</span>Estado=Default</div>
+                <div class="variant"><span class="sbtn btn-demo is-hover">Inscrever-se</span>Estado=Hover</div>
+                <div class="variant"><span class="sbtn btn-demo is-focus">Inscrever-se</span>Estado=Focus</div>
+                <div class="variant"><span class="sbtn btn-demo is-pressed">Inscrever-se</span>Estado=Pressed</div>
+                <div class="variant"><span class="sbtn btn-demo is-disabled"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-lock"></use></svg>Esgotado</span>Estado=Disabled</div>
+              </div>
+              <p>Um componente, vários conjuntos de propriedade=valor. Os 5 estados do slide 7 viram variantes.</p>
+            </div>
+
+            <div class="stack">
+              <div class="mock-panel">
+                <div class="ws-panel-head"><span>Variáveis (tokens)</span><svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-sliders"></use></svg></div>
+                <div class="var-row"><i style="background: #2f5bd3;"></i><span>cor/primaria</span><span>#2F5BD3</span></div>
+                <div class="var-row"><i style="background: #171a21;"></i><span>cor/texto</span><span>#171A21</span></div>
+                <div class="var-row"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-ruler"></use></svg><span>espaco/2</span><span>16</span></div>
+                <div class="var-row"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-square"></use></svg><span>raio/m</span><span>8</span></div>
+                <div class="var-row"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-letter-t"></use></svg><span>texto/corpo</span><span>16/24</span></div>
+              </div>
+              <div class="callout callout-info">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg>
+                <p><strong>Estilos e variáveis</strong> guardam cor, espaçamento, raio e tipo uma vez só. Trocou o token, a tela inteira acompanha.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 21: Ponte Figma 4 - prototipo e handoff                 -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-21" aria-label="Slide 21: Ponte Figma 4, protótipo e handoff">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>21-ponte-figma-prototipo
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bolt"></use></svg>
+                Ponte Figma 4 de 4
+              </span>
+              <div class="refs">Saiba mais:
+                <a href="https://help.figma.com/hc/en-us/search?query=prototyping" target="_blank" rel="noopener">Protótipo<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+                <a href="https://help.figma.com/hc/en-us/search?query=dev+mode" target="_blank" rel="noopener">Inspeção e handoff<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></a>
+              </div>
+            </div>
+            <h2 class="slide-title">Ponte Figma 4: protótipo e handoff</h2>
+            <p class="slide-subtitle">Conecte telas para testar o fluxo e entregue medidas exatas para quem vai programar.</p>
+          </header>
+
+          <div class="slide-body s21-body">
+            <div class="canvas-box canvas-dots proto-canvas">
+              <div class="proto-screen">
+                <span class="ps-name">evento-detalhe</span>
+                <b>Dia do Design</b>
+                <span>16 de maio, Auditório B</span>
+                <span>Oficinas, revisão de portfólio e conversas com designers.</span>
+                <span class="ps-btn">Inscrever-se</span>
+              </div>
+              <div class="interaction">
+                <div class="ws-panel-head"><span>Interação</span><svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bolt"></use></svg></div>
+                <div class="prop">Gatilho<b>On click</b></div>
+                <div class="prop">Ação<b>Navigate to</b></div>
+                <div class="prop">Destino<b>confirmacao</b></div>
+                <div class="prop">Animação<b>Smart Animate</b></div>
+              </div>
+              <div class="proto-screen">
+                <span class="ps-name">confirmacao</span>
+                <span class="ps-ok"><svg class="ic ic-24" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-check"></use></svg></span>
+                <b class="ps-center">Inscrição feita!</b>
+                <span class="ps-center">Nos vemos em 16 de maio.</span>
+              </div>
+              <svg class="proto-wire" aria-hidden="true" preserveAspectRatio="none">
+                <defs><marker id="wire-head" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2f5bd3"/></marker></defs>
+                <line x1="20%" y1="50%" x2="80%" y2="50%" stroke="#2f5bd3" stroke-width="2" marker-end="url(#wire-head)"/>
+              </svg>
+            </div>
+
+            <div class="stack">
+              <div class="card card-alt">
+                <h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-bolt"></use></svg>Protótipo</h3>
+                <ul class="list">
+                  <li><span><strong>Conexão:</strong> a seta que liga o botão à próxima tela.</span></li>
+                  <li><span><strong>Gatilho</strong> (On click), <strong>ação</strong> (Navigate to) e <strong>animação</strong> (Smart Animate).</span></li>
+                </ul>
+              </div>
+              <div class="mock-panel">
+                <div class="ws-panel-head"><span>Inspecionar &middot; botao-inscrever</span><svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-code"></use></svg></div>
+                <div class="prop">Largura &times; altura<b>232 &times; 48</b></div>
+                <div class="prop">Raio<b>8</b></div>
+                <div class="prop">Cor<b>#2F5BD3</b></div>
+                <div class="ws-section"><code class="mono txt">border-radius: 8px;<br>background: #2f5bd3;</code></div>
+              </div>
+              <p class="txt"><strong>Handoff:</strong> o painel de inspeção mostra medidas e valores de código prontos para o desenvolvimento.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 22: Roteiro da missao e Explore mais                    -->
+      <!-- ============================================================ -->
+      <section class="slide" id="slide-22" aria-label="Slide 22: Roteiro da missão e Explore mais">
+        <div class="frame-name" aria-hidden="true">
+          <svg class="ic ic-16" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-frame"></use></svg>22-roteiro-missao
+        </div>
+        <div class="frame">
+          <header class="slide-header">
+            <div class="slide-head-row">
+              <span class="slide-tag">
+                <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-key"></use></svg>
+                Missão em duplas
+              </span>
+            </div>
+            <h2 class="slide-title">Roteiro da missão e &ldquo;Explore mais&rdquo;</h2>
+            <p class="slide-subtitle">A trilha tem <strong>8 fechaduras</strong> e <strong>3 minigames</strong>. Cada fechadura cita o slide que ensina a regra.</p>
+          </header>
+
+          <div class="slide-body s22-body">
+            <div class="trail" aria-label="As 8 fechaduras">
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-typography"></use></svg><strong>Escala tipográfica</strong><span>slides 4 e 5</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg><strong>Escaneamento F e Z</strong><span>slides 3 e 5</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-box-padding"></use></svg><strong>Espaçamento 8px</strong><span>slides 12 a 14</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-sliders"></use></svg><strong>Affordance e estados</strong><span>slides 6 a 9</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-compass"></use></svg><strong>Consistência e dark patterns</strong><span>slides 10 e 11</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-layers"></use></svg><strong>Wireframe low-fi</strong><span>slide 16</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-shield-check"></use></svg><strong>Heurísticas de Nielsen</strong><span>slide 17</span></div>
+              <div class="lock"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-component"></use></svg><strong>Ponte Figma</strong><span>slides 18 a 21</span></div>
+            </div>
+
+            <div class="games" aria-label="Os 3 minigames">
+              <div class="game"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-eye"></use></svg><span><strong>Olho Clínico:</strong> ache a falha (slide 15)</span></div>
+              <div class="game"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-contrast"></use></svg><span><strong>Corrida do Contraste</strong> (slide 9)</span></div>
+              <div class="game"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-typography"></use></svg><span><strong>Ajuste Fino:</strong> arraste as letras (slide 15)</span></div>
+            </div>
+
+            <div class="how">
+              <div class="card card-alt"><h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-users"></use></svg>Em dupla</h3><p>Um pilota, o outro confere a regra no slide citado.</p></div>
+              <div class="card card-alt"><h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-message"></use></svg>Errou?</h3><p>A mensagem aponta o engano provável e o slide da regra.</p></div>
+              <div class="card card-alt"><h3 class="card-title"><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-star"></use></svg>No fim</h3><p>Certificado da dupla e os tokens do card para usar no Figma.</p></div>
+            </div>
+
+            <div class="stack">
+              <div class="s22-cta">
+                <span class="ws-label">Explore mais (opcional, sites externos)</span>
+                <a href="../quest/index.html" class="btn btn-primary btn-lg only-standalone">
+                  <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-key"></use></svg>Iniciar a quest
+                </a>
+              </div>
+              <div class="explore">
+                <a href="https://cantunsee.space" target="_blank" rel="noopener"><strong>Can't Unsee<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></strong>Qual das duas telas está certa?</a>
+                <a href="https://bezier.method.ac" target="_blank" rel="noopener"><strong>The Bezier Game<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></strong>Treine a ferramenta caneta.</a>
+                <a href="https://type.method.ac" target="_blank" rel="noopener"><strong>Kern Type<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></strong>Ajuste o kerning de palavras.</a>
+                <a href="https://color.method.ac" target="_blank" rel="noopener"><strong>Color Method<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></strong>Matiz, saturação e harmonia.</a>
+                <a href="https://userinyerface.com" target="_blank" rel="noopener"><strong>User Inyerface<svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-external-link"></use></svg></strong>Sobreviva a uma interface hostil.</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Bottom Navigation Footer -->
+    <!-- Status bar navigation -->
     <footer class="deck-footer">
       <div class="deck-nav-controls">
-        <button type="button" class="btn-nav" id="btn-prev" aria-label="Slide anterior">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-left"></use></svg>
-          <span>Anterior</span>
+        <button type="button" class="btn btn-secondary btn-sm btn-nav" id="btn-prev" aria-label="Slide anterior">
+          <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-left"></use></svg><span>Anterior</span>
         </button>
-
-        <span class="slide-counter">
-          <span class="slide-counter-current">1</span> / <span class="slide-counter-total">14</span>
-        </span>
-
-        <button type="button" class="btn-nav" id="btn-next" aria-label="Próximo slide">
-          <span>Próximo</span>
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right"></use></svg>
+        <span class="slide-counter" aria-live="polite"><span class="slide-counter-current">1</span> / <span class="slide-counter-total">22</span></span>
+        <button type="button" class="btn btn-secondary btn-sm btn-nav" id="btn-next" aria-label="Próximo slide">
+          <span>Próximo</span><svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-chevron-right"></use></svg>
         </button>
       </div>
-
+      <div class="deck-hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> navegar &middot; <kbd>K</kbd> buscar &middot; <kbd>M</kbd> índice &middot; <kbd>H</kbd> atalhos</div>
     </footer>
+  </div>
 
-    <!-- Slide Index Drawer -->
-    <div class="deck-drawer-overlay" id="deck-drawer-overlay" aria-hidden="true"></div>
-    <aside class="deck-drawer" id="deck-drawer" aria-label="Índice dos Slides" aria-hidden="true">
-      <div class="drawer-header">
-        <h3>Índice de Slides</h3>
-        <button type="button" class="btn-icon" id="btn-close-drawer" aria-label="Fechar índice">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
-        </button>
-      </div>
-      <div class="drawer-slide-list" id="drawer-slide-list">
-        <!-- Generated dynamically by slides-engine.js -->
-      </div>
-    </aside>
-
-    <!-- Search / Quick Jump Modal -->
-    <div class="deck-modal-overlay" id="deck-modal-overlay" aria-hidden="true"></div>
-    <div class="deck-modal" id="deck-search-modal" role="dialog" aria-modal="true" aria-label="Busca rápida de slides" aria-hidden="true">
-      <div class="modal-search-input-wrap">
-        <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>
-        <input type="text" class="modal-search-input" id="modal-search-input" placeholder="Buscar por tema, conceito ou pilar..." autocomplete="off">
-        <button type="button" class="btn-icon" id="btn-close-search" aria-label="Fechar busca">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
-        </button>
-      </div>
-      <div class="modal-search-results" id="modal-search-results">
-        <!-- Rendered dynamically -->
-      </div>
+  <!-- Pages drawer -->
+  <div class="deck-drawer-overlay" id="deck-drawer-overlay" aria-hidden="true"></div>
+  <aside class="deck-drawer" id="deck-drawer" aria-label="Índice dos slides" aria-hidden="true">
+    <div class="ws-panel-head">
+      <span>Páginas &middot; 22 slides</span>
+      <button type="button" class="icon-btn" id="btn-close-drawer" aria-label="Fechar índice">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
+      </button>
     </div>
+    <div class="drawer-slide-list" id="drawer-slide-list"></div>
+  </aside>
 
-    <!-- Keyboard Shortcuts Help Modal -->
-    <div class="deck-modal" id="deck-help-modal" role="dialog" aria-modal="true" aria-label="Atalhos de Teclado" aria-hidden="true">
-      <div style="padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--border-default); display: flex; align-items: center; justify-content: space-between;">
-        <h3 style="font-size: var(--font-h3); font-weight: 600; color: var(--text-primary);">Atalhos de Teclado</h3>
-        <button type="button" class="btn-icon" id="btn-close-help" aria-label="Fechar ajuda">
-          <svg aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
-        </button>
-      </div>
-      <div style="padding: var(--space-3);">
-        <table class="shortcuts-table">
-          <tbody>
-            <tr>
-              <td><span class="shortcut-key">Seta Direita</span> / <span class="shortcut-key">Espaço</span></td>
-              <td>Avançar para o próximo slide</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">Seta Esquerda</span></td>
-              <td>Retornar ao slide anterior</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">Home</span></td>
-              <td>Ir para o primeiro slide (Capa)</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">End</span></td>
-              <td>Ir para o último slide (Quest)</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">F</span></td>
-              <td>Alternar modo Tela Cheia (Fullscreen)</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">K</span> ou <span class="shortcut-key">/</span></td>
-              <td>Abrir busca rápida de tópicos</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">M</span> ou <span class="shortcut-key">O</span></td>
-              <td>Abrir/Fechar gaveta de índice dos slides</td>
-            </tr>
-            <tr>
-              <td><span class="shortcut-key">Esc</span></td>
-              <td>Fechar modais ou gavetas abertas</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- Search modal -->
+  <div class="deck-modal-overlay" id="deck-modal-overlay" aria-hidden="true"></div>
+  <div class="deck-modal" id="deck-search-modal" role="dialog" aria-modal="true" aria-label="Busca rápida de slides" aria-hidden="true">
+    <div class="modal-search-input-wrap">
+      <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-search"></use></svg>
+      <input type="text" class="modal-search-input" id="modal-search-input" placeholder="Buscar tema ou conceito (ex.: botao, kerning)" autocomplete="off" aria-label="Buscar nos slides">
+      <button type="button" class="icon-btn" id="btn-close-search" aria-label="Fechar busca">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
+      </button>
     </div>
+    <div class="modal-search-results" id="modal-search-results"></div>
+  </div>
 
+  <!-- Help modal -->
+  <div class="deck-modal" id="deck-help-modal" role="dialog" aria-modal="true" aria-label="Atalhos de teclado" aria-hidden="true">
+    <div class="ws-panel-head">
+      <span>Atalhos de teclado</span>
+      <button type="button" class="icon-btn" id="btn-close-help" aria-label="Fechar ajuda">
+        <svg class="ic" aria-hidden="true"><use href="assets/icons/sprite.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <table class="shortcuts-table">
+        <tbody>
+          <tr><td><kbd>&rarr;</kbd> <kbd>Espaço</kbd> <kbd>PgDn</kbd></td><td>Próximo slide</td></tr>
+          <tr><td><kbd>&larr;</kbd> <kbd>PgUp</kbd></td><td>Slide anterior</td></tr>
+          <tr><td><kbd>Home</kbd> <kbd>End</kbd></td><td>Primeiro e último slide</td></tr>
+          <tr><td><kbd>K</kbd> <kbd>/</kbd></td><td>Busca rápida (acentos opcionais)</td></tr>
+          <tr><td><kbd>M</kbd> <kbd>O</kbd></td><td>Abrir ou fechar o índice</td></tr>
+          <tr><td><kbd>F</kbd></td><td>Tela cheia</td></tr>
+          <tr><td><kbd>H</kbd> <kbd>?</kbd></td><td>Esta ajuda</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Fechar janelas abertas</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <script src="assets/js/slides-engine.js"></script>

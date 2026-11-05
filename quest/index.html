@@ -3,289 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Quests: UI Design de Apps &amp; Figma Ready</title>
-  <meta name="description" content="Trilha em duplas sobre os 4 pilares de UI Design com bancadas interativas e preparação para o Figma.">
+  <title>Estúdio Oito: a trilha do card</title>
+  <meta name="description" content="Trilha em duplas: consertem o card de um app aplicando hierarquia, affordance, consistência e grid de 8px, e montem o componente como no Figma.">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/quest.css">
+  <link rel="stylesheet" href="assets/css/bancadas.css">
+  <link rel="stylesheet" href="assets/css/minigames.css">
 </head>
 <body>
-  <!-- Inline SVG Sprite for Offline & Browser Portability (Zero Emojis) -->
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <defs>
-      <symbol id="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </symbol>
-      <symbol id="icon-unlock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
-      </symbol>
-      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </symbol>
-      <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </symbol>
-      <symbol id="icon-backpack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"></path>
-        <path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path>
-        <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"></path>
-        <path d="M8 10h8"></path>
-        <path d="M10 14h4"></path>
-      </symbol>
-      <symbol id="icon-slides" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-        <line x1="8" y1="21" x2="16" y2="21"></line>
-        <line x1="12" y1="17" x2="12" y2="21"></line>
-      </symbol>
-      <symbol id="icon-timer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <polyline points="12 6 12 12 16 14"></polyline>
-      </symbol>
-      <symbol id="icon-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21 2-2 2m-1.5 1.5L16 7l-1.5-1.5M19 5l-1.5 1.5M9.5 13.5a5.5 5.5 0 1 1 7.78-7.78l5.22 5.22v3.56l-3.56 3.56-1.78-1.78-1.78 1.78L13 17l-3.5 3.5-3-3 7-7Z"></path>
-      </symbol>
-      <symbol id="icon-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="7"></circle>
-        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-      </symbol>
-      <symbol id="icon-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-        <polyline points="7 3 7 8 15 8"></polyline>
-      </symbol>
-      <symbol id="icon-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="7 10 12 15 17 10"></polyline>
-        <line x1="12" y1="15" x2="12" y2="3"></line>
-      </symbol>
-      <symbol id="icon-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-        <polyline points="17 8 12 3 7 8"></polyline>
-        <line x1="12" y1="3" x2="12" y2="15"></line>
-      </symbol>
-      <symbol id="icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-      </symbol>
-      <symbol id="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-        <circle cx="12" cy="12" r="3"></circle>
-      </symbol>
-      <symbol id="icon-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </symbol>
-      <symbol id="icon-sliders" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="4" y1="21" x2="4" y2="14"></line>
-        <line x1="4" y1="10" x2="4" y2="3"></line>
-        <line x1="12" y1="21" x2="12" y2="12"></line>
-        <line x1="12" y1="8" x2="12" y2="3"></line>
-        <line x1="20" y1="21" x2="20" y2="16"></line>
-        <line x1="20" y1="12" x2="20" y2="3"></line>
-      </symbol>
-      <symbol id="icon-layout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="3" y1="9" x2="21" y2="9"></line>
-        <line x1="9" y1="21" x2="9" y2="9"></line>
-      </symbol>
-      <symbol id="icon-pointer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"></path>
-        <path d="m13 13 6 6"></path>
-      </symbol>
-      <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
-        <line x1="12" y1="9" x2="12" y2="13"></line>
-        <line x1="12" y1="17" x2="12.01" y2="17"></line>
-      </symbol>
-      <symbol id="icon-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m12 3-1.91 5.8a2 2 0 0 1-1.29 1.29L3 12l5.8 1.91a2 2 0 0 1 1.29 1.29L12 21l1.91-5.8a2 2 0 0 1 1.29-1.29L21 12l-5.8-1.91a2 2 0 0 1-1.29-1.29L12 3z"></path>
-      </symbol>
-      <symbol id="icon-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-        <polyline points="15 3 21 3 21 9"></polyline>
-        <line x1="10" y1="14" x2="21" y2="3"></line>
-      </symbol>
-    </defs>
+  <a class="skip-link" href="#area-canvas">Pular para o canvas</a>
+
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:none">
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.8-1.2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-slides" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8M7 21v-7h10v7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></symbol>
+    <symbol id="i-frame" viewBox="0 0 24 24"><path d="M7 3v18M17 3v18M3 7h18M3 17h18"/></symbol>
+    <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 5h14M12 5v14M9 19h6"/></symbol>
+    <symbol id="i-rect" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="2"/></symbol>
+    <symbol id="i-component" viewBox="0 0 24 24"><path d="M12 2l4 4-4 4-4-4zM6 8l4 4-4 4-4-4zM18 8l4 4-4 4-4-4zM12 14l4 4-4 4-4-4z"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
+    <symbol id="i-pages" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></symbol>
+    <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4h11l-1 4 4 4H5"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 4a3 3 0 0 1 0 6M21 20a6 6 0 0 0-4-5.6"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2M7 14h10v7H7z"/></symbol>
+    <symbol id="i-export" viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="5"/><path d="M7 10v4M5 12h4M15 11h0M18 13h0"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-floppy" viewBox="0 0 24 24"><path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><rect x="7" y="13" width="10" height="8"/><path d="M8 3v5h7V3"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18"/></symbol>
+    <symbol id="i-pointer" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2-2 6z"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></symbol>
   </svg>
 
-  <!-- Top Navigation Header -->
-  <header class="top-header">
-    <div class="header-container">
-      <div class="brand-section">
-        <svg class="icon icon-lg" style="color: var(--primary);"><use href="#icon-layout"></use></svg>
-        <h1 class="brand-title">Web Quests: UI Design</h1>
-        <span class="team-badge" id="header-team-names">Equipe</span>
-      </div>
-
-      <div class="header-actions">
-        <span class="stat-pill" title="Tempo Decorrido">
-          <svg class="icon icon-sm"><use href="#icon-timer"></use></svg>
-          <span id="header-timer-display">00:00</span>
-        </span>
-
-        <button type="button" class="btn btn-secondary" id="btn-open-backpack" title="Mochila de Dicas">
-          <svg class="icon icon-sm"><use href="#icon-backpack"></use></svg>
-          <span>Dicas (<span id="header-hints-count">0</span>)</span>
-        </button>
-
-        <button type="button" class="btn btn-secondary" id="btn-open-saveload" title="Salvar ou Restaurar Progresso">
-          <svg class="icon icon-sm"><use href="#icon-save"></use></svg>
-          <span>Salvar / Carregar</span>
-        </button>
-
-        <!-- Prominent Slides Button (Ctrl+S) -->
-        <button type="button" class="btn btn-primary" id="btn-open-slides" title="Consultar Apresentação de Apoio (Atalho Ctrl+S)">
-          <svg class="icon icon-sm"><use href="#icon-slides"></use></svg>
-          <span>Consultar Slides (Ctrl+S)</span>
-        </button>
-      </div>
-    </div>
+  <header class="ws-toolbar" role="banner">
+    <a class="ws-brand" href="../index.html" aria-label="Voltar ao portal do Estúdio Oito">
+      <span class="ws-brand-mark" aria-hidden="true">8</span>
+      <span>Estúdio Oito</span>
+    </a>
+    <span class="ws-toolbar-sep" aria-hidden="true"></span>
+    <span class="toolbar-file" id="toolbar-arquivo">Agenda do Campus / Card do evento</span>
+    <span class="ws-toolbar-spacer"></span>
+    <span class="toolbar-roles" id="toolbar-papeis" hidden></span>
+    <span class="toolbar-stat" title="Tempo da dupla"><svg class="ic ic-16" aria-hidden="true"><use href="#i-timer"/></svg><span id="toolbar-tempo" aria-label="Tempo decorrido">00:00</span></span>
+    <button type="button" class="ws-tool-btn" id="btn-salvar" hidden><svg class="ic ic-16" aria-hidden="true"><use href="#i-save"/></svg><span class="hide-sm">Progresso</span></button>
+    <button type="button" class="ws-tool-btn is-active" id="btn-slides" aria-expanded="false" aria-controls="gaveta-slides" title="Abrir slides (Ctrl+S)"><svg class="ic ic-16" aria-hidden="true"><use href="#i-slides"/></svg><span>Slides</span></button>
   </header>
 
-  <!-- Locks Track (Fechaduras 1 a 8 + Vitória) -->
-  <nav class="progress-strip" aria-label="Trilha de Fechaduras da Quest">
-    <ul class="locks-track" id="locks-track">
-      <!-- Populated dynamically by app.js -->
-    </ul>
+  <nav class="mobile-tabs" aria-label="Painéis">
+    <button type="button" data-painel="esquerda" aria-pressed="false"><svg class="ic ic-16" aria-hidden="true"><use href="#i-pages"/></svg>Trilha</button>
+    <button type="button" data-painel="canvas" aria-pressed="true"><svg class="ic ic-16" aria-hidden="true"><use href="#i-frame"/></svg>Canvas</button>
+    <button type="button" data-painel="direita" aria-pressed="false"><svg class="ic ic-16" aria-hidden="true"><use href="#i-sliders"/></svg>Design</button>
   </nav>
 
-  <!-- Main Game Stage Container -->
-  <main class="main-wrapper" id="main-content">
-    <div id="stage-container" aria-live="polite">
-      <!-- Dynamic Stage Render -->
-      <div class="stage-card">
-        <p class="stage-enunciado">Carregando fechadura...</p>
-      </div>
-    </div>
-  </main>
+  <div class="ws-shell" id="shell" data-painel="canvas">
+    <aside class="ws-panel panel-left" aria-label="Trilha e camadas">
+      <div class="ws-panel-head"><span>Páginas</span><span class="chip" id="trilha-contagem">0/8</span></div>
+      <ol class="trail" id="trilha"></ol>
+      <div class="ws-panel-head"><span>Camadas</span></div>
+      <div class="layers-host" id="camadas"><p class="muted small pad-2">As camadas aparecem quando a bancada tiver estrutura.</p></div>
+      <div class="ws-panel-head"><span>Valores da dupla</span></div>
+      <ul class="backpack" id="mochila"><li class="muted small">Nenhum valor ainda.</li></ul>
+    </aside>
 
-  <!-- Slide-Out Drawer (Ctrl+S) embedding slides/index.html -->
-  <div class="slide-drawer-backdrop" id="drawer-backdrop" aria-hidden="true"></div>
-  <aside class="slide-drawer" id="slide-drawer" role="dialog" aria-label="Painel de Slides de Apoio">
-    <header class="drawer-header">
-      <h2 class="drawer-title">
-        <svg class="icon icon-sm"><use href="#icon-slides"></use></svg>
-        <span>Slides de UI Design &amp; Figma Ready</span>
-      </h2>
-      <button type="button" class="btn btn-secondary" id="btn-close-drawer">
-        <svg class="icon icon-sm"><use href="#icon-x"></use></svg>
-        <span>Fechar (Esc)</span>
-      </button>
-    </header>
-    <iframe class="drawer-iframe" src="../slides/index.html" title="Apresentação Interativa de UI Design"></iframe>
+    <main class="canvas-area ws-canvas-bg" id="area-canvas" tabindex="-1">
+      <div class="canvas-inner" id="canvas"></div>
+    </main>
+
+    <aside class="ws-panel panel-right" aria-label="Painel Design">
+      <div class="ws-panel-head"><span>Design</span><span class="chip chip-select" id="design-etapa">-</span></div>
+      <div id="propriedades"></div>
+      <section class="ws-section answer-box" id="caixa-pista" hidden aria-labelledby="pista-titulo">
+        <h2 class="section-title" id="pista-titulo"><svg class="ic ic-16" aria-hidden="true"><use href="#i-lock"/></svg>Pista da fechadura</h2>
+        <form id="form-pista" autocomplete="off">
+          <label class="ws-label" for="campo-pista" id="pista-formato">Formato</label>
+          <div class="answer-row">
+            <input class="field field-mono" id="campo-pista" name="pista" spellcheck="false" aria-describedby="pista-retorno">
+            <button type="submit" class="btn btn-primary" id="btn-abrir"><svg class="ic ic-16" aria-hidden="true"><use href="#i-unlock"/></svg>Abrir</button>
+          </div>
+        </form>
+        <div class="answer-feedback" id="pista-retorno" role="status" aria-live="polite"></div>
+      </section>
+      <section class="ws-section" id="caixa-dicas" hidden aria-labelledby="dicas-titulo">
+        <h2 class="section-title" id="dicas-titulo"><svg class="ic ic-16" aria-hidden="true"><use href="#i-bulb"/></svg>Dicas</h2>
+        <div id="dicas"></div>
+      </section>
+      <section class="ws-section" id="caixa-conceitos" hidden aria-labelledby="conceitos-titulo">
+        <h2 class="section-title" id="conceitos-titulo">Saiba mais</h2>
+        <ul class="concept-links" id="conceitos"></ul>
+      </section>
+    </aside>
+  </div>
+
+  <aside class="slides-drawer" id="gaveta-slides" aria-label="Slides de apoio" hidden>
+    <div class="drawer-head">
+      <strong>Slides de apoio</strong>
+      <button type="button" class="btn btn-ghost btn-sm" id="btn-fechar-slides" aria-label="Fechar slides"><svg class="ic ic-16" aria-hidden="true"><use href="#i-x"/></svg>Fechar</button>
+    </div>
+    <iframe id="iframe-slides" title="Slides de apoio" src="about:blank"></iframe>
   </aside>
 
-  <!-- Onboarding Modal: Register 2 Students -->
-  <div class="modal-backdrop" id="modal-onboarding" role="dialog" aria-modal="true" aria-labelledby="title-onboarding">
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2 class="modal-title" id="title-onboarding">
-          <svg class="icon"><use href="#icon-award"></use></svg>
-          <span>Início da Web Quest em Dupla</span>
-        </h2>
-      </header>
-      <div class="modal-body">
-        <p style="margin-bottom: 16px;">
-          Esta atividade foi projetada para resolução colaborativa em duplas de desenvolvimento web e design.
-          Definam quem atuará como <strong>Navegador</strong> (análise teórica, consulta aos slides) e <strong>Piloto</strong> (operação da bancada e digitação).
-        </p>
-        <form id="form-onboarding">
-          <div class="form-group">
-            <label class="form-label" for="input-team-1">Nome do Integrante 1 (Navegador):</label>
-            <input type="text" id="input-team-1" class="form-input" required placeholder="Ex: Ana Silva" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="input-team-2">Nome do Integrante 2 (Piloto):</label>
-            <input type="text" id="input-team-2" class="form-input" required placeholder="Ex: Carlos Santos" />
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
-            <svg class="icon icon-sm"><use href="#icon-key"></use></svg>
-            <span>Iniciar Trilha de Fechaduras</span>
-          </button>
-        </form>
-        <button type="button" class="btn btn-secondary" id="btn-onboarding-restore" style="width: 100%; margin-top: 8px;">
-          <svg class="icon icon-sm"><use href="#icon-upload"></use></svg>
-          <span>Já temos um código: restaurar progresso</span>
-        </button>
+  <dialog class="ws-dialog" id="dialogo-progresso" aria-labelledby="progresso-titulo">
+    <form method="dialog" class="dialog-body">
+      <h2 id="progresso-titulo">Progresso da dupla</h2>
+      <p class="small">Este código vai para o professor e serve para continuar em outro computador (com a senha da dupla).</p>
+      <textarea class="field field-mono code-box" id="codigo-progresso" rows="5" readonly aria-label="Código de progresso"></textarea>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-primary" id="btn-copiar-codigo"><svg class="ic ic-16" aria-hidden="true"><use href="#i-copy"/></svg>Copiar código</button>
+        <button type="button" class="btn btn-secondary" id="btn-baixar-codigo"><svg class="ic ic-16" aria-hidden="true"><use href="#i-download"/></svg>Baixar .txt</button>
+        <button type="button" class="btn btn-danger" id="btn-recomecar">Recomeçar a trilha</button>
+        <button type="submit" class="btn btn-ghost">Fechar</button>
       </div>
-    </div>
-  </div>
+      <p class="small muted" id="progresso-aviso" role="status"></p>
+    </form>
+  </dialog>
 
-  <!-- Backpack Modal (Mochila de Dicas) -->
-  <div class="modal-backdrop" id="modal-backpack" role="dialog" aria-modal="true" aria-labelledby="title-backpack">
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2 class="modal-title" id="title-backpack">
-          <svg class="icon"><use href="#icon-backpack"></use></svg>
-          <span>Mochila de Dicas da Equipe</span>
-        </h2>
-        <button type="button" class="btn btn-secondary" id="btn-close-backpack" style="padding: 4px 8px;">
-          <svg class="icon icon-sm"><use href="#icon-x"></use></svg>
-        </button>
-      </header>
-      <div class="modal-body" id="backpack-content">
-        <!-- Rendered by app.js -->
-      </div>
-    </div>
-  </div>
+  <div class="toast-region" id="avisos" role="status" aria-live="polite"></div>
 
-  <!-- Save / Restore Progress Modal -->
-  <div class="modal-backdrop" id="modal-saveload" role="dialog" aria-modal="true" aria-labelledby="title-saveload">
-    <div class="modal-content">
-      <header class="modal-header">
-        <h2 class="modal-title" id="title-saveload">
-          <svg class="icon"><use href="#icon-save"></use></svg>
-          <span>Salvar &amp; Restaurar Progresso</span>
-        </h2>
-        <button type="button" class="btn btn-secondary" id="btn-close-saveload" style="padding: 4px 8px;">
-          <svg class="icon icon-sm"><use href="#icon-x"></use></svg>
-        </button>
-      </header>
-      <div class="modal-body">
-        <div style="margin-bottom: 20px;">
-          <h3 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 6px;">Código Oficial da Dupla:</h3>
-          <p style="font-size: 0.8125rem; color: var(--text-subtle); margin-bottom: 8px;">
-            Use este código para continuar em outro computador ou para entregar ao professor.
-          </p>
-          <textarea id="txt-export-code" class="form-textarea" readonly></textarea>
-          <div style="display: flex; gap: 8px; margin-top: 8px;">
-            <button type="button" class="btn btn-primary" id="btn-copy-code">
-              <svg class="icon icon-sm"><use href="#icon-copy"></use></svg>
-              <span>Copiar Código</span>
-            </button>
-            <button type="button" class="btn btn-secondary" id="btn-download-file">
-              <svg class="icon icon-sm"><use href="#icon-download"></use></svg>
-              <span>Baixar Arquivo .txt</span>
-            </button>
-          </div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;" />
-
-        <div>
-          <h3 style="font-size: 0.9375rem; font-weight: 700; margin-bottom: 6px;">Restaurar Progresso Anterior:</h3>
-          <form id="form-restore">
-            <textarea id="txt-restore-code" class="form-textarea" placeholder="Cole o código WQ-UI26-... aqui"></textarea>
-            <button type="submit" class="btn btn-secondary" style="margin-top: 8px; width: 100%;">
-              <svg class="icon icon-sm"><use href="#icon-upload"></use></svg>
-              <span>Restaurar Progresso</span>
-            </button>
-          </form>
-          <div id="restore-feedback" class="answer-feedback" style="margin-top: 8px;"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Page Footer -->
-  <footer class="page-footer">
-    <p>Web Quests: UI Design &amp; Preparação para o Figma &bull; Atividade Pedagógica Interativa em Duplas</p>
-  </footer>
-
-  <!-- Application Entrypoint -->
   <script type="module" src="assets/js/app.js"></script>
 </body>
 </html>

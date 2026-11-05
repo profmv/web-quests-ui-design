@@ -58,7 +58,8 @@ Diretrizes mandatórias para qualquer agente autônomo ou assistente de IA atuan
 |---|---|
 | Executar aplicação local | `iniciar.bat` ou `python scripts/server/serve.py` |
 | Auditar proibição de emojis | `python scripts/audit/check_no_emojis.py` |
-| Compilar/cifrar etapas da trilha | `node scripts/build/build_etapas.mjs` |
+| Compilar/cifrar etapas da trilha | `node scripts/build/build_etapas.mjs --placar-senha "<frase-senha do professor>"` |
+| Restaurar a fonte das etapas (gitignored) | `node scripts/build/build_etapas.mjs --restaurar --placar-senha "<frase-senha do professor>"` |
 | Checar governança em grafos | `python C:\Repo\antigravity-workspace\scripts\gov.py checar` |
 | Registrar pendência no grafo | `python C:\Repo\antigravity-workspace\scripts\gov.py add pend --chave "PEND_XXX" --campo pendencia="<texto>" --campo origem="<origem>"` |
 | Status das lições locais | `node "C:/Users/Marcos V Moraes/.gemini/config/plugins/gerador-licoes-projeto/scripts/licoes.mjs" status` |

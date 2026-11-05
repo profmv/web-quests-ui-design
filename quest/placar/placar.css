@@ -1,0 +1,39 @@
+/*
+ * OBJECTIVE: Teacher scoreboard styles on top of assets/css/tokens.css.
+ */
+
+body { min-height: 100vh; display: flex; flex-direction: column; }
+.toolbar-title { font-size: var(--fs-14); color: var(--ws-toolbar-muted); }
+.placar { flex: 1; padding: var(--s-4) var(--s-2); }
+.placar > *, #tela-placar > * { max-width: 1120px; margin-left: auto; margin-right: auto; }
+.panel-card { margin-bottom: var(--s-3); padding: var(--s-3); background: var(--ws-panel); border: 1px solid var(--ws-border); border-radius: var(--r-12); box-shadow: var(--el-1); }
+.panel-card h1 { margin: 0 0 var(--s-1); font-size: var(--fs-24); }
+.panel-card h2 { margin: 0 0 var(--s-1); font-size: var(--fs-20); }
+.lock-card { max-width: 480px; margin-top: var(--s-6); }
+.row { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+.row .field { flex: 1; min-width: 200px; }
+.actions { margin-top: var(--s-1); }
+.form-msg { min-height: 24px; margin: var(--s-1) 0 0; font-size: var(--fs-14); font-weight: 600; color: var(--tx-2); }
+.small { font-size: var(--fs-14); }
+.muted { color: var(--tx-3); }
+.regras summary { cursor: pointer; font-weight: 700; }
+.rules-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: var(--s-2); align-items: end; margin-top: var(--s-2); }
+.table-wrap { overflow-x: auto; }
+.ranking { width: 100%; border-collapse: collapse; font-size: var(--fs-14); }
+.ranking th { padding: var(--s-1); text-align: left; font-size: var(--fs-12); text-transform: uppercase; letter-spacing: 0.04em; color: var(--tx-2); border-bottom: 2px solid var(--ws-border); white-space: nowrap; }
+.ranking td { padding: var(--s-1); border-bottom: 1px solid var(--ws-border); vertical-align: top; }
+.ranking .num { font-family: var(--ff-mono); text-align: right; }
+.ranking .rank { font-weight: 800; font-size: var(--fs-20); color: var(--ac-select); }
+.row-bad { background: var(--bad-soft); }
+.trail-dots { display: inline-flex; gap: 4px; vertical-align: middle; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ws-border); border: 1px solid var(--ws-border-strong); }
+.dot-ok { background: var(--ok); border-color: var(--ok); }
+.dot-falsa { background: var(--bad); border-color: var(--bad); }
+.ranking .chip { margin: 0 4px 4px 0; white-space: normal; }
+.note { margin: var(--s-2) 0 0; }
+
+@media print {
+  .placar { padding: 0; background: #ffffff; }
+  #tela-placar > section:first-child, .regras, .ws-toolbar { display: none !important; }
+  .panel-card { box-shadow: none; border: 0; }
+}
