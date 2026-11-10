@@ -1,6 +1,6 @@
 /**
  * OBJECTIVE: Quest shell for "Estúdio Oito": trail, encrypted lock chain, benches, hints, glossary balloons,
- *            minigame interludes, progress code and the final delivery (certificate, tokens, Figma bonus).
+ *            minigame interludes, progress code, certificate, tokens and the final Figma mission.
  * USAGE: Loaded by quest/index.html as an ES module. Benches live in ./bancadas/<tipo>.js and expose
  *        montar({ canvas, props, camadas, config, rascunho, salvar, anunciar }) -> { destruir(), resumo() }.
  *        Minigames live in ./minigames/<id>.js and expose iniciar(raiz, { aoTerminar }) -> { destruir() }.
@@ -12,6 +12,7 @@ import { normalizar, decifrarBloco, sha256Hex } from "./crypto.js";
 import { carregarEstado, salvarEstado, apagarEstado, estadoVazio, gerarCodigo, lerCodigo, abrirCofre } from "./progress.js";
 import { el, icone, textoComTermos, ativarBaloes, aviso, copiar, baixar } from "./ui.js";
 import { nomeArquivoSeguro } from "./util.js";
+import { apagarRascunhoFigma, montarMissaoFigma } from "./figma-mission.js";
 
 const TRILHA = [
   { tipo: "lock", i: 0 },
@@ -140,9 +141,10 @@ function ligarEventos() {
     if (!confirmarRecomeco) {
       confirmarRecomeco = true;
       ev.currentTarget.textContent = "Clique de novo para apagar tudo";
-      dom.avisoProgresso.textContent = "Isso apaga o progresso deste navegador. Copiem o código antes.";
+      dom.avisoProgresso.textContent = "Isso apaga o progresso e o rascunho Figma desta dupla no navegador. Copiem o código e baixem a entrega antes.";
       return;
     }
+    apagarRascunhoFigma(estado);
     apagarEstado();
     location.reload();
   });
@@ -285,7 +287,7 @@ function mostrarBoasVindas() {
         el("div", { class: "welcome-story" }, [
           el("p", { class: "eyebrow", text: "Estúdio Oito · primeiro dia" }),
           el("h1", { id: "bv-titulo", text: "O card do evento chegou quebrado." }),
-          el("p", { class: "lead", text: "Vocês são a nova dupla de design do estúdio. O cliente, Prof. Ramos, do app Agenda do Campus, precisa do card do Dia do Design pronto para o Figma. Oito fechaduras, oito consertos, três intervalos." }),
+          el("p", { class: "lead", text: "O Prof. Ramos precisa do card do Dia do Design no Agenda do Campus. Consertem o card em oito fechaduras, treinem o olhar nos intervalos e testem o protótipo no Figma." }),
           el("ul", { class: "welcome-steps" }, [
             el("li", {}, [icone("frame"), el("span", { text: "Cada fechadura conserta uma parte do mesmo card." })]),
             el("li", {}, [icone("sliders"), el("span", { text: "A pista sai do trabalho de vocês na bancada, não do texto." })]),
@@ -354,7 +356,7 @@ function irPara(item) {
   atualizarPapeis();
   mostrarPainel("canvas");
   dom.areaCanvas.scrollTop = 0;
-  requestAnimationFrame(() => dom.canvas.querySelector(".lock-title")?.focus({ preventScroll: true }));
+  requestAnimationFrame(() => dom.canvas.querySelector(".lock-title, #fm-title")?.focus({ preventScroll: true }));
 }
 
 function renderizarTrilha() {
@@ -377,7 +379,7 @@ function renderizarTrilha() {
         estadoTxt = jogado ? "jogado" : ok ? "disponível" : "trancado";
         ic = "gamepad";
       } else {
-        rotulo = "Entrega ao cliente";
+        rotulo = "Missão Figma";
         estadoTxt = ok ? "disponível" : "trancada";
         ic = "award";
       }
@@ -617,7 +619,7 @@ function mostrarAprovacao(i, recente) {
   if (!alvo) return;
   const seguinte = TRILHA[TRILHA.findIndex((t) => t.tipo === "lock" && t.i === i) + 1];
   const btn = el("button", { type: "button", class: "btn btn-primary", onclick: () => irPara(seguinte) }, [
-    seguinte.tipo === "jogo" ? `Ir para o intervalo: ${seguinte.nome}` : seguinte.tipo === "final" ? "Entregar ao cliente" : "Próxima fechadura",
+    seguinte.tipo === "jogo" ? `Ir para o intervalo: ${seguinte.nome}` : seguinte.tipo === "final" ? "Abrir missão Figma" : "Próxima fechadura",
     icone("arrow-right"),
   ]);
   alvo.replaceChildren(
@@ -685,7 +687,7 @@ function renderizarIntervalo(item) {
 
 function renderizarFinal() {
   const c = conteudos[TOTAL];
-  dom.etapaChip.textContent = "Entrega";
+  dom.etapaChip.textContent = "Missão Figma";
   if (!c) return;
   const segundos = Math.round(((estado.completedAt || Date.now()) - estado.startedAt) / 1000);
   const totalErros = estado.erros.reduce((a, b) => a + (b || 0), 0);
@@ -696,7 +698,7 @@ function renderizarFinal() {
   const certificado = el("section", { class: "certificate anim-pop", id: "certificado", "aria-labelledby": "cert-titulo" }, [
     el("div", { class: "cert-head" }, [
       el("span", { class: "ws-brand-mark cert-mark", "aria-hidden": "true", text: "8" }),
-      el("div", {}, [el("p", { class: "eyebrow", text: "Estúdio Oito · certificado de entrega" }), el("h1", { id: "cert-titulo", text: "Card pronto para o Figma" })]),
+      el("div", {}, [el("p", { class: "eyebrow", text: "Estúdio Oito · certificado da trilha" }), el("h2", { id: "cert-titulo", text: "Card pronto para o Figma" })]),
     ]),
     el("p", { class: "cert-names", text: estado.team.join(" e ") }),
     el("p", { class: "cert-quote", text: c.mensagem }),
@@ -707,18 +709,12 @@ function renderizarFinal() {
       el("div", {}, [el("dt", { text: "Dicas" }), el("dd", { text: String(totalDicas) })]),
       el("div", {}, [el("dt", { text: "Intervalos" }), el("dd", { text: jogos.length ? `${jogos.length} jogados` : "nenhum" })]),
     ]),
-    el("h2", { class: "section-title", text: "O que a dupla aprendeu" }),
+    el("h3", { class: "section-title", text: "O que a dupla aprendeu" }),
     el("ol", { class: "cert-learned" }, conteudos.slice(0, TOTAL).map((k) => el("li", {}, [el("strong", { text: `${k.titulo}: ` }), k.aprendizado]))),
   ]);
 
-  const bonus = el("section", { class: "bonus", "aria-labelledby": "bonus-titulo" }, [
-    el("div", { class: "frame-tag" }, [icone("component", 16), "Opcional"]),
-    el("h2", { id: "bonus-titulo", text: c.bonus.titulo }),
-    el("ol", {}, c.bonus.passos.map((p) => el("li", { text: p }))),
-    el("a", { class: "btn btn-secondary btn-sm", href: c.bonus.link, target: "_blank", rel: "noopener" }, ["Figma: guia de auto layout", icone("external")]),
-  ]);
-
-  dom.canvas.replaceChildren(certificado, bonus);
+  const missao = montarMissaoFigma({ team: estado.team, startedAt: estado.startedAt, abrirSlide });
+  dom.canvas.replaceChildren(missao, certificado);
   dom.props.replaceChildren(
     el("section", { class: "ws-section" }, [
       el("h2", { class: "section-title", text: "Entregáveis" }),
@@ -729,7 +725,7 @@ function renderizarFinal() {
         onclick: () => baixar("tokens.json", JSON.stringify({ $descricao: `Tokens da dupla ${estado.team.join(" e ")} - Estúdio Oito`, ...c.tokens }, null, 2) + "\n", "application/json"),
       }, [icone("download"), "Baixar tokens.json"]),
       el("button", { type: "button", class: "btn btn-secondary btn-block", onclick: () => window.print() }, [icone("printer"), "Imprimir certificado"]),
-      el("p", { class: "small muted", text: "O tokens.json reúne os valores que vocês descobriram: recriem como variáveis no Figma na missão bônus." }),
+      el("p", { class: "small muted", text: "Consultem o tokens.json para aplicar os valores do card no Figma. Se quiserem reutilizá-los, criem variáveis no arquivo." }),
     ])
   );
 }

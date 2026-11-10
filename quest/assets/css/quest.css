@@ -213,8 +213,6 @@ body {
   letter-spacing: -0.01em;
 }
 
-.lock-title:focus { outline: none; }
-
 .difficulty { display: inline-flex; gap: var(--s-05); }
 .difficulty .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ws-border-strong); }
 .difficulty .dot.on { background: var(--ac-redline); }
@@ -349,8 +347,6 @@ body {
   color: var(--tx-1);
 }
 
-.prop-input input:focus,
-.prop-input select:focus { outline: none; box-shadow: none; }
 .prop-input.is-offgrid { border-color: var(--ac-redline); background: var(--ac-redline-soft); }
 
 .inspect {
@@ -495,7 +491,7 @@ body {
 }
 
 .cert-head { display: flex; align-items: center; gap: var(--s-2); }
-.cert-head h1 { margin: 0; font-size: var(--fs-32); line-height: var(--lh-tight); }
+.cert-head h2 { margin: 0; font-size: var(--fs-32); line-height: var(--lh-tight); }
 .cert-mark { width: 48px; height: 48px; font-size: var(--fs-24); border-radius: var(--r-8); }
 .cert-names { margin: var(--s-3) 0 var(--s-1); font-size: var(--fs-24); font-weight: 700; }
 .cert-quote { margin: 0 0 var(--s-3); padding-left: var(--s-2); border-left: 3px solid var(--ac-component); color: var(--tx-2); font-style: italic; }
@@ -505,18 +501,6 @@ body {
 .cert-stats dd { margin: 0; font-weight: 700; }
 .cert-learned { margin: 0; padding-left: var(--s-3); font-size: var(--fs-14); }
 .cert-learned li { margin-bottom: var(--s-05); }
-
-.bonus {
-  position: relative;
-  padding: var(--s-3);
-  border: 1px dashed var(--ac-component);
-  border-radius: var(--r-12);
-  background: var(--ac-component-soft);
-}
-
-.bonus .frame-tag { color: #5b2aa6; }
-.bonus h2 { margin: var(--s-1) 0; font-size: var(--fs-20); }
-.bonus ol { padding-left: var(--s-3); font-size: var(--fs-14); }
 
 /* Slides drawer */
 .slides-drawer {
@@ -630,16 +614,21 @@ body {
   .welcome { padding: var(--s-3) var(--s-2); }
   .welcome-grid { grid-template-columns: 1fr; gap: var(--s-3); }
   .field-pair { grid-template-columns: 1fr; }
-  .lock-title, .welcome h1, .cert-head h1 { font-size: var(--fs-24); }
+  .lock-title, .welcome h1, .cert-head h2 { font-size: var(--fs-24); }
   .comment { padding: var(--s-2); gap: var(--s-1); }
   .cert-stats { grid-template-columns: repeat(2, 1fr); }
   .slides-drawer { top: 0; }
 }
 
+@media (max-width: 480px) {
+  .ws-toolbar { gap: var(--s-05); padding-inline: var(--s-1); }
+  .ws-toolbar-sep, #btn-slides > span { display: none; }
+}
+
 @media print {
   body { overflow: visible; height: auto; display: block; }
   .ws-shell { display: block; }
-  .panel-left, .panel-right, .mobile-tabs, .bonus, .toast-region, .slides-drawer { display: none !important; }
+  .panel-left, .panel-right, .mobile-tabs, .figma-mission, .toast-region, .slides-drawer { display: none !important; }
   .canvas-area { overflow: visible; background: #ffffff; }
   .certificate { box-shadow: none; }
 }

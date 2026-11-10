@@ -1,0 +1,41 @@
+/* Guided mission: paper desk, ink and blue controls. */
+.figma-mission {
+  color: var(--tx-1);
+  background: var(--ws-panel);
+  border: 1px solid var(--ws-border-strong);
+  border-radius: var(--r-12);
+  padding: clamp(16px, 4vw, 32px);
+  margin-bottom: var(--s-3);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.figma-mission h1, .figma-mission h2, .figma-mission h3 { margin: 0 0 var(--s-1); }
+.figma-mission h1 { font-size: clamp(1.5rem, 4vw, 2rem); }
+.figma-mission h2 { margin-top: var(--s-3); font-size: var(--fs-20); }
+.figma-mission h3 { font-size: 1.125rem; }
+.figma-mission p { margin: 0 0 12px; line-height: 1.55; }
+.fm-kicker { color: var(--tx-2); font-weight: 700; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+.fm-brief { background: var(--ws-panel-alt); border-left: 4px solid var(--tx-2); padding: var(--s-2); margin: var(--s-3) 0; }
+.fm-brief strong { display: block; margin-bottom: 8px; }
+.fm-brief p:last-child { margin-bottom: 0; }
+.fm-steps { list-style: none; padding: 0; margin: 16px 0; }
+.fm-step { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1px solid var(--ws-border); }
+.fm-number { color: var(--tx-2); font-weight: 800; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+.figma-mission a, .fm-slide { color: var(--ac-select); text-decoration: underline; text-underline-offset: 3px; }
+.fm-slide { border: 0; background: transparent; padding: 4px; min-height: 24px; font: inherit; cursor: pointer; }
+.fm-coach, .fm-evidence { border-top: 2px solid var(--tx-1); margin-top: 24px; }
+.fm-decision label, .fm-coach label, .fm-field label { display: block; font-weight: 700; margin: 16px 0 8px; }
+.fm-decision select, .fm-coach select, .fm-field input, .fm-field textarea { display: block; width: 100%; max-width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--tx-3); border-radius: 6px; color: var(--tx-1); background: var(--ws-panel); font: inherit; }
+.figma-mission #fm-decision-feedback { margin-top: var(--s-1); }
+#fm-decision-feedback[data-result="correct"] { color: var(--ok); }
+#fm-decision-feedback[data-result="retry"] { color: var(--bad); }
+.fm-feedback { background: var(--ws-panel-alt); border-left: 4px solid var(--tx-3); padding: 12px 16px; margin: 16px 0; }
+.fm-feedback p:last-child { margin-bottom: 0; }
+.fm-check { display: flex; gap: 12px; align-items: flex-start; margin: 12px 0; line-height: 1.5; }
+.fm-check input { flex: 0 0 auto; width: 24px; height: 24px; margin: 2px 0 0; }
+.fm-note, .fm-save { font-size: .9rem; }
+.fm-save { font-weight: 700; margin-top: 12px !important; }
+.figma-mission :focus-visible { outline: 3px solid var(--ac-select); outline-offset: 3px; }
+.figma-mission button:disabled { opacity: .6; cursor: not-allowed; }
+@media (max-width: 360px) { .fm-step { grid-template-columns: 1fr; gap: 4px; } .figma-mission .btn { width: 100%; white-space: normal; } }
+@media (prefers-reduced-motion: reduce) { .figma-mission *, .figma-mission *::before, .figma-mission *::after { animation: none !important; transition: none !important; } }

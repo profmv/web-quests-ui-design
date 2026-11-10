@@ -51,10 +51,11 @@ body {
 }
 
 .deck-progress-fill {
-  width: 0;
   height: 100%;
   background: var(--ac-select);
-  transition: width var(--t-med) var(--ease);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-med) var(--ease);
 }
 
 .deck-stage {

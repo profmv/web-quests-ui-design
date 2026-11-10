@@ -10,7 +10,6 @@ OUTPUTS: Serves static files over HTTP at http://localhost:<port>/
 import argparse
 import http.server
 import os
-import socketserver
 import sys
 import webbrowser
 
@@ -36,7 +35,7 @@ def run_server(port=8080, open_browser=True):
     handler = CustomHTTPHandler
     for p in range(port, port + 20):
         try:
-            with socketserver.TCPServer(("127.0.0.1", p), handler) as httpd:
+            with http.server.ThreadingHTTPServer(("127.0.0.1", p), handler) as httpd:
                 url = f"http://localhost:{p}/"
                 print(f"[OK] Serving Web Quests UI Design at {url}")
                 print("[INFO] Press Ctrl+C to stop the server.")

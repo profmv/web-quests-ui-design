@@ -109,9 +109,8 @@
     });
 
     // Update Progress Bar
-    const progressPercent = ((currentSlideIndex + 1) / totalSlides) * 100;
     if (progressFill) {
-      progressFill.style.width = `${progressPercent}%`;
+      progressFill.style.transform = `scaleX(${(currentSlideIndex + 1) / totalSlides})`;
     }
 
     // Update Counter
