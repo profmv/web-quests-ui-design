@@ -141,7 +141,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
         title: "Clique seleciona; Shift ou Ctrl + clique seleciona várias; duplo clique renomeia",
         onclick: (ev) => selecionar(id, ev.shiftKey || ev.ctrlKey || ev.metaKey),
         ondblclick: () => focarNome(),
-      }, [icone(ic), el("span", { text: n.nome })]));
+      }, [icone(ic), el("span", { text: n.nome.trim() || "Camada sem nome" })]));
       (n.filhos || []).forEach((f) => visitar(f, nivel + 1));
     };
     visitar("root", 0);
@@ -229,21 +229,26 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
     const n = s.nos[id];
     const m = acharMedida(medidaRaiz, id) || { x: 0, y: 0, w: 0, h: 0 };
     const nome = el("input", { class: "field", id: "al-nome", value: n.nome, spellcheck: "false", autocomplete: "off" });
-    const aplicarNome = () => {
-      const v = nome.value.trim();
-      if (v && v !== n.nome) {
-        n.nome = v;
-        atualizar(false);
-      }
+    const avisoNome = el("p", { class: "small", "aria-live": "polite" });
+    const atualizarAviso = () => {
+      const valido = nomeValido(id);
+      const mensagem = valido ? "Nome válido. Alterações salvas automaticamente." : "Nome inválido ou genérico. Descrevam a função da camada.";
+      if (avisoNome.textContent !== mensagem) avisoNome.textContent = mensagem;
+      avisoNome.style.color = valido ? "var(--tx-1)" : "var(--ac-redline)";
     };
-    nome.addEventListener("change", aplicarNome);
-    nome.addEventListener("keydown", (ev) => { if (ev.key === "Enter") { ev.preventDefault(); aplicarNome(); } });
+    nome.addEventListener("input", () => {
+      n.nome = nome.value;
+      atualizarAviso();
+      atualizar(false);
+    });
+    nome.addEventListener("keydown", (ev) => { if (ev.key === "Enter") ev.preventDefault(); });
+    atualizarAviso();
 
     const blocos = [
       secao("Camada", [
         el("label", { class: "ws-label", for: "al-nome", text: "Nome" }),
         nome,
-        GENERICO.test(n.nome) ? el("p", { class: "small", style: { color: "var(--ac-redline)", fontWeight: "600", margin: "4px 0 0" }, text: "Nome genérico: descrevam a função." }) : null,
+        avisoNome,
         el("div", { class: "al-actions" }, [
           id !== "root" ? el("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: envolver }, [icone("frame"), "Envolver (Shift+A)"]) : null,
           id !== "root" && n.tipo === "frame" ? el("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => desfazer(id) }, ["Desfazer frame"]) : null,
@@ -291,14 +296,32 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar, anunc
   function desenharChecklist() {
     const folhas = config.camadas.map((c) => c.id);
     const frames = Object.values(s.nos).filter((n) => n.tipo === "frame" && n.id !== "root");
+    const raiz = s.nos.root;
+    const chips = pai("chip1");
+    const cabecalho = pai("titulo");
+    const conteudo = pai("descricao");
+    const chipsJuntos = chips && chips !== raiz && chips === pai("chip2");
+    const aninhado = chipsJuntos && cabecalho && conteudo &&
+      cabecalho === pai("data") && cabecalho === pai(chips.id) &&
+      conteudo === pai(cabecalho.id) && raiz === pai(conteudo.id) && raiz === pai("botao");
+    const layout = (frame, dir, gap, pad = 0) => frame.al.ativo && frame.al.dir === dir && frame.al.gap === gap && frame.al.pad === pad;
     const itens = [
       ["Camadas de conteúdo com nomes semânticos (titulo, data, chip-..., descricao, botao-...)", folhas.every(nomeValido)],
       ["Frames internos sem nome genérico", frames.length > 0 && frames.every((f) => nomeValido(f.id))],
       ["Frame raiz chamado Card/Evento", nomeValido("root")],
-      ["Auto layout ativo no Card/Evento", s.nos.root.al.ativo],
-      ["Card/Evento transformado em componente", s.nos.root.componente],
+      ["Chips, cabeçalho e conteúdo aninhados conforme o roteiro", aninhado],
+      ["Chips na horizontal e demais frames na vertical, com o ritmo do estúdio", aninhado &&
+        layout(chips, "H", 8) && layout(cabecalho, "V", 8) && layout(conteudo, "V", 16) && layout(raiz, "V", 24, 24)],
+      ["Card/Evento com largura fixa dentro das margens e altura Hug", raiz.larg.modo === "fixed" && medidaRaiz.w === 360 - 2 * 16 && raiz.alt.modo === "hug"],
+      ["Conteúdo, descrição e botão ocupam a largura disponível", aninhado &&
+        [conteudo, s.nos.descricao, s.nos.botao].every((n) => n.larg.modo === "fill")],
+      ["Card/Evento transformado em componente", raiz.componente],
     ];
-    checklist.replaceChildren(...itens.map(([t, ok]) => el("li", { class: ok ? "is-ok" : "" }, [icone(ok ? "check" : "x"), el("span", { text: t })])));
+    checklist.replaceChildren(...itens.map(([t, ok]) => el("li", { class: ok ? "is-ok" : "" }, [
+      icone(ok ? "check" : "x"),
+      el("span", { class: "sr-only", text: ok ? "Conferido. " : "A conferir. " }),
+      el("span", { text: t }),
+    ])));
     const validos = Object.keys(s.nos).filter((id) => nomeValido(id)).length + (s.nos.root.componente ? 1 : 0);
     exp.definir(`${Math.round(medidaRaiz.w)}x${Math.round(medidaRaiz.h)}-N${validos}`);
   }

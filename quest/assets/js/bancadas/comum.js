@@ -81,11 +81,17 @@ export function quadro(rotulo, largura, extraClasse = "") {
   return el("div", { class: `stage-frame ${extraClasse}`, style: { width: `${largura}px` } }, [el("span", { class: "frame-label", text: rotulo })]);
 }
 
-/** Export box (handoff code). Returns { no, definir(codigo) }. */
+/** Shows a handoff code when available and lets the quest fill the clue field. */
 export function caixaExport(rotulo) {
   const code = el("code", { text: "-" });
-  const no = el("div", { class: "export-box", "aria-live": "polite" }, [el("span", { class: "ws-label", text: rotulo }), code]);
-  return { no, definir: (c) => (code.textContent = c || "-") };
+  const usar = el("button", { type: "button", class: "btn btn-secondary btn-sm", disabled: true, text: "Usar como pista",
+    onclick: () => no.dispatchEvent(new CustomEvent("quest:usar-pista", { detail: code.textContent, bubbles: true })),
+  });
+  const no = el("div", { class: "export-box" }, [el("span", { class: "ws-label", text: rotulo }), code, usar]);
+  return { no, definir: (codigo, pendencia = "-") => {
+    code.textContent = codigo || pendencia;
+    usar.disabled = !codigo;
+  } };
 }
 
 /** Selection outline with handles and size badge. */

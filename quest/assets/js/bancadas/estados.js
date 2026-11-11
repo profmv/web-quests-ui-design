@@ -85,7 +85,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
       }
     }
     const completo = s.disabled ? `${s.default}-${s.hover}-${s.pressed}-${s.focus}-${s.disabled}` : "";
-    exp.definir(completo || "escolham a estratégia do Disabled");
+    exp.definir(completo, "Escolham a estratégia do Disabled.");
     camadas.replaceChildren(
       ...ESTADOS.map((k) => el("button", { type: "button", class: `layer-row${k.id === selecionado ? " is-selected" : ""}`, onclick: () => { selecionado = k.id; desenhar(); } }, [icone("component"), el("span", { text: `Estado=${k.nome}` })]))
     );

@@ -377,6 +377,9 @@ body {
   margin-top: var(--s-05);
 }
 
+.export-box button { margin-top: var(--s-1); }
+.bench-props[data-resolvida="true"] .export-box button { display: none; }
+
 /* Answer box */
 .answer-box { background: var(--ws-panel-alt); }
 .answer-row { display: flex; gap: var(--s-1); }
@@ -501,6 +504,7 @@ body {
 .cert-stats dd { margin: 0; font-weight: 700; }
 .cert-learned { margin: 0; padding-left: var(--s-3); font-size: var(--fs-14); }
 .cert-learned li { margin-bottom: var(--s-05); }
+.cert-print { margin-top: var(--s-2); }
 
 /* Slides drawer */
 .slides-drawer {
@@ -628,7 +632,7 @@ body {
 @media print {
   body { overflow: visible; height: auto; display: block; }
   .ws-shell { display: block; }
-  .panel-left, .panel-right, .mobile-tabs, .figma-mission, .toast-region, .slides-drawer { display: none !important; }
+  .panel-left, .panel-right, .mobile-tabs, .figma-mission, .cert-print, .toast-region, .slides-drawer { display: none !important; }
   .canvas-area { overflow: visible; background: #ffffff; }
   .certificate { box-shadow: none; }
 }

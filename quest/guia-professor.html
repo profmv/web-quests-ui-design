@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guia do professor - Estúdio Oito</title>
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <style>
+    body { max-width: 52rem; margin: 0 auto; padding: var(--s-3); line-height: 1.6; background: var(--ws-panel); }
+    h1, h2 { line-height: 1.25; }
+    section { margin-block: var(--s-4); }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid var(--tx-3); padding: var(--s-1); text-align: left; vertical-align: top; }
+    .line { border-bottom: 1px solid var(--tx-3); min-height: 2.5rem; }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none; }
+      #folha { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="no-print">
+    <h1>Guia do professor</h1>
+    <p>Prepare a turma, avalie as entregas e use a folha alternativa quando faltar acesso ao Figma.</p>
+  </header>
+  <main>
+    <section class="no-print">
+      <h2>Preparação</h2>
+      <ol>
+        <li>Organize a turma em duplas. Cada dupla pode criar um arquivo Design no Figma e alternar quem edita e quem observa.</li>
+        <li>Confira o acesso ao Figma e teste se você consegue abrir um arquivo compartilhado. Quando faltar acesso, combine como a dupla apresentará a folha alternativa.</li>
+        <li>Peça o código WQ2 para o placar e o arquivo de entrega da missão, acompanhado do link do Figma ou da evidência alternativa.</li>
+        <li>Na troca opcional, uma dupla testa o protótipo de outra. Os autores registram onde houve hesitação e revisam um detalhe.</li>
+      </ol>
+    </section>
+    <section class="no-print">
+      <h2>Rubrica breve</h2>
+      <p>Para cada critério, atribua 0 (ausente), 1 (parcial) ou 2 (demonstrado). A pontuação sugerida é de 0 a 8.</p>
+      <table>
+        <thead><tr><th scope="col">Critério</th><th scope="col">Exemplo de evidência</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Hierarquia e legibilidade</th><td>Título, data e ação distinguíveis em largura estreita.</td></tr>
+          <tr><th scope="row">Estrutura e adaptação</th><td>Camadas nomeadas e card que acomoda um título longo.</td></tr>
+          <tr><th scope="row">Estados e fluxo</th><td>Ação identificável, resposta visível e estado indisponível com texto.</td></tr>
+          <tr><th scope="row">Teste e revisão</th><td>Relato de observação, alteração e motivo. Um desenho anotado também serve.</td></tr>
+        </tbody>
+      </table>
+      <p>Confira o arquivo ou a evidência antes de atribuir pontos.</p>
+    </section>
+    <section id="folha">
+      <h2>Folha alternativa sem Figma</h2>
+      <p>Dupla _______________________________________ Data __________________</p>
+      <p>Desenhem um card de evento com título, data e ação. Mostrem um estado indisponível e a resposta à ação. Anotem os nomes das partes e seus espaçamentos.</p>
+      <div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div>
+      <p>Outra dupla consegue encontrar a data ou explicar por que a inscrição está encerrada? Onde hesitou?</p>
+      <div class="line"></div>
+      <p>Qual detalhe foi revisado e por quê?</p>
+      <div class="line"></div>
+      <p>Apresentem esta folha ao professor e descrevam a evidência alternativa na missão.</p>
+      <p class="no-print"><button type="button" class="btn btn-secondary" onclick="window.print()">Imprimir folha alternativa</button> <a href="index.html">Voltar à atividade</a></p>
+    </section>
+  </main>
+</body>
+</html>

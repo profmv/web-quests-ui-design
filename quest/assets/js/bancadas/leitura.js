@@ -14,7 +14,8 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
   const frame = quadro("Feed / Card do evento", 400);
   const card = el("div", { class: "read-card" });
   frame.append(card);
-  canvas.replaceChildren(frame, el("p", { class: "stage-note", text: "Cliquem num elemento para inspecionar. Os números mostram a ordem que vocês montaram." }));
+  const compacto = el("div", { class: "canvas-inspector", "aria-live": "polite" });
+  canvas.replaceChildren(frame, compacto, el("p", { class: "stage-note", text: "Cliquem num elemento para inspecionar. Os números mostram a ordem que vocês montaram." }));
 
   const inspecao = el("div");
   const lista = el("ol", { class: "order-list", "aria-label": "Ordem de leitura" });
@@ -37,10 +38,16 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
     const pos = s.ordem.indexOf(e.id) + 1;
     return el("button", {
       type: "button",
+      "data-elemento": e.id,
       class: `read-el area-${e.area}${e.id === selecionado ? " is-selected" : ""}`,
       style: { fontSize: `${e.tamanho}px`, fontWeight: e.peso, color: e.cor, background: e.area === "botao" || e.area === "tag" ? e.fundo : "transparent" },
       "aria-label": `${e.id}: ${e.rotulo}, posição ${pos} na ordem`,
-      onclick: () => { selecionado = e.id; desenhar(); },
+      "aria-pressed": String(e.id === selecionado),
+      onclick: () => {
+        selecionado = e.id;
+        desenhar();
+        card.querySelector(`[data-elemento="${e.id}"]`)?.focus({ preventScroll: true });
+      },
     }, [
       el("span", { class: "read-marker", "aria-hidden": "true", text: e.id }),
       el("span", { class: "read-order", "aria-hidden": "true", text: String(pos) }),
@@ -58,16 +65,18 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
       el("div", { class: "read-row read-actions" }, [E("E"), E("F")])
     );
     const e = porId[selecionado];
+    const medidas = [
+      ["Tamanho", `${e.tamanho}px`],
+      ["Peso", String(e.peso)],
+      ["Texto", e.cor],
+      ["Fundo", e.fundo],
+      ["Contraste", `${num(contraste(e), 1)}:1`],
+    ];
     inspecao.replaceChildren(
       el("p", { class: "small", style: { margin: "0 0 8px" } }, [el("strong", { text: `${e.id} · ${e.rotulo}` })]),
-      inspetor([
-        ["Tamanho", `${e.tamanho}px`],
-        ["Peso", String(e.peso)],
-        ["Texto", e.cor],
-        ["Fundo", e.fundo],
-        ["Contraste", `${num(contraste(e), 1)}:1`],
-      ])
+      inspetor(medidas)
     );
+    compacto.replaceChildren(el("strong", { text: `${e.id} · ${e.rotulo}` }), inspetor(medidas));
     lista.replaceChildren(
       ...s.ordem.map((id, i) =>
         el("li", { class: "order-item", "data-id": id }, [

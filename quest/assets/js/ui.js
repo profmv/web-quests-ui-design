@@ -65,7 +65,7 @@ function fecharBalao() {
 }
 
 /**
- * Wires glossary balloons inside `raiz`. `aoAbrirSlide(n)` opens the slides drawer.
+ * Wires glossary balloons inside `raiz`. `aoAbrirSlide(n, gatilho)` opens the slides drawer.
  */
 export function ativarBaloes(raiz, conceitos, aoAbrirSlide) {
   const mapa = Object.fromEntries(conceitos.map((c) => [c.chave, c]));
@@ -84,7 +84,7 @@ export function ativarBaloes(raiz, conceitos, aoAbrirSlide) {
         el("p", {}, [el("strong", { text: "O que é: " }), c.oQue]),
         el("p", {}, [el("strong", { text: "Para que serve: " }), c.praQue]),
         el("div", { class: "balloon-links" }, [
-          c.slide ? el("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => { fecharBalao(); aoAbrirSlide(c.slide); } }, [icone("slides"), `Slide ${c.slide}`]) : null,
+          c.slide ? el("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => { fecharBalao(); aoAbrirSlide(c.slide, gatilho); } }, [icone("slides"), `Slide ${c.slide}`]) : null,
           c.link ? el("a", { href: c.link, target: "_blank", rel: "noopener" }, [c.rotulo || "Saiba mais", " ", icone("external", 16)]) : null,
         ]),
       ]);

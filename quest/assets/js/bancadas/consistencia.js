@@ -76,7 +76,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
 
   function atualizar() {
     const faltam = config.marcadores.filter((m) => s.classes[m.id] === null).length;
-    exp.definir(faltam ? `faltam ${faltam} marcadores` : config.marcadores.map((m) => s.classes[m.id]).join(""));
+    exp.definir(faltam ? "" : config.marcadores.map((m) => s.classes[m.id]).join(""), `Faltam ${faltam} marcadores.`);
     palco.querySelectorAll(".audit-marker").forEach((b) => {
       const id = b.textContent;
       b.className = `audit-marker${selecionado === id ? " is-selected" : ""} cls-${s.classes[id] ?? "x"}`;

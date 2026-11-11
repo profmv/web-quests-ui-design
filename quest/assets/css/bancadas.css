@@ -112,7 +112,7 @@
 /* ---------- Lock 2: rhythm ---------- */
 .rhythm-frame { overflow: visible; }
 .rhythm-card { position: relative; border-radius: var(--r-16); }
-.rhythm-layer { position: absolute; cursor: pointer; }
+.rhythm-layer { position: absolute; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
 .rhythm-layer:hover { outline: 1px solid #c4d3f7; }
 .r-title { display: block; font-size: 32px; font-weight: 700; line-height: 40px; white-space: nowrap; }
 .r-date { display: block; font-size: 20px; font-weight: 600; line-height: 24px; color: var(--tx-2); white-space: nowrap; }
@@ -285,4 +285,11 @@
   .pt-grid { grid-template-columns: 1fr; }
   .stage-frame { max-width: 100%; }
   .wire-compare .stage-frame, .audit-screens .stage-frame { width: 280px !important; }
+}
+
+/* Read-only selection details for compact layouts. */
+.canvas-inspector { display: none; }
+@media (max-width: 960px) {
+  .canvas-inspector { display: block; width: min(100%, 640px); padding: var(--s-2); border: 1px solid var(--ws-border); border-radius: var(--r-8); background: var(--ws-panel); }
+  .canvas-inspector .inspect { margin-top: var(--s-1); }
 }

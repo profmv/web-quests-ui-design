@@ -146,6 +146,8 @@ export async function iniciar(raiz, opcoes = {}) {
   const ciclo = criarCiclo();
   let inicio = 0;
   let estado = 'intro';
+  let pratica = false;
+  let rodada = 0;
   let cartoes = [];
   let indice = 0;
   let acertos = 0;
@@ -169,7 +171,15 @@ export async function iniciar(raiz, opcoes = {}) {
     segundos: inicio ? (performance.now() - inicio) / 1000 : 0
   }));
 
-  function comecar() {
+  function comecar(modoPratica = false) {
+    if (pararTique) { pararTique(); pararTique = null; }
+    rodada += 1;
+    pratica = modoPratica;
+    casca.botaoPular.hidden = pratica;
+    acertos = 0;
+    respondidos = 0;
+    sequencia = 0;
+    respostas.length = 0;
     inicio = performance.now();
     cartoes = embaralharEquilibrado(PLANO).map(gerarCartao);
     indice = 0;
@@ -177,12 +187,13 @@ export async function iniciar(raiz, opcoes = {}) {
     casca.corpo.innerHTML = `
       <div class="mg-cc">
         <div class="mg-cc-cab">
-          <div class="mg-tempo mg-cc-tempo">
+          ${pratica ? '' : `<div class="mg-tempo mg-cc-tempo">
             ${icone('relogio', 'mg-ic mg-ic-16')}
             <span class="mg-barra" aria-hidden="true"><span class="mg-barra-fill"></span></span>
             <span class="mg-tempo-num" role="timer" aria-label="Tempo restante">${DURACAO}s</span>
-          </div>
-          <span class="chip chip-select mg-cc-placar">0 acertos</span>
+          </div>`}
+          <span class="chip chip-select mg-cc-placar">${pratica ? 'Prática sem pontuação' : '0 acertos'}</span>
+          ${pratica ? '<button type="button" class="btn mg-cc-voltar">Voltar para iniciar a corrida</button>' : ''}
         </div>
         <div class="mg-cc-mesa">
           <figure class="mg-cc-cartao">
@@ -208,10 +219,11 @@ export async function iniciar(raiz, opcoes = {}) {
     casca.corpo.querySelectorAll('.mg-cc-resp').forEach((b) => {
       ciclo.ouvir(b, 'click', () => responder(b.dataset.resp === 'sim'));
     });
+    if (pratica) ciclo.ouvir(casca.corpo.querySelector('.mg-cc-voltar'), 'click', mostrarIntro);
     mostrarCartao();
     casca.corpo.querySelector('.mg-cc-sim').focus({ preventScroll: true });
     ultimoTique = performance.now();
-    pararTique = ciclo.intervalo(tique, 100);
+    if (!pratica) pararTique = ciclo.intervalo(tique, 100);
   }
 
   function tique() {
@@ -231,7 +243,7 @@ export async function iniciar(raiz, opcoes = {}) {
   function mostrarCartao() {
     const c = cartoes[indice];
     estado = 'pergunta';
-    casca.status.textContent = `Cartão ${indice + 1} de ${MAX_CARTOES}`;
+    casca.status.textContent = pratica ? "Prática" : `Cartão ${indice + 1} de ${MAX_CARTOES}`;
     const amostra = casca.corpo.querySelector('.mg-cc-amostra');
     const frase = casca.corpo.querySelector('.mg-cc-frase');
     amostra.style.background = c.fundo;
@@ -256,12 +268,14 @@ export async function iniciar(raiz, opcoes = {}) {
     estado = 'retorno';
     const c = cartoes[indice];
     const ok = disse === c.passa;
-    respondidos += 1;
-    if (ok) { acertos += 1; sequencia += 1; } else sequencia = 0;
-    respostas.push({ ...c, ok, disse });
+    if (!pratica) {
+      respondidos += 1;
+      if (ok) { acertos += 1; sequencia += 1; } else sequencia = 0;
+      respostas.push({ ...c, ok, disse });
+    }
     casca.corpo.querySelectorAll('.mg-cc-resp').forEach((b) => { b.disabled = true; });
     const placar = casca.corpo.querySelector('.mg-cc-placar');
-    placar.textContent = `${acertos} ${acertos === 1 ? 'acerto' : 'acertos'}${sequencia >= 3 ? `, sequência ${sequencia}` : ''}`;
+    if (!pratica) placar.textContent = `${acertos} ${acertos === 1 ? 'acerto' : 'acertos'}${sequencia >= 3 ? `, sequência ${sequencia}` : ''}`;
     const ret = casca.corpo.querySelector('.mg-cc-retorno');
     ret.className = `mg-cc-retorno callout ${ok ? 'callout-ok' : 'callout-bad'}`;
     const tipo = c.grande ? 'texto grande, mínimo 3:1' : 'texto normal, mínimo 4,5:1';
@@ -270,9 +284,11 @@ export async function iniciar(raiz, opcoes = {}) {
       <span><strong>${ok ? 'Certo' : 'Errado'}:</strong> <span class="mg-cc-razao">${num(c.razao, 2)}:1</span> ${tipo}. ${c.passa ? 'Passa.' : 'Não passa.'}</span>`;
     if (!ok) animar(casca.corpo.querySelector('.mg-cc-cartao'), 'anim-shake');
     casca.anunciar(`${ok ? 'Certo' : 'Errado'}. Contraste ${num(c.razao, 2)} para 1, ${tipo}. ${c.passa ? 'Passa.' : 'Não passa.'}`);
+    const rodadaAtual = rodada;
     ciclo.timeout(() => {
-      if (estado !== 'retorno') return;
+      if (estado !== 'retorno' || rodadaAtual !== rodada) return;
       indice += 1;
+      if (pratica && indice >= cartoes.length) { cartoes = embaralharEquilibrado(PLANO).map(gerarCartao); indice = 0; }
       if (indice >= MAX_CARTOES || indice >= cartoes.length) encerrar();
       else mostrarCartao();
     }, PAUSA_RETORNO);
@@ -327,6 +343,7 @@ export async function iniciar(raiz, opcoes = {}) {
       extraHtml,
       aoContinuar: () => finalizar(pontos)
     }, ciclo);
+    casca.anunciar(`Resultado: ${pontos} pontos. ${acertos} de ${respondidos} acertos.`);
   }
 
   ciclo.ouvir(document, 'keydown', (e) => {
@@ -339,18 +356,35 @@ export async function iniciar(raiz, opcoes = {}) {
     }
   });
 
-  telaIntro(casca, {
-    titulo: 'Corrida do Contraste',
-    objetivo: 'Em 60 segundos, decida se cada texto passa no contraste AA da WCAG para o tamanho e o peso indicados.',
-    duracao: '60 s de corrida',
-    nomeIcone: 'contraste',
-    passos: [
-      'Texto normal precisa de 4,5:1; texto grande (24px, ou 18,66px em negrito) precisa de 3:1.',
-      'Responda com <kbd>A</kbd> (passa AA) ou <kbd>N</kbd> (não passa), ou toque nos botões.',
-      'Depois de cada resposta, a razão calculada aparece por um instante. O relógio pausa enquanto ela aparece.'
-    ],
-    aoComecar: comecar
-  }, ciclo);
+  function mostrarIntro() {
+    rodada += 1;
+    estado = 'intro';
+    casca.botaoPular.hidden = false;
+    if (pararTique) { pararTique(); pararTique = null; }
+    casca.anunciar('');
+    telaIntro(casca, {
+      titulo: 'Corrida do Contraste',
+      objetivo: 'Em 60 segundos, decida se cada texto passa no contraste AA da WCAG para o tamanho e o peso indicados.',
+      duracao: '60 s de corrida',
+      nomeIcone: 'contraste',
+      passos: [
+        'Texto normal precisa de 4,5:1. Texto grande (24px, ou 18,66px em negrito) precisa de 3:1.',
+        'Responda com <kbd>A</kbd> (passa AA) ou <kbd>N</kbd> (não passa), ou toque nos botões.',
+        'Depois de cada resposta, a razão calculada aparece por um instante. O relógio pausa enquanto ela aparece.'
+      ],
+      aoComecar: () => comecar(false)
+    }, ciclo);
+    const acoes = casca.corpo.querySelector('.mg-acoes');
+    const botaoPratica = document.createElement('button');
+    botaoPratica.type = 'button';
+    botaoPratica.className = 'btn btn-secondary btn-lg';
+    botaoPratica.textContent = 'Praticar sem tempo';
+    acoes.appendChild(botaoPratica);
+    ciclo.ouvir(botaoPratica, 'click', () => comecar(true));
+    casca.corpo.querySelector('.mg-comecar').textContent = 'Iniciar corrida valendo pontos';
+  }
+
+  mostrarIntro();
 
   return {
     destruir() {

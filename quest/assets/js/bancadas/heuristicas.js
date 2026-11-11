@@ -34,7 +34,8 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
   ]);
   const f = quadro("Portal Acadêmico (navegador)", 640, "portal-frame");
   f.append(portal);
-  canvas.replaceChildren(f, el("p", { class: "stage-note", text: "Cliquem em P1 a P7 para ler cada problema." }));
+  const compacto = el("div", { class: "canvas-inspector", "aria-live": "polite" });
+  canvas.replaceChildren(f, compacto, el("p", { class: "stage-note", text: "Cliquem em P1 a P7 para ler cada problema." }));
 
   const leitura = el("div", { class: "heur-detail", "aria-live": "polite" });
   const lista = el("div", { class: "audit-list" });
@@ -58,6 +59,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
   function desenhar() {
     portal.querySelectorAll(".heur-marker").forEach((b) => b.classList.toggle("is-selected", b.textContent === selecionado));
     const p = config.problemas.find((k) => k.id === selecionado);
+    compacto.replaceChildren(el("strong", { text: `${p.id}:` }), ` ${p.texto}`);
     leitura.replaceChildren(el("p", { class: "callout callout-info" }, [el("span", {}, [el("strong", { text: `${p.id}:` }), ` ${p.texto}`])]));
     lista.querySelectorAll(".audit-row").forEach((r) => r.classList.toggle("is-selected", r.dataset.problema === selecionado));
     // Full heuristic name under each select: long names are cut inside a narrow panel.
@@ -67,7 +69,7 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
       n.hidden = !v;
     });
     const faltam = config.problemas.filter((k) => !s.notas[k.id]).length;
-    exp.definir(faltam ? `faltam ${faltam} problemas` : config.problemas.map((k) => s.notas[k.id]).join("-"));
+    exp.definir(faltam ? "" : config.problemas.map((k) => s.notas[k.id]).join("-"), `Faltam ${faltam} problemas.`);
     camadas.replaceChildren(...config.problemas.map((k) => el("button", { type: "button", class: `layer-row${k.id === selecionado ? " is-selected" : ""}`, onclick: () => selecionar(k.id) }, [icone("message"), el("span", { text: `${k.id}${s.notas[k.id] ? ` · heurística ${s.notas[k.id]}` : ""}` })])));
     salvar(s);
   }

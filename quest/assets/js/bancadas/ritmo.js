@@ -15,7 +15,10 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
   const frame = quadro("Card/Evento", W, "rhythm-frame");
   const area = el("div", { class: "rhythm-card" });
   frame.append(area);
-  canvas.replaceChildren(frame, el("p", { class: "stage-note", text: "Linhas rosa: medidas. Selecionem uma camada para ver X, Y, L e A." }));
+  const compacto = el("div", { class: "canvas-inspector" });
+  const medidaCompacta = el("div", { "aria-live": "polite" });
+  compacto.append(el("button", { type: "button", class: "btn btn-secondary btn-sm", text: "Selecionar Card/Evento", onclick: () => { selecionado = "card"; desenhar(); } }), medidaCompacta);
+  canvas.replaceChildren(frame, compacto, el("p", { class: "stage-note", text: "Linhas rosa: medidas. Selecionem uma camada para ver X, Y, L e A." }));
   const inspecao = el("div");
 
   function geometria() {
@@ -47,10 +50,18 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
     area.style.height = `${g.card.h}px`;
     const camada = (id, filho) => {
       const r = g[id];
-      return el("div", {
+      return el("button", {
+        type: "button",
+        "data-camada": id,
         class: `rhythm-layer layer-${id}${selecionado === id ? " is-selected" : ""}`,
+        "aria-pressed": String(selecionado === id),
         style: { left: `${r.x}px`, top: `${r.y}px`, width: `${r.w}px`, height: `${r.h}px` },
-        onclick: (ev) => { ev.stopPropagation(); selecionado = id; desenhar(); },
+        onclick: (ev) => {
+          ev.stopPropagation();
+          selecionado = id;
+          desenhar();
+          area.querySelector(`[data-camada="${id}"]`)?.focus({ preventScroll: true });
+        },
       }, [filho, selecionado === id ? selecao(r.w, r.h) : null]);
     };
     area.replaceChildren(...[
@@ -67,9 +78,15 @@ export function montar({ canvas, props, camadas, config, rascunho, salvar }) {
     ].filter(Boolean));
     area.onclick = () => { selecionado = "card"; desenhar(); };
     const r = g[selecionado];
+    const medidas = [["X", String(r.x)], ["Y", String(r.y)], ["L (largura)", String(r.w)], ["A (altura)", String(r.h)]];
     inspecao.replaceChildren(
       el("p", { class: "small", style: { margin: "0 0 8px" } }, [el("strong", { text: nomes[selecionado] })]),
-      inspetor([["X", String(r.x)], ["Y", String(r.y)], ["L (largura)", String(r.w)], ["A (altura)", String(r.h)]])
+      inspetor(medidas)
+    );
+    medidaCompacta.replaceChildren(
+      el("strong", { text: nomes[selecionado] }),
+      inspetor(medidas),
+      el("p", { class: "small", text: `Card/Evento: ${g.card.w} × ${g.card.h} px` })
     );
     listaCamadas(camadas, ["card", "titulo", "data", "descricao", "botao"].map((id) => ({ id, nome: nomes[id], icone: id === "card" ? "frame" : id === "botao" ? "rect" : "text", nivel: id === "card" ? 0 : 1 })), selecionado, (id) => { selecionado = id; desenhar(); });
     salvar(s);

@@ -127,7 +127,12 @@ function ligarEventos() {
     ev.preventDefault();
     conferirPista();
   });
-  dom.btnSlides.addEventListener("click", () => alternarSlides());
+  dom.props.addEventListener("quest:usar-pista", (ev) => {
+    if (vista?.tipo !== "lock" || dom.caixaPista.hidden || dom.campoPista.disabled) return;
+    dom.campoPista.value = ev.detail;
+    dom.campoPista.focus();
+  });
+  dom.btnSlides.addEventListener("click", (ev) => alternarSlides(dom.gaveta.hidden, null, ev.currentTarget));
   document.getElementById("btn-fechar-slides").addEventListener("click", () => alternarSlides(false));
   dom.btnSalvar.addEventListener("click", abrirProgresso);
   document.getElementById("btn-copiar-codigo").addEventListener("click", async () => {
@@ -160,13 +165,16 @@ function ligarEventos() {
   document.addEventListener("keydown", (ev) => {
     if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "s") {
       ev.preventDefault();
-      alternarSlides();
+      alternarSlides(dom.gaveta.hidden, null, document.activeElement);
     }
     if (ev.key === "Escape" && !dom.gaveta.hidden) alternarSlides(false);
   });
   window.addEventListener("message", (ev) => {
-    if (ev.origin !== location.origin || !ev.data || typeof ev.data !== "object") return;
+    if (ev.origin !== location.origin || ev.source !== dom.iframe.contentWindow || !ev.data || typeof ev.data !== "object") return;
     if (ev.data.type === "CLOSE_DRAWER" || ev.data.type === "TOGGLE_DRAWER") alternarSlides(false);
+    if (ev.data.type === "SLIDES_READY" && slidePendente !== null && !dom.gaveta.hidden) {
+      dom.iframe.contentWindow.postMessage({ type: "JUMP_TO_SLIDE", slideIndex: slidePendente }, location.origin);
+    }
   });
 }
 
@@ -178,21 +186,25 @@ function mostrarPainel(qual) {
 /* ---------------- Slides drawer ---------------- */
 
 let slidePendente = null;
+let gatilhoSlides = null;
 
-function alternarSlides(abrir = dom.gaveta.hidden, slide = null) {
+function alternarSlides(abrir, slide = null, gatilho = null) {
+  if (!abrir && dom.gaveta.hidden) return;
+  if (abrir && dom.gaveta.hidden) gatilhoSlides = gatilho;
   dom.gaveta.hidden = !abrir;
   dom.btnSlides.setAttribute("aria-expanded", String(abrir));
   if (!abrir) {
-    dom.btnSlides.focus();
+    const retorno = gatilhoSlides?.getClientRects().length ? gatilhoSlides : dom.btnSlides;
+    gatilhoSlides = null;
+    slidePendente = null;
+    retorno.focus();
     return;
   }
-  const alvo = slide || vistaSlide() || 1;
+  slidePendente = slide || vistaSlide() || 1;
   if (dom.iframe.getAttribute("src") === "about:blank") {
-    slidePendente = null;
-    dom.iframe.src = `../slides/index.html#${alvo}`;
+    dom.iframe.src = `../slides/index.html#${slidePendente}`;
   } else {
-    slidePendente = alvo;
-    dom.iframe.contentWindow?.postMessage({ type: "JUMP_TO_SLIDE", slideIndex: alvo }, location.origin);
+    dom.iframe.contentWindow?.postMessage({ type: "JUMP_TO_SLIDE", slideIndex: slidePendente }, location.origin);
   }
   dom.iframe.focus();
 }
@@ -202,8 +214,8 @@ function vistaSlide() {
   return null;
 }
 
-function abrirSlide(n) {
-  alternarSlides(true, n);
+function abrirSlide(n, gatilho) {
+  alternarSlides(true, n, gatilho);
 }
 
 /* ---------------- Welcome ---------------- */
@@ -450,19 +462,28 @@ async function renderizarFechadura(i) {
   if (!c) return;
   const feita = i < resolvidas();
   dom.etapaChip.textContent = `Fechadura ${i}`;
+  // Update teaching copy while keeping existing encrypted stages and progress compatible.
+  const conceitos = c.conceitos.map((k) => k.termo === "alvo de toque" ? {
+    ...k,
+    oQue: "A WCAG 2.2 (2.5.8) pede alvos de pelo menos 24 × 24 pixels CSS, com exceções como espaçamento suficiente e links no texto. O estúdio usa 48 × 48 pixels CSS.",
+    link: "https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html",
+    rotulo: "WCAG 2.2: tamanho mínimo do alvo",
+  } : k);
 
   const pontos = el("span", { class: "difficulty", "aria-label": `Dificuldade ${c.dificuldade} de 4` },
     [1, 2, 3, 4].map((k) => el("span", { class: k <= c.dificuldade ? "dot on" : "dot" })));
 
-  const briefing = el("div", { class: "comment-text", html: textoComTermos(c.briefing, c.conceitos) });
+  const briefing = el("div", { class: "comment-text", html: textoComTermos(c.briefing, conceitos) });
   const comentario = el("article", { class: "comment", "aria-labelledby": `titulo-${i}` }, [
     el("div", { class: "comment-avatar", "aria-hidden": "true", text: "B" }),
     el("div", { class: "comment-body" }, [
       el("div", { class: "comment-meta" }, [el("strong", { text: "Bia" }), el("span", { class: "muted", text: " · designer líder" })]),
       briefing,
-      el("ol", { class: "task-list" }, c.tarefa.map((t) => el("li", { text: t }))),
+      el("ol", { class: "task-list" }, c.tarefa.map((t) => el("li", {
+        text: t.startsWith("Exportem") ? "No painel Design, encontrem o código em Handoff e selecionem Usar como pista. Confiram o campo antes de abrir a fechadura." : t,
+      }))),
       el("div", { class: "comment-actions" }, [
-        el("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: () => abrirSlide(c.slide) }, [icone("slides"), `Abrir slide ${c.slide}`]),
+        el("button", { type: "button", class: "btn btn-secondary btn-sm", onclick: (ev) => abrirSlide(c.slide, ev.currentTarget) }, [icone("slides"), `Abrir slide ${c.slide}`]),
       ]),
     ]),
   ]);
@@ -480,7 +501,7 @@ async function renderizarFechadura(i) {
     palco,
     aprovacao
   );
-  ativarBaloes(briefing, c.conceitos, abrirSlide);
+  ativarBaloes(briefing, conceitos, abrirSlide);
 
   // Answer box
   dom.caixaPista.hidden = false;
@@ -492,10 +513,10 @@ async function renderizarFechadura(i) {
   if (feita) mostrarAprovacao(i, false);
 
   renderizarDicas(i);
-  renderizarConceitos(c);
+  renderizarConceitos(conceitos);
 
   // Bench
-  const props = el("div", { class: "bench-props" });
+  const props = el("div", { class: "bench-props", "data-resolvida": String(feita) });
   dom.props.replaceChildren(props);
   try {
     const mod = await import(`./bancadas/${c.bancada.tipo}.js`);
@@ -526,7 +547,7 @@ function renderizarDicas(i) {
     el("div", { class: "hint anim-pop" }, [
       el("p", { class: "hint-label", text: `Dica ${k + 1}` }),
       el("p", { text: d.texto }),
-      d.slide ? el("button", { type: "button", class: "btn btn-ghost btn-sm", onclick: () => abrirSlide(d.slide) }, [icone("slides"), `Abrir slide ${d.slide}`]) : null,
+      d.slide ? el("button", { type: "button", class: "btn btn-ghost btn-sm", onclick: (ev) => abrirSlide(d.slide, ev.currentTarget) }, [icone("slides"), `Abrir slide ${d.slide}`]) : null,
     ])
   );
   const restantes = c.dicas.length - usadas;
@@ -547,14 +568,14 @@ function renderizarDicas(i) {
   if (!itens.length && !botao) dom.dicas.append(el("p", { class: "small muted", text: "Sem dicas usadas nesta fechadura." }));
 }
 
-function renderizarConceitos(c) {
+function renderizarConceitos(conceitos) {
   dom.caixaConceitos.hidden = false;
   dom.conceitos.replaceChildren(
-    ...c.conceitos.map((k) =>
+    ...conceitos.map((k) =>
       el("li", {}, [
         el("strong", { text: k.termo }),
         el("div", { class: "concept-actions" }, [
-          k.slide ? el("button", { type: "button", class: "link-btn", onclick: () => abrirSlide(k.slide) }, [`Slide ${k.slide}`]) : null,
+          k.slide ? el("button", { type: "button", class: "link-btn", onclick: (ev) => abrirSlide(k.slide, ev.currentTarget) }, [`Slide ${k.slide}`]) : null,
           k.link ? el("a", { href: k.link, target: "_blank", rel: "noopener" }, [k.rotulo || "Saiba mais", icone("external", 16)]) : null,
         ]),
       ])
@@ -593,6 +614,7 @@ async function conferirPista() {
     salvarEstado(estado);
     dom.campoPista.disabled = true;
     dom.btnAbrir.disabled = true;
+    dom.props.querySelector(".bench-props")?.setAttribute("data-resolvida", "true");
     dom.retorno.replaceChildren(el("p", { class: "callout callout-ok" }, [icone("unlock"), " Fechadura aberta."]));
     aviso(`Fechadura ${i} aberta.`, "ok");
     renderizarTrilha();
@@ -703,7 +725,7 @@ function renderizarFinal() {
     el("p", { class: "cert-names", text: estado.team.join(" e ") }),
     el("p", { class: "cert-quote", text: c.mensagem }),
     el("dl", { class: "cert-stats" }, [
-      el("div", {}, [el("dt", { text: "Tempo" }), el("dd", { text: tempo })]),
+      el("div", {}, [el("dt", { text: "Tempo total decorrido" }), el("dd", { text: tempo })]),
       el("div", {}, [el("dt", { text: "Fechaduras" }), el("dd", { text: `${resolvidas()} de ${TOTAL}` })]),
       el("div", {}, [el("dt", { text: "Tentativas erradas" }), el("dd", { text: String(totalErros) })]),
       el("div", {}, [el("dt", { text: "Dicas" }), el("dd", { text: String(totalDicas) })]),
@@ -711,21 +733,26 @@ function renderizarFinal() {
     ]),
     el("h3", { class: "section-title", text: "O que a dupla aprendeu" }),
     el("ol", { class: "cert-learned" }, conteudos.slice(0, TOTAL).map((k) => el("li", {}, [el("strong", { text: `${k.titulo}: ` }), k.aprendizado]))),
+    el("button", { type: "button", class: "btn btn-secondary btn-sm cert-print", onclick: () => window.print() }, [icone("printer"), "Imprimir certificado"]),
   ]);
 
-  const missao = montarMissaoFigma({ team: estado.team, startedAt: estado.startedAt, abrirSlide });
+  const baixarTokens = () => baixar("tokens.json", JSON.stringify({
+    $descricao: `Tokens da dupla ${estado.team.join(" e ")} - Estúdio Oito`,
+    ...c.tokens,
+  }, null, 2) + "\n", "application/json");
+  const missao = montarMissaoFigma({ team: estado.team, startedAt: estado.startedAt, abrirSlide, baixarTokens, abrirProgresso });
   dom.canvas.replaceChildren(missao, certificado);
   dom.props.replaceChildren(
     el("section", { class: "ws-section" }, [
-      el("h2", { class: "section-title", text: "Entregáveis" }),
-      el("button", { type: "button", class: "btn btn-primary btn-block", onclick: abrirProgresso }, [icone("export"), "Código para o professor"]),
+      el("h2", { class: "section-title", text: "Missão final" }),
       el("button", {
         type: "button",
-        class: "btn btn-secondary btn-block",
-        onclick: () => baixar("tokens.json", JSON.stringify({ $descricao: `Tokens da dupla ${estado.team.join(" e ")} - Estúdio Oito`, ...c.tokens }, null, 2) + "\n", "application/json"),
-      }, [icone("download"), "Baixar tokens.json"]),
-      el("button", { type: "button", class: "btn btn-secondary btn-block", onclick: () => window.print() }, [icone("printer"), "Imprimir certificado"]),
-      el("p", { class: "small muted", text: "Consultem o tokens.json para aplicar os valores do card no Figma. Se quiserem reutilizá-los, criem variáveis no arquivo." }),
+        class: "btn btn-secondary btn-sm",
+        onclick: () => {
+          mostrarPainel("canvas");
+          missao.querySelector("#fm-evidence-title").focus();
+        },
+      }, ["Ir para a entrega"]),
     ])
   );
 }
